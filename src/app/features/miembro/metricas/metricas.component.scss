@@ -1,0 +1,88 @@
+.container-metricas {
+  padding: 1.5rem;
+}
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+.tarjeta-formulario, .tarjeta-resultado {
+  background-color: var(--fondo-tarjeta);
+  border-radius: var(--radio);
+  padding: 1.5rem;
+  border: 1px solid var(--borde);
+  box-shadow: var(--sombra);
+
+  h3 {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--borde);
+    padding-bottom: 0.5rem;
+  }
+}
+.visualizador-imc {
+  text-align: center;
+  padding: 1.5rem 0;
+
+  .numero-imc {
+    display: block;
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--acento);
+  }
+
+  .etiqueta-imc {
+    font-size: 0.85rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+}
+
+.clasificacion {
+  text-align: center;
+  font-size: 1.05rem;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+
+.tarjeta-resultado {
+  transition: border-color 0.3s ease;
+
+  &.bajo .numero-imc { color: #3b82f6; }
+  &.normal .numero-imc { color: #10b981; }
+  &.sobrepeso .numero-imc { color: #f59e0b; }
+  &.obesidad .numero-imc { color: #ef4444; }
+}
+
+.guia-escala {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem;
+  margin-top: 1rem;
+  border-top: 1px solid var(--borde);
+  padding-top: 1rem;
+
+  .rango {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    text-align: center;
+    background: #141414;
+    padding: 0.4rem 0.2rem;
+    border-radius: 4px;
+
+    span {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      margin-top: 0.15rem;
+      text-transform: uppercase;
+    }
+  }
+}
+
+

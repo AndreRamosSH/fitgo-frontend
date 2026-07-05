@@ -1,0 +1,38 @@
+<section class="seccion-bienvenida">
+  <h1>Panel del Entrenador</h1>
+  <p>Supervisa el progreso y asistencia de tus alumnos asignados.</p>
+</section>
+
+<section class="rejilla-tarjetas">
+  <article class="tarjeta">
+    <p class="tarjeta-titulo">Miembros Asignados</p>
+    <p class="tarjeta-valor tarjeta-valor--acento">{{ totalMiembros }}</p>
+    <p class="tarjeta-etiqueta">Alumnos activos en tu turno</p>
+  </article>
+</section>
+
+<section class="seccion">
+  <h2 class="titulo-seccion">Registros de Asistencia Recientes (General)</h2>
+  
+  <table class="tabla-usuarios">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Correo</th>
+        <th>Fecha y Hora de Ingreso</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let asis of asistencias">
+        <td class="columna-nombre">{{ asis.usuario.nombre }}</td>
+        <td>{{ asis.usuario.apellido }}</td>
+        <td>{{ asis.usuario.correo }}</td>
+        <td>{{ asis.fechaHora | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+      </tr>
+      <tr *ngIf="asistencias.length === 0">
+        <td colspan="4" class="texto-vacio">No hay registros de asistencia recientes.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

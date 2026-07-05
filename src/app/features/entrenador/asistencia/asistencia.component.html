@@ -1,0 +1,37 @@
+<section class="seccion-bienvenida">
+  <h1>Registrar Asistencia</h1>
+  <p>Selecciona el miembro que asistió hoy al gimnasio.</p>
+</section>
+
+<section class="seccion">
+  <div class="tarjeta-formulario">
+    <div *ngIf="error" class="alerta-error">
+      <span>{{ error }}</span>
+    </div>
+
+    <div *ngIf="exito" class="alerta-exito">
+      <span>{{ exito }}</span>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" id="formularioAsistencia">
+      <div class="grupo-campo">
+        <label for="correo">Miembro</label>
+        <select id="correo" name="correo" [(ngModel)]="correoSeleccionado" required>
+          <option value="">-- Selecciona un miembro --</option>
+          <option *ngFor="let m of miembros" [value]="m.correo">
+            {{ m.nombre }} {{ m.apellido }} - {{ m.correo }}
+          </option>
+        </select>
+      </div>
+
+      <div class="grupo-botones">
+        <button type="submit" class="btn-primary">
+          Registrar asistencia
+        </button>
+        <a routerLink="/entrenador/resumen" class="btn-secondary">
+          Cancelar
+        </a>
+      </div>
+    </form>
+  </div>
+</section>

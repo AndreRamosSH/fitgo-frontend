@@ -1,0 +1,151 @@
+.contenedor-sesion {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+.tarjeta-sesion {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem 3.5rem;
+  background-color: var(--fondo-tarjeta);
+  gap: 1.5rem;
+}
+
+.encabezado-sesion {
+  margin-bottom: 0.5rem;
+}
+
+.logo-texto {
+  font-family: var(--fuente-titulo);
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.logo-texto span {
+  color: var(--acento);
+}
+
+.subtitulo-sesion {
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.envoltorio-contrasena {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.envoltorio-contrasena input {
+  padding-right: 3rem;
+}
+
+.boton-ojo {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: var(--texto-suave);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.boton-ojo:hover {
+  color: var(--acento);
+}
+
+.pie-sesion {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--borde);
+}
+
+.pie-sesion p {
+  color: var(--texto-suave);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.panel-marca {
+  background-color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.contenido-marca {
+  text-align: center;
+}
+
+.contenido-marca h2 {
+  font-family: var(--fuente-titulo);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.contenido-marca h2 span {
+  color: var(--acento);
+}
+
+.contenido-marca p {
+  color: var(--texto-suave);
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.logo-banner-marca {
+  width: 360px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .contenedor-sesion {
+    grid-template-columns: 1fr;
+  }
+  .panel-marca {
+    display: none;
+  }
+  .tarjeta-sesion {
+    padding: 2rem 1.5rem;
+  }
+}
+
+.grupo-campo-espaciado {
+  margin-top: 1rem;
+}
+
+.boton-formulario-sesion {
+  margin-top: 1.5rem;
+}
+
+.pie-formulario {
+  margin-top: 1rem;
+  text-align: center;
+  
+  a {
+    color: var(--acento);
+    font-weight: 500;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

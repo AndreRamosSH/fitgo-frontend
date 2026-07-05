@@ -1,0 +1,58 @@
+<section class="seccion-bienvenida">
+  <h1>Gestión de Miembros</h1>
+  <p>Visualiza y administra a los miembros registrados en el gimnasio.</p>
+</section>
+
+<section class="rejilla-tarjetas" *ngIf="resumen">
+  <article class="tarjeta">
+    <p class="tarjeta-titulo">Total Miembros</p>
+    <p class="tarjeta-valor">{{ resumen.total }}</p>
+  </article>
+  
+  <article class="tarjeta">
+    <p class="tarjeta-titulo">Activos</p>
+    <p class="tarjeta-valor verde">{{ resumen.activos }}</p>
+  </article>
+
+  <article class="tarjeta">
+    <p class="tarjeta-titulo">Por vencer</p>
+    <p class="tarjeta-valor naranja">{{ resumen.porVencer }}</p>
+  </article>
+
+  <article class="tarjeta">
+    <p class="tarjeta-titulo">Sin membresía</p>
+    <p class="tarjeta-valor rojo">{{ resumen.sinMembresia }}</p>
+  </article>
+</section>
+
+<section class="seccion">
+  <table class="tabla-usuarios">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Correo</th>
+        <th>Entrenador</th>
+        <th class="texto-derecha">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of miembros">
+        <td class="columna-nombre">{{ m.nombre }}</td>
+        <td>{{ m.apellido }}</td>
+        <td>{{ m.correo }}</td>
+        <td>
+          {{ m.entrenador ? m.entrenador.usuario.nombre + ' ' + m.entrenador.usuario.apellido : 'Sin asignar' }}
+        </td>
+        <td class="texto-derecha">
+          <button (click)="eliminar(m.id)" class="btn-eliminar">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="miembros.length === 0">
+        <td colspan="5" class="texto-vacio">No hay miembros registrados.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

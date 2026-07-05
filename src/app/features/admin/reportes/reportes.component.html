@@ -1,0 +1,168 @@
+<div class="reportes-container">
+  <section class="seccion-bienvenida">
+    <h1>Reportes del Sistema</h1>
+    <p>Visualiza estadísticas de asistencia y reportes generales del gimnasio.</p>
+  </section>
+
+  <div class="tabs-container">
+    <button 
+      class="tab-pill" 
+      [class.active]="activeTab === 'asistencias'" 
+      (click)="setActiveTab('asistencias')">
+      Asistencias
+    </button>
+    <button 
+      class="tab-pill" 
+      [class.active]="activeTab === 'membresias'" 
+      (click)="setActiveTab('membresias')">
+      Membresías
+    </button>
+    <button 
+      class="tab-pill" 
+      [class.active]="activeTab === 'entrenadores'" 
+      (click)="setActiveTab('entrenadores')">
+      Rendimiento entrenadores
+    </button>
+  </div>
+
+  <div class="tab-content" *ngIf="activeTab === 'asistencias'">
+    <div class="reportes-filtros">
+      <select [value]="mesSeleccionado" class="filtro-select">
+        <option *ngFor="let m of meses" [value]="m.valor">{{ m.texto }}</option>
+      </select>
+
+      <select [value]="miembroSeleccionado" class="filtro-select">
+        <option *ngFor="let mb of miembros" [value]="mb.valor">{{ mb.texto }}</option>
+      </select>
+
+      <button class="btn-secondary">Exportar</button>
+    </div>
+
+    <div class="rejilla-tarjetas">
+      <div class="tarjeta tarjeta--sin-hover" *ngFor="let kpi of kpis">
+        <p class="tarjeta-titulo">{{ kpi.titulo }}</p>
+        <p class="tarjeta-valor" [class.tarjeta-valor--acento]="kpi.destacado">{{ kpi.valor }}</p>
+        <p class="tarjeta-etiqueta">{{ kpi.etiqueta }}</p>
+      </div>
+    </div>
+
+    <div class="rejilla-graficos">
+      <div class="grafico-card">
+        <h4 class="grafico-titulo">Ingresos por día - Enero</h4>
+        <div class="grafico-barras-vertical">
+          <div class="barra-vertical-columna" *ngFor="let item of ingresosPorDia">
+            <span class="barra-valor">{{ item.valor }}</span>
+            <div class="barra-grafico">
+              <div class="barra-relleno" [style.height.%]="(item.valor / maxIngresosDia) * 100" [class.destacado]="item.destacado"></div>
+            </div>
+            <span class="barra-dia">{{ item.dia }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grafico-card">
+        <h4 class="grafico-titulo">Asistencias por día de semana</h4>
+        <div class="grafico-barras-horizontal">
+          <div class="barra-horizontal-fila" *ngFor="let item of asistenciasPorDiaSemana">
+            <span class="barra-dia-semana">{{ item.dia }}</span>
+            <div class="barra-progreso-contenedor">
+              <div class="barra-progreso-relleno" [style.width.%]="item.porcentaje"></div>
+            </div>
+            <span class="barra-total-asistencias">{{ item.valor }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" *ngIf="activeTab === 'membresias'">
+    <div class="rejilla-tarjetas">
+      <div class="tarjeta tarjeta--sin-hover" *ngFor="let kpi of kpisReportes">
+        <p class="tarjeta-titulo">{{ kpi.titulo }}</p>
+        <p class="tarjeta-valor" [class.tarjeta-valor--acento]="kpi.destacado">{{ kpi.valor }}</p>
+        <p class="tarjeta-etiqueta">{{ kpi.etiqueta }}</p>
+      </div>
+    </div>
+
+    <div class="rejilla-graficos">
+      <div class="grafico-card">
+        <h4 class="grafico-titulo">Distribución por plan</h4>
+        <div class="distribucion-contenedor">
+          <div class="grafico-donut"></div>
+          <div class="leyenda-lista">
+            <div class="leyenda-item" *ngFor="let p of distribucionPlan">
+              <span class="leyenda-color" [style.background-color]="p.color"></span>
+              <span class="leyenda-texto">{{ p.nombre }} — {{ p.miembros }} miembros ({{ p.porcentaje }}%)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grafico-card">
+        <h4 class="grafico-titulo">Próximas a vencer</h4>
+        <table class="tabla-usuarios">
+          <thead>
+            <tr>
+              <th>Miembro</th>
+              <th>Plan</th>
+              <th>Vence</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of proximasVencer">
+              <td class="columna-nombre">{{ item.miembro }}</td>
+              <td>{{ item.plan }}</td>
+              <td>{{ item.vence }}</td>
+              <td>
+                <span class="badge-estado" [ngClass]="'badge-' + item.estado">{{ item.dias }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" *ngIf="activeTab === 'entrenadores'">
+    <div class="rejilla-tarjetas">
+      <div class="tarjeta tarjeta--sin-hover" *ngFor="let kpi of kpisEntrenadores">
+        <p class="tarjeta-titulo">{{ kpi.titulo }}</p>
+        <p class="tarjeta-valor" [class.tarjeta-valor--acento]="kpi.destacado">{{ kpi.valor }}</p>
+        <p class="tarjeta-etiqueta">{{ kpi.etiqueta }}</p>
+      </div>
+    </div>
+
+    <div class="grafico-card full-width">
+      <h4 class="grafico-titulo">Comparativa de entrenadores</h4>
+      <table class="tabla-usuarios">
+        <thead>
+          <tr>
+            <th>Entrenador</th>
+            <th>Especialidad</th>
+            <th>Miembros</th>
+            <th>Rutinas</th>
+            <th>% Membresías Activas</th>
+            <th>Carga</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of comparativaEntrenadores">
+            <td class="columna-nombre">{{ item.entrenador }}</td>
+            <td>{{ item.especialidad }}</td>
+            <td>{{ item.miembros }}</td>
+            <td>{{ item.rutinas }}</td>
+            <td>
+              <span class="badge-estado" [ngClass]="'badge-' + item.estadoMembresia">{{ item.membresiasActivas }}</span>
+            </td>
+            <td>
+              <div class="barra-progreso-carga-contenedor">
+                <div class="barra-progreso-carga-relleno" [style.width.%]="item.carga" [style.background-color]="item.colorCarga"></div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

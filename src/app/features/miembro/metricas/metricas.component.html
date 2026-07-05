@@ -1,0 +1,57 @@
+<div class="container-metricas">
+    <div class="seccion-bienvenida">
+        <h1>Calculadora de IMC y Control de Métricas</h1>
+        <p>Mantén el registro de tus medidas corporales para evaluar tu evolución física.</p>
+    </div>
+    <div *ngIf="mensaje" class="alerta-exito">
+        {{ mensaje }}
+    </div>
+
+    <div class="grid-layout">
+        <div class="tarjeta-formulario">
+            <h3>Actualizar Medidas</h3>
+
+            <div class="grupo-campo">
+                <label for="peso">Peso Actual (kg):</label>
+                <input type="number" id="peso" [(ngModel)]="peso" (input)="calcularIMC()" placeholder="Ej: 74.5"
+                    step="0.1">
+            </div>
+
+            <div class="grupo-campo">
+                <label for="altura">Altura (cm):</label>
+                <input type="number" id="altura" [(ngModel)]="altura" (input)="calcularIMC()" placeholder="Ej: 175">
+            </div>
+
+            <button class="btn-primary" (click)="guardarMetricas()" [disabled]="peso <= 0 || altura <= 0">
+                Registrar Progreso
+            </button>
+        </div>
+
+        <div class="tarjeta-resultado" [ngClass]="{
+      'bajo': estadoImc === 'Bajo peso',
+      'normal': estadoImc === 'Normal / Saludable',
+      'sobrepeso': estadoImc === 'Sobrepeso',
+      'obesidad': estadoImc === 'Obesidad'
+    }">
+            <h3>Tu Estado Actual</h3>
+
+            <div class="visualizador-imc">
+                <span class="numero-imc">{{ imc | number:'1.1-1' }}</span>
+                <span class="etiqueta-imc">Puntaje IMC</span>
+            </div>
+
+            <div class="clasificacion">
+                <p>Condición: <strong>{{ estadoImc }}</strong></p>
+            </div>
+
+            <div class="guia-escala">
+                <div class="rango">
+                    < 18.5 <span>Bajo</span>
+                </div>
+                <div class="rango">18.5 - 24.9 <span>Normal</span></div>
+                <div class="rango">25 - 29.9 <span>Sobre</span></div>
+                <div class="rango">30+ <span>Obesidad</span></div>
+            </div>
+        </div>
+    </div>
+</div>

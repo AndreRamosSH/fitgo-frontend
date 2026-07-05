@@ -1,0 +1,78 @@
+<section class="seccion-bienvenida">
+  <h1>Registrar Nuevo Usuario</h1>
+  <p>Completa los datos para agregar un miembro, entrenador o administrador al sistema.</p>
+</section>
+
+<section class="seccion">
+  <div class="tarjeta-formulario">
+    <div *ngIf="error" class="alerta-error">
+      <span>{{ error }}</span>
+    </div>
+
+    <div *ngIf="exito" class="alerta-exito">
+      <span>{{ exito }}</span>
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="grupo-campo">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" [(ngModel)]="nombre" required placeholder="Nombre">
+      </div>
+
+      <div class="grupo-campo">
+        <label for="apellido">Apellido</label>
+        <input type="text" id="apellido" name="apellido" [(ngModel)]="apellido" required placeholder="Apellido">
+      </div>
+
+      <div class="grupo-campo">
+        <label for="correo">Correo electrónico</label>
+        <input type="email" id="correo" name="correo" [(ngModel)]="correo" required placeholder="correo@fitgo.com">
+      </div>
+
+      <div class="grupo-campo">
+        <label for="telefono">Número telefónico</label>
+        <input type="text" id="telefono" name="telefono" [(ngModel)]="telefono" placeholder="+51 987 654 321">
+      </div>
+
+      <div class="grupo-campo">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" [(ngModel)]="password" required placeholder="Mínimo 6 caracteres">
+      </div>
+
+      <div class="grupo-campo">
+        <label for="rol">Rol</label>
+        <select id="rol" name="rol" [(ngModel)]="rol" required>
+          <option value="">-- Selecciona un rol --</option>
+          <option value="MIEMBRO">Miembro</option>
+          <option value="ENTRENADOR">Entrenador</option>
+          <option value="ADMIN">Administrador</option>
+        </select>
+      </div>
+
+      <div *ngIf="rol === 'ENTRENADOR'" class="seccion-entrenador">
+        <div class="grupo-campo">
+          <label for="turno">Turno</label>
+          <select id="turno" name="turno" [(ngModel)]="turno">
+            <option value="MANANA">Mañana (6:00 - 12:00)</option>
+            <option value="TARDE">Tarde (12:00 - 18:00)</option>
+            <option value="NOCHE">Noche (18:00 - 23:00)</option>
+          </select>
+        </div>
+
+        <div class="grupo-campo">
+          <label for="experienciaAnios">Años de experiencia</label>
+          <input type="number" id="experienciaAnios" name="experienciaAnios" [(ngModel)]="experienciaAnios" min="0" max="50">
+        </div>
+      </div>
+
+      <div class="grupo-botones">
+        <button type="submit" class="btn-primary">
+          Registrar usuario
+        </button>
+        <a routerLink="/admin/resumen" class="btn-secondary">
+          Cancelar
+        </a>
+      </div>
+    </form>
+  </div>
+</section>

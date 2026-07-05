@@ -1,0 +1,74 @@
+<main class="contenedor-sesion">
+
+  <section class="tarjeta-sesion">
+
+    <header class="encabezado-sesion">
+      <h1 class="logo-texto">FIT<span>GO</span></h1>
+      <p class="subtitulo-sesion">Crear una cuenta nueva</p>
+    </header>
+
+    <div *ngIf="error" class="alerta-error">
+      <span>{{ error }}</span>
+    </div>
+
+    <div *ngIf="exito" class="alerta-exito">
+      <span>{{ exito }}</span>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" id="formularioRegistro">
+
+      <div class="grupo-campo">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" [(ngModel)]="nombre" placeholder="Tu nombre" required>
+      </div>
+
+      <div class="grupo-campo">
+        <label for="apellido">Apellido</label>
+        <input type="text" id="apellido" name="apellido" [(ngModel)]="apellido" placeholder="Tu apellido" required>
+      </div>
+
+      <div class="grupo-campo">
+        <label for="correo">Correo electrónico</label>
+        <input type="email" id="correo" name="correo" [(ngModel)]="correo" placeholder="correo@ejemplo.com" required autocomplete="email">
+      </div>
+
+      <div class="grupo-campo">
+        <label for="telefono">Número telefónico</label>
+        <input type="text" id="telefono" name="telefono" [(ngModel)]="telefono" placeholder="+51 987 654 321">
+      </div>
+
+      <div class="grupo-campo grupo-campo-espaciado">
+        <label for="password">Contraseña</label>
+        <div class="envoltorio-contrasena">
+          <input [type]="verContrasena ? 'text' : 'password'" id="password" name="password" [(ngModel)]="password" placeholder="Contraseña" required autocomplete="new-password">
+          <button type="button" (click)="alternarContrasena()" class="boton-ojo" aria-label="Mostrar u ocultar contraseña">
+            <span class="icono-ojo">{{ verContrasena ? 'Ocultar' : 'Mostrar' }}</span>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary boton-completo boton-formulario-sesion">
+        Registrarse
+      </button>
+
+      <div class="pie-formulario">
+        <p>¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+      </div>
+
+    </form>
+
+    <footer class="pie-sesion">
+      <p>FitGO &copy; 2026 - Todos los derechos reservados</p>
+    </footer>
+
+  </section>
+
+  <aside class="panel-marca">
+    <div class="contenido-marca">
+      <img src="images/fitgo-banner-1.png" alt="FitGO" class="logo-banner-marca" onerror="this.src='https://placehold.co/360x180?text=FitGO+Banner'">
+      <h2>Transforma tu cuerpo,<br><span>transforma tu vida.</span></h2>
+      <p>Gestiona rutinas, membresías y progreso desde un solo lugar.</p>
+    </div>
+  </aside>
+
+</main>

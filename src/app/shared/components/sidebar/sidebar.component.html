@@ -1,0 +1,24 @@
+<aside class="barra-lateral">
+  <div class="logo-lateral">FIT<span>GO</span></div>
+
+  <div *ngFor="let section of sections" class="grupo-navegacion">
+    <p class="etiqueta-grupo">{{ section.title }}</p>
+    <nav>
+      <a *ngFor="let item of section.items" 
+         [routerLink]="item.route" 
+         routerLinkActive="activo"
+         [routerLinkActiveOptions]="{exact: true}">
+        <span class="icono-nav"></span> {{ item.label }}
+      </a>
+    </nav>
+  </div>
+
+  <div class="grupo-navegacion cuenta-seccion">
+    <p class="etiqueta-grupo">Cuenta</p>
+    <nav>
+      <a (click)="logout()" class="cerrar-sesion">
+        <span class="icono-nav"></span> Cerrar sesión
+      </a>
+    </nav>
+  </div>
+</aside>

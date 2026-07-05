@@ -1,0 +1,41 @@
+.pestanas-control {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid var(--borde);
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+  
+  button {
+    background: none;
+    border: none;
+    color: var(--texto-suave);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: var(--radio);
+    
+    &:hover {
+      color: var(--texto);
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+    
+    &.activo {
+      color: var(--acento);
+      background-color: rgba(249, 115, 22, 0.08);
+    }
+  }
+}
+
+.seccion-division {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .seccion-division {
+    grid-template-columns: 1fr;
+  }
+}

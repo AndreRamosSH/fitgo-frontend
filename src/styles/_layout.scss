@@ -1,0 +1,449 @@
+@import 'variables';
+@import 'mixins';
+
+.diseno-panel {
+  display: grid;
+  grid-template-columns: var(--lateral-ancho) 1fr;
+  grid-template-rows: var(--encabezado-alto) 1fr;
+  grid-template-areas:
+    "lateral encabezado"
+    "lateral principal";
+  min-height: 100vh;
+}
+
+@media (max-width: 992px) {
+  .diseno-panel {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      "encabezado"
+      "lateral"
+      "principal";
+  }
+}
+
+.grupo-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+}
+
+.grupo-campo label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.grupo-campo input,
+.grupo-campo select,
+.grupo-campo textarea,
+.busqueda input {
+  background-color: #141414;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  color: var(--texto);
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.95rem;
+  padding: 0.85rem 1.1rem;
+  outline: none;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.grupo-campo input:focus,
+.grupo-campo select:focus,
+.grupo-campo textarea:focus,
+.busqueda input:focus {
+  border-color: var(--acento);
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.15);
+  background-color: #1a1a1a;
+}
+
+.grupo-campo input::placeholder {
+  color: #4a4a4a;
+}
+
+.alerta-error {
+  background-color: rgba(220, 53, 69, 0.1);
+  border: 1px solid #dc3545;
+  border-radius: var(--radio);
+  color: #f87171;
+  font-size: 0.9rem;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.alerta-exito {
+  background-color: rgba(40, 167, 69, 0.1);
+  border: 1px solid #28a745;
+  border-radius: var(--radio);
+  color: #34d399;
+  font-size: 0.9rem;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--gradiente);
+  color: #fff;
+  border: none;
+  padding: 0.85rem 1.5rem;
+  font-weight: 600;
+  border-radius: var(--radio);
+  font-size: 0.95rem;
+  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--texto);
+  border: 1px solid var(--borde);
+  padding: 0.85rem 1.5rem;
+  font-weight: 600;
+  border-radius: var(--radio);
+  font-size: 0.95rem;
+}
+
+.btn-secondary:hover {
+  border-color: var(--texto-suave);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn-editar {
+  background-color: transparent;
+  color: var(--acento);
+  border: 1px solid var(--acento);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radio);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-block;
+  
+  &:hover {
+    background-color: var(--acento);
+    color: #fff;
+  }
+}
+
+.btn-eliminar {
+  background-color: transparent;
+  color: #f87171;
+  border: 1px solid #f87171;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radio);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-block;
+  
+  &:hover {
+    background-color: #f87171;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(248, 113, 113, 0.2);
+  }
+}
+
+.boton-completo {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.tabla-usuarios {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: var(--fondo-tarjeta);
+  border-radius: var(--radio);
+  overflow: hidden;
+  box-shadow: var(--sombra);
+}
+
+.tabla-usuarios th,
+.tabla-usuarios td {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  border-bottom: 1px solid var(--borde);
+}
+
+.tabla-usuarios th {
+  background-color: #141414;
+  font-family: var(--fuente-titulo);
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  color: var(--texto-suave);
+  font-weight: 600;
+}
+
+.tabla-usuarios tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-usuarios tr:hover td {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.columna-nombre {
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.texto-derecha {
+  text-align: right;
+}
+
+.texto-vacio {
+  text-align: center;
+  color: var(--texto-suave);
+}
+
+.celda-acciones {
+  text-align: right;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.seccion-bienvenida {
+  margin-bottom: 2rem;
+
+  h1 {
+    font-family: var(--fuente-titulo);
+    font-size: 2.2rem;
+    font-weight: 700;
+
+    span {
+      color: var(--acento);
+    }
+  }
+
+  p {
+    color: var(--texto-suave);
+    font-size: 0.95rem;
+    margin-top: 0.25rem;
+  }
+}
+
+.titulo-seccion {
+  font-family: var(--fuente-titulo);
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--borde);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.rejilla-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.tarjeta {
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 1.5rem;
+  box-shadow: var(--sombra);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: var(--acento);
+    transform: translateY(-2px);
+  }
+}
+
+.tarjeta-titulo {
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.tarjeta-valor {
+  font-family: var(--fuente-titulo);
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.tarjeta-etiqueta {
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.tarjeta-formulario {
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 2rem;
+  max-width: 550px;
+  box-shadow: var(--sombra);
+}
+
+.grupo-botones {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  button, a {
+    flex: 1;
+    text-align: center;
+    display: inline-block;
+  }
+}
+
+.encabezado-tabla-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  .titulo-seccion {
+    margin-bottom: 0;
+    font-family: var(--fuente-titulo);
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+}
+
+.busqueda input {
+  padding: 0.55rem 1rem;
+  width: 250px;
+  background-color: #141414;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  color: var(--texto);
+  font-size: 0.9rem;
+  
+  &:focus {
+    border-color: var(--acento);
+  }
+}
+
+.tag-especial {
+  background-color: rgba(249, 115, 22, 0.1);
+  border: 1px solid var(--acento);
+  color: var(--acento);
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+
+  &.admin {
+    background-color: rgba(239, 68, 68, 0.1);
+    border-color: #ef4444;
+    color: #ef4444;
+  }
+  
+  &.entrenador {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+    color: #3b82f6;
+  }
+  
+  &.miembro {
+    background-color: rgba(16, 185, 129, 0.1);
+    border-color: #10b981;
+    color: #10b981;
+  }
+}
+
+.badge-estado {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid transparent;
+  
+  &.badge-activa {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border-color: #10b981;
+  }
+  
+  &.badge-por-vencer {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    border-color: #f59e0b;
+  }
+  
+  &.badge-vencida {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border-color: #ef4444;
+  }
+}
+
+.badge-turno {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid transparent;
+
+  &.badge-turno-manana {
+    background-color: rgba(96, 165, 250, 0.1);
+    color: #60a5fa;
+    border-color: #60a5fa;
+  }
+
+  &.badge-turno-tarde {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #fbbf24;
+    border-color: #fbbf24;
+  }
+
+  &.badge-turno-noche {
+    background-color: rgba(167, 139, 250, 0.1);
+    color: #a78bfa;
+    border-color: #a78bfa;
+  }
+}
+
+.tarjeta-valor--acento {
+  color: var(--acento);
+}
+
+.tarjeta--sin-hover {
+  transition: none;
+
+  &:hover {
+    transform: none;
+    border-color: var(--borde);
+  }
+}

@@ -1,0 +1,54 @@
+@import 'variables';
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --fondo-principal: #{$fondo-principal};
+  --fondo-tarjeta: #{$fondo-tarjeta};
+  --fondo-lateral: #{$fondo-lateral};
+  --acento: #{$acento};
+  --texto: #{$texto};
+  --texto-suave: #{$texto-suave};
+  --borde: #{$borde};
+  --fuente-titulo: #{$fuente-titulo};
+  --fuente-cuerpo: #{$fuente-cuerpo};
+  --lateral-ancho: #{$lateral-ancho};
+  --encabezado-alto: #{$encabezado-alto};
+  --radio: #{$radio};
+  --sombra: #{$sombra};
+  --gradiente: #{$gradiente};
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--fuente-cuerpo);
+  background-color: var(--fondo-principal);
+  color: var(--texto);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--acento);
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--fuente-cuerpo);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+ul {
+  list-style: none;
+}

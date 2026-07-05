@@ -1,0 +1,21 @@
+<header class="encabezado-panel">
+  <div class="seccion-info">
+    <span class="tag-especial" [ngClass]="rolClase">
+      {{ rolTexto }}
+    </span>
+  </div>
+
+  <div class="usuario-perfil-contenedor">
+    <div class="nombre-usuario">
+      {{ user?.nombre }} {{ user?.apellido }}
+    </div>
+    
+    <div class="avatar-usuario" (click)="alternarMenu()">
+      <span>{{ initial }}</span>
+      <div class="menu-usuario" [class.visible]="menuVisible">
+        <a class="opcion-menu" (click)="goToProfile()">Mi Perfil</a>
+        <a class="cerrar-sesion" (click)="logout()">Cerrar sesión</a>
+      </div>
+    </div>
+  </div>
+</header>

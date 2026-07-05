@@ -1,0 +1,144 @@
+<div class="perfil-container">
+  <div class="seccion-bienvenida">
+    <h1>Mi Perfil</h1>
+    <p>Gestiona tu información personal y preferencias de cuenta.</p>
+  </div>
+
+  <div *ngIf="mensajeExito" class="alerta-exito">
+    <span>{{ mensajeExito }}</span>
+  </div>
+
+  <div *ngIf="mensajeError" class="alerta-error">
+    <span>{{ mensajeError }}</span>
+  </div>
+
+  <div class="perfil-grid">
+    <div class="perfil-sidebar">
+      <div class="tarjeta-avatar">
+        <div class="avatar-circulo">
+          <span>{{ initials }}</span>
+        </div>
+        <h2 class="nombre-usuario">{{ user?.nombre }} {{ user?.apellido }}</h2>
+        <p class="correo-usuario">{{ user?.correo }}</p>
+        <span class="tag-especial" [ngClass]="getRoleBadgeClass()">{{ user?.rol }}</span>
+      </div>
+    </div>
+
+    <div class="perfil-contenido">
+      <div class="tarjeta-seccion">
+        <div class="tarjeta-cabecera">
+          <h3>DATOS PERSONALES</h3>
+          <div class="botones-cabecera">
+            <button *ngIf="!editando" class="btn-secondary-outline" (click)="activarEdicion()">Editar</button>
+            <div *ngIf="editando" class="grupo-botones-edicion">
+              <button class="btn-primary-small" (click)="guardarEdicion()">Guardar</button>
+              <button class="btn-secondary-outline" (click)="cancelarEdicion()">Cancelar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="formulario-grid">
+          <div class="grupo-campo">
+            <label>NOMBRE</label>
+            <div *ngIf="!editando" class="input-falso">{{ user?.nombre }}</div>
+            <input *ngIf="editando" type="text" name="nombre" [(ngModel)]="editUser.nombre">
+          </div>
+
+          <div class="grupo-campo">
+            <label>APELLIDO</label>
+            <div *ngIf="!editando" class="input-falso">{{ user?.apellido }}</div>
+            <input *ngIf="editando" type="text" name="apellido" [(ngModel)]="editUser.apellido">
+          </div>
+
+          <div class="grupo-campo input-completo">
+            <label>CORREO ELECTRÓNICO</label>
+            <div *ngIf="!editando" class="input-falso">{{ user?.correo }}</div>
+            <input *ngIf="editando" type="email" name="correo" [(ngModel)]="editUser.correo">
+          </div>
+
+          <div class="grupo-campo">
+            <label>TELÉFONO</label>
+            <div *ngIf="!editando" class="input-falso">{{ user?.telefono || '+51 987 654 321' }}</div>
+            <input *ngIf="editando" type="text" name="telefono" [(ngModel)]="editUser.telefono" placeholder="+51 987 654 321">
+          </div>
+
+          <div class="grupo-campo">
+            <label>ROL EN EL SISTEMA</label>
+            <div class="input-falso">
+              <span class="tag-especial" [ngClass]="getRoleBadgeClass()">{{ user?.rol }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tarjeta-seccion">
+        <div class="tarjeta-cabecera">
+          <h3>SEGURIDAD</h3>
+        </div>
+
+        <div class="lista-seguridad">
+          <div class="item-seguridad" [class.columna-edicion]="editandoPassword">
+            <div *ngIf="!editandoPassword" class="item-info">
+              <h4>Contraseña</h4>
+              <p>Última actualización hace 3 meses</p>
+            </div>
+            <button *ngIf="!editandoPassword" class="btn-secondary-outline" (click)="activarEdicionPassword()">Cambiar</button>
+
+            <div *ngIf="editandoPassword" class="formulario-password-inline">
+              <div class="grupo-campo">
+                <label>Contraseña Actual</label>
+                <input type="password" name="actual" [(ngModel)]="passwordForm.actual" placeholder="••••••••">
+              </div>
+              <div class="grupo-campo">
+                <label>Nueva Contraseña</label>
+                <input type="password" name="nuevo" [(ngModel)]="passwordForm.nuevo" placeholder="Mínimo 6 caracteres">
+              </div>
+              <div class="grupo-campo">
+                <label>Confirmar Nueva Contraseña</label>
+                <input type="password" name="confirmar" [(ngModel)]="passwordForm.confirmar" placeholder="Repite la contraseña">
+              </div>
+              <div class="grupo-botones-inline">
+                <button class="btn-primary-small" (click)="guardarPassword()">Guardar</button>
+                <button class="btn-secondary-outline" (click)="cancelarEdicionPassword()">Cancelar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="item-seguridad">
+            <div class="item-info">
+              <h4>Eliminar cuenta</h4>
+              <p>Esta acción no se puede deshacer</p>
+            </div>
+            <button class="btn-peligro-outline">Eliminar</button>
+          </div>
+        </div>
+      </div>
+      @switch (user?.rol) {
+        @case ('ADMIN') {
+          <div class="tarjeta-seccion dinamica">
+            <div class="tarjeta-cabecera">
+              <h3>ADMINISTRACIÓN</h3>
+            </div>
+            <p class="seccion-vacia">Opciones de administración del sistema (En construcción).</p>
+          </div>
+        }
+        @case ('ENTRENADOR') {
+          <div class="tarjeta-seccion dinamica">
+            <div class="tarjeta-cabecera">
+              <h3>MI INFORMACIÓN PROFESIONAL</h3>
+            </div>
+            <p class="seccion-vacia">Configuración de especialidades y biografía (En construcción).</p>
+          </div>
+        }
+        @case ('MIEMBRO') {
+          <div class="tarjeta-seccion dinamica">
+            <div class="tarjeta-cabecera">
+              <h3>MI MEMBRESÍA</h3>
+            </div>
+            <p class="seccion-vacia">Detalles y estado actual de tu membresía (En construcción).</p>
+          </div>
+        }
+      }
+
+    </div>
+  </div>
+</div>

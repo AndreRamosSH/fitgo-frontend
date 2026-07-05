@@ -1,0 +1,67 @@
+<section class="seccion-bienvenida">
+  <h1>Hola, <span>{{ nombreUsuario }}</span></h1>
+  <p>Hoy es un gran día para superar tus límites. Revisa tu progreso actual y los entrenadores de nuestra comunidad.</p>
+</section>
+
+<section class="rejilla-tarjetas">
+  <article class="tarjeta">
+    <p class="tarjeta-titulo">Racha actual</p>
+    <p class="tarjeta-valor">{{ rachaActual }} Días</p>
+    <p class="tarjeta-etiqueta" *ngIf="rachaActual > 0">¡Sigue así!</p>
+    <p class="tarjeta-etiqueta" *ngIf="rachaActual === 0">¡Inicia hoy tu racha!</p>
+  </article>
+
+  <article class="tarjeta">
+    <p class="tarjeta-titulo">Último Peso Registrado</p>
+    <p class="tarjeta-valor">{{ pesoFormateado }}</p>
+    <p class="tarjeta-etiqueta">Mantén tu progreso actualizado</p>
+  </article>
+
+  <article class="tarjeta">
+    <p class="tarjeta-titulo">Próximo Pago</p>
+    <p class="tarjeta-valor">
+      {{ fechaProximoPago ? (fechaProximoPago | date:'dd MMM yyyy') : '--' }}
+    </p>
+    <p class="tarjeta-etiqueta">
+      {{ planActivo }}
+    </p>
+  </article>
+</section>
+
+<section class="seccion">
+  <div class="encabezado-tabla-flex">
+    <h2 class="titulo-seccion">Comunidad FitGO - Entrenadores</h2>
+
+    <div class="busqueda">
+      <input type="text" [(ngModel)]="filtro" placeholder="Filtrar por nombre o turno...">
+    </div>
+  </div>
+
+  <table class="tabla-usuarios">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Turno / Nivel</th>
+        <th>Especialidad / Experiencia</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let ent of entrenadoresFiltrados">
+        <td class="columna-nombre">{{ ent.usuario.nombre }}</td>
+        <td>{{ ent.usuario.apellido }}</td>
+        <td>
+          <span class="badge-turno" [ngClass]="'badge-turno-' + ent.turno.toLowerCase()">
+            {{ ent.turno }}
+          </span>
+        </td>
+        <td>
+          <span class="tag-especial">{{ ent.experienciaAnios }} años de exp.</span>
+        </td>
+      </tr>
+      <tr *ngIf="entrenadoresFiltrados.length === 0">
+        <td colspan="4" class="texto-vacio">No hay entrenadores disponibles por el momento.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

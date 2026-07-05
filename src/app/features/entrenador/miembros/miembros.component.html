@@ -1,0 +1,26 @@
+<section class="seccion-bienvenida">
+  <h1>Mis Miembros Asignados</h1>
+  <p>Lista de miembros a tu cargo. Total: {{ totalMiembros }}</p>
+</section>
+
+<section class="seccion">
+  <table class="tabla-usuarios">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Correo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of miembros">
+        <td class="columna-nombre">{{ m.nombre }}</td>
+        <td>{{ m.apellido }}</td>
+        <td>{{ m.correo }}</td>
+      </tr>
+      <tr *ngIf="miembros.length === 0">
+        <td colspan="3" class="texto-vacio">No tienes miembros asignados todavía.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

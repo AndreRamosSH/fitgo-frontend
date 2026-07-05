@@ -1,0 +1,42 @@
+<section class="seccion-bienvenida">
+  <h1>Gestión de Entrenadores</h1>
+  <p>Visualiza y administra al personal técnico del gimnasio. Total: {{ totalEntrenadores }}</p>
+</section>
+
+<section class="seccion">
+  <table class="tabla-usuarios">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Correo</th>
+        <th>Turno</th>
+        <th>Experiencia</th>
+        <th class="texto-derecha">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let e of entrenadores">
+        <td class="columna-nombre">{{ e.usuario.nombre }}</td>
+        <td>{{ e.usuario.apellido }}</td>
+        <td>{{ e.usuario.correo }}</td>
+        <td>
+          <span class="badge-turno" [ngClass]="'badge-turno-' + e.turno.toLowerCase()">
+            {{ e.turno }}
+          </span>
+        </td>
+        <td>
+          <span class="tag-especial">{{ e.experienciaAnios }} años</span>
+        </td>
+        <td class="texto-derecha">
+          <button (click)="eliminar(e.id)" class="btn-eliminar">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="entrenadores.length === 0">
+        <td colspan="6" class="texto-vacio">No hay entrenadores registrados.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
