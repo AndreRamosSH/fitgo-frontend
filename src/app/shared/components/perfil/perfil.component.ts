@@ -124,7 +124,8 @@ export class PerfilComponent implements OnInit {
       apellido: this.user?.apellido,
       correo: this.user?.correo,
       telefono: this.user?.telefono,
-      password: this.passwordForm.nuevo
+      password: this.passwordForm.nuevo,
+      passwordActual: this.passwordForm.actual
     };
 
     this.authService.actualizarPerfil(payload).subscribe({
