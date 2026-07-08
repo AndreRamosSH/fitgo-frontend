@@ -1,67 +1,93 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { Usuario } from '../models/usuario.model';
+import { Plan } from '../models/plan.model';
+import { Membresia } from '../models/membresia.model';
+
+export interface ResumenAdmin {
+  totalUsuarios: number;
+  miembrosActivos: number;
+  totalEntrenadores: number;
+  membresiasPorVencer: number;
+  asistenciasHoy: number;
+}
+
+export interface MiembrosRespuesta {
+  miembros: Usuario[];
+  resumen: {
+    activos: number;
+    vencidos: number;
+    porVencer: number;
+  };
+}
+
+export interface MembresiasYPlanesRespuesta {
+  planes: Plan[];
+  membresias: Membresia[];
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/admin';
+  private apiUrl = `${environment.apiUrl}/admin`;
 
-  getResumen(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/resumen`);
+  getResumen(): Observable<ResumenAdmin> {
+    return this.http.get<ResumenAdmin>(`${this.apiUrl}/resumen`);
   }
 
-  getUsuarios(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/usuarios`);
+  getUsuarios(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.apiUrl}/usuarios`);
   }
 
-  registrarUsuario(user: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/usuarios/registro`, user);
+  registrarUsuario(user: Usuario): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}/usuarios/registro`, user);
   }
 
-  getMiembros(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/miembros`);
+  getMiembros(): Observable<MiembrosRespuesta> {
+    return this.http.get<MiembrosRespuesta>(`${this.apiUrl}/miembros`);
   }
 
-  eliminarMiembro(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/miembros/${id}`);
+  eliminarMiembro(id: number): Observable<{ mensaje: string }> {
+    return this.http.delete<{ mensaje: string }>(`${this.apiUrl}/miembros/${id}`);
   }
 
-  getEntrenadores(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/entrenadores`);
+  getEntrenadores(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.apiUrl}/entrenadores`);
   }
 
-  eliminarEntrenador(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/entrenadores/${id}`);
+  eliminarEntrenador(id: number): Observable<{ mensaje: string }> {
+    return this.http.delete<{ mensaje: string }>(`${this.apiUrl}/entrenadores/${id}`);
   }
 
-  getMembresias(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/membresias`);
+  getMembresias(): Observable<MembresiasYPlanesRespuesta> {
+    return this.http.get<MembresiasYPlanesRespuesta>(`${this.apiUrl}/membresias`);
   }
 
-  crearPlan(plan: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/membresias/nuevo-plan`, plan);
+  crearPlan(plan: Plan): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}/membresias/nuevo-plan`, plan);
   }
 
-  getPlan(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/membresias/plan/${id}`);
+  getPlan(id: number): Observable<Plan> {
+    return this.http.get<Plan>(`${this.apiUrl}/membresias/plan/${id}`);
   }
 
-  actualizarPlan(id: number, plan: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/membresias/plan/${id}`, plan);
+  actualizarPlan(id: number, plan: Plan): Observable<{ mensaje: string }> {
+    return this.http.put<{ mensaje: string }>(`${this.apiUrl}/membresias/plan/${id}`, plan);
   }
 
-  eliminarPlan(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/membresias/plan/${id}`);
+  eliminarPlan(id: number): Observable<{ mensaje: string }> {
+    return this.http.delete<{ mensaje: string }>(`${this.apiUrl}/membresias/plan/${id}`);
   }
 
-  getElegiblesMembresia(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/membresias/asignar/elegibles`);
+  getElegiblesMembresia(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.apiUrl}/membresias/asignar/elegibles`);
   }
 
-  asignarMembresia(membresia: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/membresias/asignar`, membresia);
+  asignarMembresia(membresia: Membresia): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}/membresias/asignar`, membresia);
   }
 }

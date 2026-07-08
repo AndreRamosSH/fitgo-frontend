@@ -1,14 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-
-export interface User {
-  nombre: string;
-  apellido: string;
-  correo: string;
-  rol: string;
-  telefono?: string;
-}
+import { environment } from '../../../environments/environment';
+import { Usuario } from '../models/usuario.model';
 
 export interface LoginResponse {
   token: string;
@@ -24,10 +18,10 @@ export interface LoginResponse {
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/auth';
-  private perfilUrl = 'http://localhost:8080/api/perfil';
+  private apiUrl = `${environment.apiUrl}/auth`;
+  private perfilUrl = `${environment.apiUrl}/perfil`;
 
-  login(credentials: any): Observable<LoginResponse> {
+  login(credentials: { correo: string; password?: string }): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(
       tap(res => {
         if (res && res.token) {
@@ -44,19 +38,19 @@ export class AuthService {
     );
   }
 
-  registro(userData: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/registro`, userData);
+  registro(userData: Usuario): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}/registro`, userData);
   }
 
-  obtenerPerfil(): Observable<User> {
-    return this.http.get<User>(this.perfilUrl);
+  obtenerPerfil(): Observable<Usuario> {
+    return this.http.get<Usuario>(this.perfilUrl);
   }
 
-  actualizarPerfil(perfil: any): Observable<any> {
-    return this.http.put<any>(this.perfilUrl, perfil);
+  actualizarPerfil(perfil: Usuario): Observable<{ mensaje: string }> {
+    return this.http.put<{ mensaje: string }>(this.perfilUrl, perfil);
   }
 
-  actualizarSesion(user: User): void {
+  actualizarSesion(user: Usuario): void {
     const currentToken = localStorage.getItem('fitgo_token');
     if (currentToken) {
       localStorage.setItem('fitgo_user', JSON.stringify({
@@ -78,7 +72,7 @@ export class AuthService {
     return !!localStorage.getItem('fitgo_token');
   }
 
-  getUser(): User | null {
+  getUser(): Usuario | null {
     const userStr = localStorage.getItem('fitgo_user');
     return userStr ? JSON.parse(userStr) : null;
   }

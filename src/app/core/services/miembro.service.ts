@@ -1,31 +1,48 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { Usuario, Entrenador } from '../models/usuario.model';
+import { Membresia } from '../models/membresia.model';
+
+export interface ResumenMiembro {
+  usuario: {
+    nombre: string;
+    apellido: string;
+    correo: string;
+    rol: string;
+    entrenador: string | { id: number; nombre: string };
+  };
+  rachaActual: number;
+  pesoActual: number | null;
+  membresia: Membresia | null;
+  entrenadores: Entrenador[];
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class MiembroService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/miembro';
+  private apiUrl = `${environment.apiUrl}/miembro`;
 
-  getResumen(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/resumen`);
+  getResumen(): Observable<ResumenMiembro> {
+    return this.http.get<ResumenMiembro>(`${this.apiUrl}/resumen`);
   }
 
-  getProgreso(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/progreso`);
+  getProgreso(): Observable<{ pesoActual: number | null }> {
+    return this.http.get<{ pesoActual: number | null }>(`${this.apiUrl}/progreso`);
   }
 
-  getMembresia(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/membresia`);
+  getMembresia(): Observable<{ membresia: Membresia | string }> {
+    return this.http.get<{ membresia: Membresia | string }>(`${this.apiUrl}/membresia`);
   }
 
-  getEntrenadores(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/entrenadores`);
+  getEntrenadores(): Observable<Entrenador[]> {
+    return this.http.get<Entrenador[]>(`${this.apiUrl}/entrenadores`);
   }
 
-  elegirEntrenador(entrenadorId: number): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/entrenadores/elegir`, { entrenadorId });
+  elegirEntrenador(entrenadorId: number): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}/entrenadores/elegir`, { entrenadorId });
   }
 }
