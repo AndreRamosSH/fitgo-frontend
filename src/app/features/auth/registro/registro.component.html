@@ -15,39 +15,58 @@
       <span>{{ exito }}</span>
     </div>
 
-    <form (ngSubmit)="onSubmit()" id="formularioRegistro">
+    <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" id="formularioRegistro">
 
       <div class="grupo-campo">
         <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" name="nombre" [(ngModel)]="nombre" placeholder="Tu nombre" required>
+        <input type="text" id="nombre" formControlName="nombre" placeholder="Tu nombre">
+        <div *ngIf="registroForm.get('nombre')?.touched && registroForm.get('nombre')?.invalid" class="texto-error-validacion">
+          <small *ngIf="registroForm.get('nombre')?.errors?.['required']">El nombre es obligatorio.</small>
+          <small *ngIf="registroForm.get('nombre')?.errors?.['minlength']">Mínimo 2 caracteres.</small>
+        </div>
       </div>
 
       <div class="grupo-campo">
         <label for="apellido">Apellido</label>
-        <input type="text" id="apellido" name="apellido" [(ngModel)]="apellido" placeholder="Tu apellido" required>
+        <input type="text" id="apellido" formControlName="apellido" placeholder="Tu apellido">
+        <div *ngIf="registroForm.get('apellido')?.touched && registroForm.get('apellido')?.invalid" class="texto-error-validacion">
+          <small *ngIf="registroForm.get('apellido')?.errors?.['required']">El apellido es obligatorio.</small>
+          <small *ngIf="registroForm.get('apellido')?.errors?.['minlength']">Mínimo 2 caracteres.</small>
+        </div>
       </div>
 
       <div class="grupo-campo">
         <label for="correo">Correo electrónico</label>
-        <input type="email" id="correo" name="correo" [(ngModel)]="correo" placeholder="correo@ejemplo.com" required autocomplete="email">
+        <input type="email" id="correo" formControlName="correo" placeholder="correo@ejemplo.com" autocomplete="email">
+        <div *ngIf="registroForm.get('correo')?.touched && registroForm.get('correo')?.invalid" class="texto-error-validacion">
+          <small *ngIf="registroForm.get('correo')?.errors?.['required']">El correo es obligatorio.</small>
+          <small *ngIf="registroForm.get('correo')?.errors?.['email']">Debe ser un correo válido.</small>
+        </div>
       </div>
 
       <div class="grupo-campo">
         <label for="telefono">Número telefónico</label>
-        <input type="text" id="telefono" name="telefono" [(ngModel)]="telefono" placeholder="+51 987 654 321">
+        <input type="text" id="telefono" formControlName="telefono" placeholder="+51 987 654 321">
+        <div *ngIf="registroForm.get('telefono')?.touched && registroForm.get('telefono')?.invalid" class="texto-error-validacion">
+          <small *ngIf="registroForm.get('telefono')?.errors?.['pattern']">Número telefónico inválido.</small>
+        </div>
       </div>
 
       <div class="grupo-campo grupo-campo-espaciado">
         <label for="password">Contraseña</label>
         <div class="envoltorio-contrasena">
-          <input [type]="verContrasena ? 'text' : 'password'" id="password" name="password" [(ngModel)]="password" placeholder="Contraseña" required autocomplete="new-password">
+          <input [type]="verContrasena ? 'text' : 'password'" id="password" formControlName="password" placeholder="Contraseña" autocomplete="new-password">
           <button type="button" (click)="alternarContrasena()" class="boton-ojo" aria-label="Mostrar u ocultar contraseña">
             <span class="icono-ojo">{{ verContrasena ? 'Ocultar' : 'Mostrar' }}</span>
           </button>
         </div>
+        <div *ngIf="registroForm.get('password')?.touched && registroForm.get('password')?.invalid" class="texto-error-validacion">
+          <small *ngIf="registroForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</small>
+          <small *ngIf="registroForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres.</small>
+        </div>
       </div>
 
-      <button type="submit" class="btn-primary boton-completo boton-formulario-sesion">
+      <button type="submit" class="btn-primary boton-completo boton-formulario-sesion" [disabled]="registroForm.invalid">
         Registrarse
       </button>
 

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms';
-import { MetricasService, Metricas} from '../../../core/services/metricas.service';
+import { MetricasService } from '../../../core/services/metricas.service';
+import { Metricas } from '../../../core/models/metricas.model';
 @Component({
     selector: 'app-metricas',
     standalone: true, 

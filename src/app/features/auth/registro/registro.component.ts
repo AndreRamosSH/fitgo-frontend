@@ -1,13 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { Usuario } from '../../../core/models/usuario.model';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.scss'
 })
@@ -15,29 +16,38 @@ export class RegistroComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  nombre = '';
-  apellido = '';
-  correo = '';
-  telefono = '';
-  password = '';
   error = '';
   exito = '';
   verContrasena = false;
 
+  registroForm = new FormGroup({
+    nombre: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    apellido: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    correo: new FormControl('', [Validators.required, Validators.email]),
+    telefono: new FormControl('', [Validators.pattern('^[+0-9\\s]{7,15}$')]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6)])
+  });
+
   onSubmit(): void {
+    if (this.registroForm.invalid) {
+      this.error = 'Por favor, completa los campos obligatorios correctamente.';
+      return;
+    }
+
     this.error = '';
     this.exito = '';
 
-    const userData = {
-      nombre: this.nombre,
-      apellido: this.apellido,
-      correo: this.correo,
-      telefono: this.telefono,
-      password: this.password
+    const userData: Usuario = {
+      nombre: this.registroForm.value.nombre!,
+      apellido: this.registroForm.value.apellido!,
+      correo: this.registroForm.value.correo!,
+      telefono: this.registroForm.value.telefono || undefined,
+      password: this.registroForm.value.password!,
+      rol: 'MIEMBRO' // Por defecto se registran como miembros desde el portal público
     };
 
     this.authService.registro(userData).subscribe({
-      next: (res) => {
+      next: () => {
         this.exito = 'Usuario registrado exitosamente. Redirigiendo al login...';
         setTimeout(() => {
           this.router.navigate(['/login']);

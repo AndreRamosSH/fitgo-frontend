@@ -1,7 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthService, User } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { Usuario } from '../../../core/models/usuario.model';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +15,7 @@ export class HeaderComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  user: User | null = null;
+  user: Usuario | null = null;
   initial = 'U';
   menuVisible = false;
 

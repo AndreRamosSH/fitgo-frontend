@@ -31,35 +31,50 @@
           <div class="botones-cabecera">
             <button *ngIf="!editando" class="btn-secondary-outline" (click)="activarEdicion()">Editar</button>
             <div *ngIf="editando" class="grupo-botones-edicion">
-              <button class="btn-primary-small" (click)="guardarEdicion()">Guardar</button>
+              <button class="btn-primary-small" (click)="guardarEdicion()" [disabled]="perfilForm.invalid">Guardar</button>
               <button class="btn-secondary-outline" (click)="cancelarEdicion()">Cancelar</button>
             </div>
           </div>
         </div>
 
-        <div class="formulario-grid">
+        <div [formGroup]="perfilForm" class="formulario-grid">
           <div class="grupo-campo">
-            <label>NOMBRE</label>
+            <label for="nombre">NOMBRE</label>
             <div *ngIf="!editando" class="input-falso">{{ user?.nombre }}</div>
-            <input *ngIf="editando" type="text" name="nombre" [(ngModel)]="editUser.nombre">
+            <input *ngIf="editando" type="text" id="nombre" formControlName="nombre">
+            <div *ngIf="editando && perfilForm.get('nombre')?.touched && perfilForm.get('nombre')?.invalid" class="texto-error-validacion">
+              <small *ngIf="perfilForm.get('nombre')?.errors?.['required']">El nombre es obligatorio.</small>
+              <small *ngIf="perfilForm.get('nombre')?.errors?.['minlength']">Mínimo 2 caracteres.</small>
+            </div>
           </div>
 
           <div class="grupo-campo">
-            <label>APELLIDO</label>
+            <label for="apellido">APELLIDO</label>
             <div *ngIf="!editando" class="input-falso">{{ user?.apellido }}</div>
-            <input *ngIf="editando" type="text" name="apellido" [(ngModel)]="editUser.apellido">
+            <input *ngIf="editando" type="text" id="apellido" formControlName="apellido">
+            <div *ngIf="editando && perfilForm.get('apellido')?.touched && perfilForm.get('apellido')?.invalid" class="texto-error-validacion">
+              <small *ngIf="perfilForm.get('apellido')?.errors?.['required']">El apellido es obligatorio.</small>
+              <small *ngIf="perfilForm.get('apellido')?.errors?.['minlength']">Mínimo 2 caracteres.</small>
+            </div>
           </div>
 
           <div class="grupo-campo input-completo">
-            <label>CORREO ELECTRÓNICO</label>
+            <label for="correo">CORREO ELECTRÓNICO</label>
             <div *ngIf="!editando" class="input-falso">{{ user?.correo }}</div>
-            <input *ngIf="editando" type="email" name="correo" [(ngModel)]="editUser.correo">
+            <input *ngIf="editando" type="email" id="correo" formControlName="correo">
+            <div *ngIf="editando && perfilForm.get('correo')?.touched && perfilForm.get('correo')?.invalid" class="texto-error-validacion">
+              <small *ngIf="perfilForm.get('correo')?.errors?.['required']">El correo es obligatorio.</small>
+              <small *ngIf="perfilForm.get('correo')?.errors?.['email']">Debe ser un correo válido.</small>
+            </div>
           </div>
 
           <div class="grupo-campo">
-            <label>TELÉFONO</label>
+            <label for="telefono">TELÉFONO</label>
             <div *ngIf="!editando" class="input-falso">{{ user?.telefono || '+51 987 654 321' }}</div>
-            <input *ngIf="editando" type="text" name="telefono" [(ngModel)]="editUser.telefono" placeholder="+51 987 654 321">
+            <input *ngIf="editando" type="text" id="telefono" formControlName="telefono" placeholder="+51 987 654 321">
+            <div *ngIf="editando && perfilForm.get('telefono')?.touched && perfilForm.get('telefono')?.invalid" class="texto-error-validacion">
+              <small *ngIf="perfilForm.get('telefono')?.errors?.['pattern']">Número telefónico inválido.</small>
+            </div>
           </div>
 
           <div class="grupo-campo">
@@ -70,6 +85,7 @@
           </div>
         </div>
       </div>
+
       <div class="tarjeta-seccion">
         <div class="tarjeta-cabecera">
           <h3>SEGURIDAD</h3>
@@ -83,21 +99,31 @@
             </div>
             <button *ngIf="!editandoPassword" class="btn-secondary-outline" (click)="activarEdicionPassword()">Cambiar</button>
 
-            <div *ngIf="editandoPassword" class="formulario-password-inline">
+            <div *ngIf="editandoPassword" [formGroup]="passwordForm" class="formulario-password-inline">
               <div class="grupo-campo">
-                <label>Contraseña Actual</label>
-                <input type="password" name="actual" [(ngModel)]="passwordForm.actual" placeholder="••••••••">
+                <label for="actual">Contraseña Actual</label>
+                <input type="password" id="actual" formControlName="actual" placeholder="••••••••">
+                <div *ngIf="passwordForm.get('actual')?.touched && passwordForm.get('actual')?.invalid" class="texto-error-validacion">
+                  <small *ngIf="passwordForm.get('actual')?.errors?.['required']">La contraseña actual es obligatoria.</small>
+                </div>
               </div>
               <div class="grupo-campo">
-                <label>Nueva Contraseña</label>
-                <input type="password" name="nuevo" [(ngModel)]="passwordForm.nuevo" placeholder="Mínimo 6 caracteres">
+                <label for="nuevo">Nueva Contraseña</label>
+                <input type="password" id="nuevo" formControlName="nuevo" placeholder="Mínimo 6 caracteres">
+                <div *ngIf="passwordForm.get('nuevo')?.touched && passwordForm.get('nuevo')?.invalid" class="texto-error-validacion">
+                  <small *ngIf="passwordForm.get('nuevo')?.errors?.['required']">La nueva contraseña es obligatoria.</small>
+                  <small *ngIf="passwordForm.get('nuevo')?.errors?.['minlength']">Mínimo 6 caracteres.</small>
+                </div>
               </div>
               <div class="grupo-campo">
-                <label>Confirmar Nueva Contraseña</label>
-                <input type="password" name="confirmar" [(ngModel)]="passwordForm.confirmar" placeholder="Repite la contraseña">
+                <label for="confirmar">Confirmar Nueva Contraseña</label>
+                <input type="password" id="confirmar" formControlName="confirmar" placeholder="Repite la contraseña">
+                <div *ngIf="passwordForm.get('confirmar')?.touched && passwordForm.get('confirmar')?.invalid" class="texto-error-validacion">
+                  <small *ngIf="passwordForm.get('confirmar')?.errors?.['required']">Confirma tu nueva contraseña.</small>
+                </div>
               </div>
               <div class="grupo-botones-inline">
-                <button class="btn-primary-small" (click)="guardarPassword()">Guardar</button>
+                <button class="btn-primary-small" (click)="guardarPassword()" [disabled]="passwordForm.invalid">Guardar</button>
                 <button class="btn-secondary-outline" (click)="cancelarEdicionPassword()">Cancelar</button>
               </div>
             </div>
@@ -112,6 +138,7 @@
           </div>
         </div>
       </div>
+
       @switch (user?.rol) {
         @case ('ADMIN') {
           <div class="tarjeta-seccion dinamica">

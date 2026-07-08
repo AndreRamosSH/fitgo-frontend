@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -15,14 +15,27 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  correo = '';
-  password = '';
   error = '';
   verContrasena = false;
 
+  loginForm = new FormGroup({
+    correo: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6)])
+  });
+
   onSubmit(): void {
+    if (this.loginForm.invalid) {
+      this.error = 'Por favor, introduce credenciales válidas.';
+      return;
+    }
+
     this.error = '';
-    this.authService.login({ correo: this.correo, password: this.password }).subscribe({
+    const credentials = {
+      correo: this.loginForm.value.correo!,
+      password: this.loginForm.value.password!
+    };
+
+    this.authService.login(credentials).subscribe({
       next: (res) => {
         const rol = res.rol;
         if (rol === 'ADMIN') {

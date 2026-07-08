@@ -1,29 +1,40 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { AuthService, User } from '../../../core/services/auth.service';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { AuthService } from '../../../core/services/auth.service';
+import { Usuario } from '../../../core/models/usuario.model';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.scss'
 })
 export class PerfilComponent implements OnInit {
   private authService = inject(AuthService);
-  
-  user: User | null = null;
+
+  user: Usuario | null = null;
   initials: string = 'U';
-  
+
   editando: boolean = false;
   editandoPassword: boolean = false;
-  
-  editUser: any = { nombre: '', apellido: '', correo: '', telefono: '' };
-  passwordForm: any = { actual: '', nuevo: '', confirmar: '' };
-  
+
   mensajeExito: string = '';
   mensajeError: string = '';
+
+  perfilForm = new FormGroup({
+    nombre: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    apellido: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    correo: new FormControl('', [Validators.required, Validators.email]),
+    telefono: new FormControl('', [Validators.pattern('^[+0-9\\s]{7,15}$')])
+  });
+
+  passwordForm = new FormGroup({
+    actual: new FormControl('', [Validators.required]),
+    nuevo: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    confirmar: new FormControl('', [Validators.required])
+  });
 
   ngOnInit(): void {
     this.cargarPerfil();
@@ -56,12 +67,12 @@ export class PerfilComponent implements OnInit {
 
   activarEdicion(): void {
     if (this.user) {
-      this.editUser = {
+      this.perfilForm.patchValue({
         nombre: this.user.nombre,
         apellido: this.user.apellido,
         correo: this.user.correo,
         telefono: this.user.telefono || ''
-      };
+      });
       this.editando = true;
       this.mensajeExito = '';
       this.mensajeError = '';
@@ -73,15 +84,28 @@ export class PerfilComponent implements OnInit {
   }
 
   guardarEdicion(): void {
-    this.authService.actualizarPerfil(this.editUser).subscribe({
+    if (this.perfilForm.invalid) {
+      this.mensajeError = 'Por favor, completa los campos correctamente.';
+      return;
+    }
+
+    const editData: Usuario = {
+      nombre: this.perfilForm.value.nombre!,
+      apellido: this.perfilForm.value.apellido!,
+      correo: this.perfilForm.value.correo!,
+      telefono: this.perfilForm.value.telefono || undefined,
+      rol: this.user?.rol!
+    };
+
+    this.authService.actualizarPerfil(editData).subscribe({
       next: (response) => {
         this.mensajeExito = response.mensaje || 'Perfil actualizado exitosamente';
         this.mensajeError = '';
         if (this.user) {
-          this.user.nombre = this.editUser.nombre;
-          this.user.apellido = this.editUser.apellido;
-          this.user.correo = this.editUser.correo;
-          this.user.telefono = this.editUser.telefono;
+          this.user.nombre = editData.nombre;
+          this.user.apellido = editData.apellido;
+          this.user.correo = editData.correo;
+          this.user.telefono = editData.telefono;
           this.authService.actualizarSesion(this.user);
           this.actualizarIniciales();
         }
@@ -95,7 +119,7 @@ export class PerfilComponent implements OnInit {
   }
 
   activarEdicionPassword(): void {
-    this.passwordForm = { actual: '', nuevo: '', confirmar: '' };
+    this.passwordForm.reset();
     this.editandoPassword = true;
     this.mensajeExito = '';
     this.mensajeError = '';
@@ -106,33 +130,32 @@ export class PerfilComponent implements OnInit {
   }
 
   guardarPassword(): void {
-    if (!this.passwordForm.actual || !this.passwordForm.nuevo || !this.passwordForm.confirmar) {
-      this.mensajeError = 'Todos los campos de contraseña son obligatorios';
+    if (this.passwordForm.invalid) {
+      this.mensajeError = 'Todos los campos son obligatorios y la contraseña debe tener al menos 6 caracteres';
       return;
     }
-    if (this.passwordForm.nuevo.length < 6) {
-      this.mensajeError = 'La nueva contraseña debe tener al menos 6 caracteres';
-      return;
-    }
-    if (this.passwordForm.nuevo !== this.passwordForm.confirmar) {
+
+    if (this.passwordForm.value.nuevo !== this.passwordForm.value.confirmar) {
       this.mensajeError = 'La confirmación no coincide con la nueva contraseña';
       return;
     }
 
-    const payload = {
-      nombre: this.user?.nombre,
-      apellido: this.user?.apellido,
-      correo: this.user?.correo,
-      telefono: this.user?.telefono,
-      password: this.passwordForm.nuevo,
-      passwordActual: this.passwordForm.actual
+    const payload: Usuario = {
+      nombre: this.user?.nombre!,
+      apellido: this.user?.apellido!,
+      correo: this.user?.correo!,
+      telefono: this.user?.telefono || undefined,
+      rol: this.user?.rol!,
+      password: this.passwordForm.value.nuevo!,
+      passwordActual: this.passwordForm.value.actual!
     };
 
     this.authService.actualizarPerfil(payload).subscribe({
-      next: (response) => {
+      next: () => {
         this.mensajeExito = 'Contraseña cambiada exitosamente';
         this.mensajeError = '';
         this.editandoPassword = false;
+        this.passwordForm.reset();
       },
       error: (err) => {
         this.mensajeError = err.error?.error || 'Error al cambiar la contraseña';
