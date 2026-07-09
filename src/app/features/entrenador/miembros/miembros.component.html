@@ -13,14 +13,17 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let m of miembros">
-        <td class="columna-nombre">{{ m.nombre }}</td>
-        <td>{{ m.apellido }}</td>
-        <td>{{ m.correo }}</td>
-      </tr>
-      <tr *ngIf="miembros.length === 0">
-        <td colspan="3" class="texto-vacio">No tienes miembros asignados todavía.</td>
-      </tr>
+      @for (m of miembros; track m.id) {
+        <tr>
+          <td class="columna-nombre">{{ m.nombre }}</td>
+          <td>{{ m.apellido }}</td>
+          <td>{{ m.correo }}</td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="3" class="texto-vacio">No tienes miembros asignados todavía.</td>
+        </tr>
+      }
     </tbody>
   </table>
 </section>

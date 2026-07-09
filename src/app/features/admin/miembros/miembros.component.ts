@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
 import { ConfirmService } from '../../../core/services/confirm.service';
@@ -8,11 +8,13 @@ import { ConfirmService } from '../../../core/services/confirm.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './miembros.component.html',
-  styleUrl: './miembros.component.scss'
+  styleUrl: './miembros.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MiembrosComponent implements OnInit {
   private adminService = inject(AdminService);
   private confirmService = inject(ConfirmService);
+  private cdr = inject(ChangeDetectorRef);
 
   miembros: any[] = [];
   resumen: any = null;
@@ -26,6 +28,7 @@ export class MiembrosComponent implements OnInit {
       next: (res: any) => {
         this.miembros = res.miembros || [];
         this.resumen = res.resumen;
+        this.cdr.markForCheck();
       },
       error: (err: any) => console.error(err)
     });
