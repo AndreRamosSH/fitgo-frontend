@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 import { AdminService } from '../../../core/services/admin.service';
 import { ConfirmService } from '../../../core/services/confirm.service';
 
@@ -37,19 +38,16 @@ export class MembresiasComponent implements OnInit {
   }
 
   cargarDatos(): void {
-    this.adminService.getMembresias().subscribe({
+    forkJoin({
+      membresiasData: this.adminService.getMembresias(),
+      elegiblesData: this.adminService.getElegiblesMembresia()
+    }).subscribe({
       next: (res: any) => {
-        this.planes = res.planes || [];
-        this.membresias = res.membresias || [];
+        this.planes = res.membresiasData.planes || [];
+        this.membresias = res.membresiasData.membresias || [];
+        this.elegibles = res.elegiblesData || [];
       },
-      error: (err: any) => console.error(err)
-    });
-
-    this.adminService.getElegiblesMembresia().subscribe({
-      next: (res: any) => {
-        this.elegibles = res || [];
-      },
-      error: (err: any) => console.error(err)
+      error: (err: any) => console.error('Error al cargar datos de membresías', err)
     });
   }
 

@@ -8,141 +8,161 @@
   <button (click)="cambiarPestana('membresias')" [class.activo]="pestanaActiva === 'membresias'">Membresías Asignadas</button>
 </div>
 
-<div *ngIf="error" class="alerta-error">
-  <span>{{ error }}</span>
-</div>
-
-<div *ngIf="exito" class="alerta-exito">
-  <span>{{ exito }}</span>
-</div>
-
-<div *ngIf="pestanaActiva === 'planes'" class="seccion-division">
-  <div class="tarjeta tarjeta--sin-hover lista-planes">
-    <h2 class="titulo-seccion">Planes Disponibles</h2>
-    
-    <table class="tabla-usuarios">
-      <thead>
-        <tr>
-          <th>Plan</th>
-          <th>Precio</th>
-          <th>Duración</th>
-          <th class="texto-derecha">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let p of planes">
-          <td class="columna-nombre">{{ p.nombre }}</td>
-          <td>S/ {{ p.precio }}</td>
-          <td>{{ p.duracionDias }} días</td>
-          <td class="celda-acciones">
-            <button (click)="editarPlan(p)" class="btn-editar">Editar</button>
-            <button (click)="eliminarPlan(p.id)" class="btn-eliminar">Eliminar</button>
-          </td>
-        </tr>
-        <tr *ngIf="planes.length === 0">
-          <td colspan="4" class="texto-vacio">No hay planes registrados.</td>
-        </tr>
-      </tbody>
-    </table>
+@if (error) {
+  <div class="alerta-error">
+    <span>{{ error }}</span>
   </div>
+}
 
-  <div class="tarjeta tarjeta--sin-hover formulario-plan">
-    <h2 class="titulo-seccion">{{ planIdEditando ? 'Editar Plan' : 'Nuevo Plan' }}</h2>
-    
-    <form (ngSubmit)="onSubmitPlan()">
-      <div class="grupo-campo">
-        <label for="planNombre">Nombre del Plan</label>
-        <input type="text" id="planNombre" name="planNombre" [(ngModel)]="planNombre" required placeholder="Ej: Plan Anual">
-      </div>
+@if (exito) {
+  <div class="alerta-exito">
+    <span>{{ exito }}</span>
+  </div>
+}
 
-      <div class="grupo-campo">
-        <label for="planPrecio">Precio (S/)</label>
-        <input type="number" id="planPrecio" name="planPrecio" [(ngModel)]="planPrecio" required min="1">
-      </div>
+@if (pestanaActiva === 'planes') {
+  <div class="seccion-division">
+    <div class="tarjeta tarjeta--sin-hover lista-planes">
+      <h2 class="titulo-seccion">Planes Disponibles</h2>
+      
+      <table class="tabla-usuarios">
+        <thead>
+          <tr>
+            <th>Plan</th>
+            <th>Precio</th>
+            <th>Duración</th>
+            <th class="texto-derecha">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of planes; track p.id) {
+            <tr>
+              <td class="columna-nombre">{{ p.nombre }}</td>
+              <td>S/ {{ p.precio }}</td>
+              <td>{{ p.duracionDias }} días</td>
+              <td class="celda-acciones">
+                <button (click)="editarPlan(p)" class="btn-editar">Editar</button>
+                <button (click)="eliminarPlan(p.id)" class="btn-eliminar">Eliminar</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4" class="texto-vacio">No hay planes registrados.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
 
-      <div class="grupo-campo">
-        <label for="planDuracion">Duración (días)</label>
-        <input type="number" id="planDuracion" name="planDuracion" [(ngModel)]="planDuracion" required min="1">
-      </div>
+    <div class="tarjeta tarjeta--sin-hover formulario-plan">
+      <h2 class="titulo-seccion">{{ planIdEditando ? 'Editar Plan' : 'Nuevo Plan' }}</h2>
+      
+      <form (ngSubmit)="onSubmitPlan()">
+        <div class="grupo-campo">
+          <label for="planNombre">Nombre del Plan</label>
+          <input type="text" id="planNombre" name="planNombre" [(ngModel)]="planNombre" required placeholder="Ej: Plan Anual">
+        </div>
 
-      <div class="grupo-campo">
-        <label for="planDescripcion">Descripción</label>
-        <textarea id="planDescripcion" name="planDescripcion" [(ngModel)]="planDescripcion" rows="3" placeholder="Detalles del plan..."></textarea>
-      </div>
+        <div class="grupo-campo">
+          <label for="planPrecio">Precio (S/)</label>
+          <input type="number" id="planPrecio" name="planPrecio" [(ngModel)]="planPrecio" required min="1">
+        </div>
 
-      <div class="grupo-botones">
-        <button type="submit" class="btn-primary">
-          {{ planIdEditando ? 'Actualizar' : 'Guardar Plan' }}
+        <div class="grupo-campo">
+          <label for="planDuracion">Duración (días)</label>
+          <input type="number" id="planDuracion" name="planDuracion" [(ngModel)]="planDuracion" required min="1">
+        </div>
+
+        <div class="grupo-campo">
+          <label for="planDescripcion">Descripción</label>
+          <textarea id="planDescripcion" name="planDescripcion" [(ngModel)]="planDescripcion" rows="3" placeholder="Detalles del plan..."></textarea>
+        </div>
+
+        <div class="grupo-botones">
+          <button type="submit" class="btn-primary">
+            {{ planIdEditando ? 'Actualizar' : 'Guardar Plan' }}
+          </button>
+          @if (planIdEditando) {
+            <button type="button" (click)="limpiarFormularioPlan()" class="btn-secondary">
+              Cancelar
+            </button>
+          }
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+@if (pestanaActiva === 'membresias') {
+  <div class="seccion-division">
+    <div class="tarjeta tarjeta--sin-hover lista-membresias">
+      <h2 class="titulo-seccion">Membresías Registradas</h2>
+
+      <table class="tabla-usuarios">
+        <thead>
+          <tr>
+            <th>Miembro</th>
+            <th>Plan</th>
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (m of membresias; track m.id) {
+            <tr>
+              <td class="columna-nombre">{{ m.usuario.nombre }} {{ m.usuario.apellido }}</td>
+              <td>{{ m.plan.nombre }}</td>
+              <td>{{ m.fechaInicio | date:'dd/MM/yyyy' }}</td>
+              <td>{{ m.fechaFin | date:'dd/MM/yyyy' }}</td>
+              <td>
+                <span class="badge-estado" 
+                      [ngClass]="m.estado === 'ACTIVA' ? 'badge-activa' : m.estado === 'POR_VENCER' ? 'badge-por-vencer' : 'badge-vencida'">
+                  {{ m.estado }}
+                </span>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="texto-vacio">No hay membresías asignadas.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tarjeta tarjeta--sin-hover formulario-membresia">
+      <h2 class="titulo-seccion">Asignar Membresía</h2>
+
+      <form (ngSubmit)="onAsignarMembresia()">
+        <div class="grupo-campo">
+          <label for="usuarioId">Miembro elegible</label>
+          <select id="usuarioId" name="usuarioId" [(ngModel)]="usuarioSeleccionadoId" required>
+            <option [ngValue]="null">-- Selecciona un miembro --</option>
+            @for (u of elegibles; track u.id) {
+              <option [value]="u.id">
+                {{ u.nombre }} {{ u.apellido }} - {{ u.correo }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="grupo-campo">
+          <label for="planId">Plan de membresía</label>
+          <select id="planId" name="planId" [(ngModel)]="planSeleccionadoId" required>
+            <option [ngValue]="null">-- Selecciona un plan --</option>
+            @for (p of planes; track p.id) {
+              <option [value]="p.id">
+                {{ p.nombre }} (S/ {{ p.precio }} - {{ p.duracionDias }} días)
+              </option>
+            }
+          </select>
+        </div>
+
+        <button type="submit" class="btn-primary boton-completo">
+          Asignar Membresía
         </button>
-        <button type="button" *ngIf="planIdEditando" (click)="limpiarFormularioPlan()" class="btn-secondary">
-          Cancelar
-        </button>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-</div>
-
-<div *ngIf="pestanaActiva === 'membresias'" class="seccion-division">
-  <div class="tarjeta tarjeta--sin-hover lista-membresias">
-    <h2 class="titulo-seccion">Membresías Registradas</h2>
-
-    <table class="tabla-usuarios">
-      <thead>
-        <tr>
-          <th>Miembro</th>
-          <th>Plan</th>
-          <th>Inicio</th>
-          <th>Fin</th>
-          <th>Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let m of membresias">
-          <td class="columna-nombre">{{ m.usuario.nombre }} {{ m.usuario.apellido }}</td>
-          <td>{{ m.plan.nombre }}</td>
-          <td>{{ m.fechaInicio | date:'dd/MM/yyyy' }}</td>
-          <td>{{ m.fechaFin | date:'dd/MM/yyyy' }}</td>
-          <td>
-            <span class="badge-estado" 
-                  [ngClass]="m.estado === 'ACTIVA' ? 'badge-activa' : m.estado === 'POR_VENCER' ? 'badge-por-vencer' : 'badge-vencida'">
-              {{ m.estado }}
-            </span>
-          </td>
-        </tr>
-        <tr *ngIf="membresias.length === 0">
-          <td colspan="5" class="texto-vacio">No hay membresías asignadas.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="tarjeta tarjeta--sin-hover formulario-membresia">
-    <h2 class="titulo-seccion">Asignar Membresía</h2>
-
-    <form (ngSubmit)="onAsignarMembresia()">
-      <div class="grupo-campo">
-        <label for="usuarioId">Miembro elegible</label>
-        <select id="usuarioId" name="usuarioId" [(ngModel)]="usuarioSeleccionadoId" required>
-          <option [ngValue]="null">-- Selecciona un miembro --</option>
-          <option *ngFor="let u of elegibles" [value]="u.id">
-            {{ u.nombre }} {{ u.apellido }} - {{ u.correo }}
-          </option>
-        </select>
-      </div>
-
-      <div class="grupo-campo">
-        <label for="planId">Plan de membresía</label>
-        <select id="planId" name="planId" [(ngModel)]="planSeleccionadoId" required>
-          <option [ngValue]="null">-- Selecciona un plan --</option>
-          <option *ngFor="let p of planes" [value]="p.id">
-            {{ p.nombre }} (S/ {{ p.precio }} - {{ p.duracionDias }} días)
-          </option>
-        </select>
-      </div>
-
-      <button type="submit" class="btn-primary boton-completo">
-        Asignar Membresía
-      </button>
-    </form>
-  </div>
-</div>
+}
