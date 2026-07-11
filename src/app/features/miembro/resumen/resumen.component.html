@@ -3,6 +3,22 @@
   <p>Hoy es un gran día para superar tus límites. Revisa tu progreso actual y los entrenadores de nuestra comunidad.</p>
 </section>
 
+<div *ngIf="mostrarAlertaVencimiento" class="alerta-vencimiento-aviso">
+  <div class="alerta-contenido">
+    <div class="alerta-texto">
+      <strong>Tu membresía está por vencer:</strong> Quedan {{ diasRestantes }} días. Renueva pronto para no perder la asignación de tu entrenador.
+    </div>
+  </div>
+</div>
+
+<div *ngIf="mostrarAlertaGracia" class="alerta-gracia-aviso">
+  <div class="alerta-contenido">
+    <div class="alerta-texto">
+      <strong>Tu membresía ha vencido:</strong> Tienes un período de gracia de {{ diasRestantes }} días para renovar tu membresía antes de que tu entrenador actual sea desasignado.
+    </div>
+  </div>
+</div>
+
 <section class="rejilla-tarjetas">
   <article class="tarjeta">
     <p class="tarjeta-titulo">Racha actual</p>

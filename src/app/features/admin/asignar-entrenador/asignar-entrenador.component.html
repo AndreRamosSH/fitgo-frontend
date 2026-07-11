@@ -1,0 +1,37 @@
+<section class="seccion-bienvenida">
+  <h1>Asignar Entrenador</h1>
+  <p>Gestiona la asignación de entrenadores a miembros con suscripción activa.</p>
+</section>
+
+<section class="seccion">
+  <table class="tabla-usuarios">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Correo</th>
+        <th>Entrenador Asignado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of miembros">
+        <td class="columna-nombre">{{ m.nombre }}</td>
+        <td>{{ m.apellido }}</td>
+        <td>{{ m.correo }}</td>
+        <td>
+          <div class="grupo-campo">
+            <select [ngModel]="m.entrenador ? m.entrenador.id : null" (ngModelChange)="onEntrenadorChange(m.id, $event)">
+              <option [ngValue]="null">Sin asignar</option>
+              <option *ngFor="let ent of entrenadores" [ngValue]="ent.id">
+                {{ ent.usuario?.nombre }} {{ ent.usuario?.apellido }}
+              </option>
+            </select>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="miembros.length === 0">
+        <td colspan="4" class="texto-vacio">No hay miembros activos con suscripción vigente en este momento.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

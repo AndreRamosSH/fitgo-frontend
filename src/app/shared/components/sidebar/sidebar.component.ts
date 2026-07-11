@@ -44,6 +44,7 @@ export class SidebarComponent implements OnInit {
           title: 'Operaciones',
           items: [
             { label: 'Registrar Usuario', route: '/admin/registro-interno' },
+            { label: 'Asignar Entrenador', route: '/admin/asignar-entrenador' },
             { label: 'Reportes', route: '/admin/reportes' }
           ]
         },
