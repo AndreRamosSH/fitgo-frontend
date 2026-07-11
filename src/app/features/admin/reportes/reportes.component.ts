@@ -1,90 +1,85 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AdminService } from '../../../core/services/admin.service';
+import { AsistenciaReport, MembresiaReport, EntrenadorReport } from '../../../core/models/reportes.model';
 
 @Component({
   selector: 'app-reportes',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './reportes.component.html',
   styleUrl: './reportes.component.scss'
 })
-export class ReportesComponent {
+export class ReportesComponent implements OnInit {
+  private adminService = inject(AdminService);
+
   activeTab: 'asistencias' | 'membresias' | 'entrenadores' = 'asistencias';
-  mesSeleccionado: string = 'enero-2025';
+  mesSeleccionado: string = '';
   miembroSeleccionado: string = 'todos';
 
-  meses = [
-    { valor: 'enero-2025', texto: 'Enero 2025' }
-  ];
+  asistenciaReport?: AsistenciaReport;
+  membresiaReport?: MembresiaReport;
+  entrenadorReport?: EntrenadorReport;
 
-  miembros = [
-    { valor: 'todos', texto: 'Todos los miembros' }
-  ];
+  ngOnInit() {
+    this.cargarReporte();
+  }
 
-  kpis = [
-    { titulo: 'Total ingresos', valor: '187', etiqueta: 'Este mes', destacado: true },
-    { titulo: 'Promedio diario', valor: '9', etiqueta: 'Personas por día', destacado: false },
-    { titulo: 'Día más concurrido', valor: 'Lun', etiqueta: '28 ingresos', destacado: false },
-    { titulo: 'Miembros ausentes', valor: '2', etiqueta: 'Sin asistir este mes', destacado: true }
-  ];
-
-  kpisReportes = [
-    { titulo: 'Activas', valor: '7', etiqueta: 'Con membresía vigente', destacado: true },
-    { titulo: 'Por vencer (7 días)', valor: '2', etiqueta: 'Requieren renovación', destacado: false },
-    { titulo: 'Vencidas', valor: '1', etiqueta: 'Sin renovar', destacado: false },
-    { titulo: 'Plan más popular', valor: 'Premium', etiqueta: '4 miembros', destacado: false }
-  ];
-
-  distribucionPlan = [
-    { nombre: 'Premium', miembros: 4, porcentaje: 58, color: '#F97316' },
-    { nombre: 'Estándar', miembros: 3, porcentaje: 20, color: '#10B981' },
-    { nombre: 'Básico', miembros: 2, porcentaje: 22, color: '#3B82F6' }
-  ];
-
-  proximasVencer = [
-    { miembro: 'Sofia Gomez', plan: 'Estándar', vence: '28 ene', dias: '3 días', estado: 'por-vencer' },
-    { miembro: 'Josué Ramos', plan: 'Premium', vence: '30 ene', dias: '5 días', estado: 'por-vencer' },
-    { miembro: 'María Vega', plan: '—', vence: '—', dias: 'Vencida', estado: 'vencida' }
-  ];
-
-  kpisEntrenadores = [
-    { titulo: 'Total entrenadores', valor: '3', etiqueta: 'Activos', destacado: true },
-    { titulo: 'Total rutinas creadas', valor: '9', etiqueta: 'Entre todos', destacado: false },
-    { titulo: 'Más miembros', valor: 'Carlos R.', etiqueta: '5 alumnos', destacado: false },
-    { titulo: 'Promedio alumnos', valor: '4', etiqueta: 'Por entrenador', destacado: false }
-  ];
-
-  comparativaEntrenadores = [
-    { entrenador: 'Carlos Ríos', especialidad: 'Musculación', miembros: 5, rutinas: 3, membresiasActivas: '80%', estadoMembresia: 'bueno', carga: 50, colorCarga: '#F97316' },
-    { entrenador: 'Ana Torres', especialidad: 'Cardio', miembros: 3, rutinas: 2, membresiasActivas: '100%', estadoMembresia: 'excelente', carga: 30, colorCarga: '#10B981' },
-    { entrenador: 'Jorge Mendoza', especialidad: 'CrossFit', miembros: 4, rutinas: 4, membresiasActivas: '75%', estadoMembresia: 'regular', carga: 40, colorCarga: '#3B82F6' }
-  ];
-
-  ingresosPorDia = [
-    { dia: 'L1', valor: 8, destacado: false },
-    { dia: 'M1', valor: 11, destacado: true },
-    { dia: 'J1', valor: 7, destacado: false },
-    { dia: 'V1', valor: 9, destacado: false },
-    { dia: 'L2', valor: 13, destacado: true },
-    { dia: 'M2', valor: 6, destacado: false },
-    { dia: 'J2', valor: 10, destacado: false },
-    { dia: 'V2', valor: 14, destacado: true },
-    { dia: 'L3', valor: 8, destacado: false },
-    { dia: 'M3', valor: 12, destacado: true }
-  ];
-
-  asistenciasPorDiaSemana = [
-    { dia: 'Lunes', valor: 28, porcentaje: 100 },
-    { dia: 'Martes', valor: 24, porcentaje: 85 },
-    { dia: 'Miércoles', valor: 19, porcentaje: 67 },
-    { dia: 'Jueves', valor: 22, porcentaje: 78 },
-    { dia: 'Viernes', valor: 27, porcentaje: 96 },
-    { dia: 'Sábado', valor: 14, porcentaje: 50 }
-  ];
-
-  maxIngresosDia: number = 14;
+  cargarReporte() {
+    if (this.activeTab === 'asistencias') {
+      this.adminService.getAsistenciasReport(this.mesSeleccionado, this.miembroSeleccionado).subscribe({
+        next: (data) => {
+          this.asistenciaReport = data;
+          if (!this.mesSeleccionado && data.mesesDisponibles && data.mesesDisponibles.length > 0) {
+            this.mesSeleccionado = data.mesesDisponibles[0].valor;
+          }
+        }
+      });
+    } else if (this.activeTab === 'membresias') {
+      this.adminService.getMembresiasReport().subscribe({
+        next: (data) => {
+          this.membresiaReport = data;
+        }
+      });
+    } else if (this.activeTab === 'entrenadores') {
+      this.adminService.getEntrenadoresReport().subscribe({
+        next: (data) => {
+          this.entrenadorReport = data;
+        }
+      });
+    }
+  }
 
   setActiveTab(tab: 'asistencias' | 'membresias' | 'entrenadores') {
     this.activeTab = tab;
+    this.cargarReporte();
+  }
+
+  onFiltroChange() {
+    if (this.activeTab === 'asistencias') {
+      this.cargarReporte();
+    }
+  }
+
+  get maxIngresosDia(): number {
+    if (!this.asistenciaReport || !this.asistenciaReport.ingresosPorDia) {
+      return 1;
+    }
+    const maxVal = Math.max(...this.asistenciaReport.ingresosPorDia.map(i => i.valor));
+    return maxVal > 0 ? maxVal : 1;
+  }
+
+  getDonutStyle(): string {
+    if (!this.membresiaReport || !this.membresiaReport.distribucionPlan || this.membresiaReport.distribucionPlan.length === 0) {
+      return 'conic-gradient(var(--borde) 0% 100%)';
+    }
+    let accum = 0;
+    const parts = this.membresiaReport.distribucionPlan.map(p => {
+      const start = accum;
+      accum += p.porcentaje;
+      return `${p.color} ${start}% ${accum}%`;
+    });
+    return `conic-gradient(${parts.join(', ')})`;
   }
 }

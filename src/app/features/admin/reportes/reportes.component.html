@@ -25,32 +25,46 @@
     </button>
   </div>
 
+
   <div class="tab-content" *ngIf="activeTab === 'asistencias'">
     <div class="reportes-filtros">
-      <select [value]="mesSeleccionado" class="filtro-select">
-        <option *ngFor="let m of meses" [value]="m.valor">{{ m.texto }}</option>
+      <select [(ngModel)]="mesSeleccionado" (change)="onFiltroChange()" class="filtro-select">
+        <option *ngFor="let m of asistenciaReport?.mesesDisponibles" [value]="m.valor">{{ m.texto }}</option>
       </select>
 
-      <select [value]="miembroSeleccionado" class="filtro-select">
-        <option *ngFor="let mb of miembros" [value]="mb.valor">{{ mb.texto }}</option>
+      <select [(ngModel)]="miembroSeleccionado" (change)="onFiltroChange()" class="filtro-select">
+        <option *ngFor="let mb of asistenciaReport?.miembrosDisponibles" [value]="mb.valor">{{ mb.texto }}</option>
       </select>
-
-      <button class="btn-secondary">Exportar</button>
     </div>
 
-    <div class="rejilla-tarjetas">
-      <div class="tarjeta tarjeta--sin-hover" *ngFor="let kpi of kpis">
-        <p class="tarjeta-titulo">{{ kpi.titulo }}</p>
-        <p class="tarjeta-valor" [class.tarjeta-valor--acento]="kpi.destacado">{{ kpi.valor }}</p>
-        <p class="tarjeta-etiqueta">{{ kpi.etiqueta }}</p>
+    <div class="rejilla-tarjetas" *ngIf="asistenciaReport">
+      <div class="tarjeta tarjeta--sin-hover">
+        <p class="tarjeta-titulo">Total ingresos</p>
+        <p class="tarjeta-valor tarjeta-valor--acento">{{ asistenciaReport.totalIngresos }}</p>
+        <p class="tarjeta-etiqueta">Este mes</p>
+      </div>
+      <div class="tarjeta tarjeta--sin-hover">
+        <p class="tarjeta-titulo">Promedio diario</p>
+        <p class="tarjeta-valor">{{ asistenciaReport.promedioDiario }}</p>
+        <p class="tarjeta-etiqueta">Personas por día</p>
+      </div>
+      <div class="tarjeta tarjeta--sin-hover">
+        <p class="tarjeta-titulo">Día más concurrido</p>
+        <p class="tarjeta-valor">{{ asistenciaReport.diaMasConcurrido }}</p>
+        <p class="tarjeta-etiqueta">Pico de asistencia</p>
+      </div>
+      <div class="tarjeta tarjeta--sin-hover">
+        <p class="tarjeta-titulo">Miembros ausentes</p>
+        <p class="tarjeta-valor tarjeta-valor--acento">{{ asistenciaReport.miembrosAusentes }}</p>
+        <p class="tarjeta-etiqueta">Sin asistir este mes</p>
       </div>
     </div>
 
-    <div class="rejilla-graficos">
+    <div class="rejilla-graficos" *ngIf="asistenciaReport">
       <div class="grafico-card">
-        <h4 class="grafico-titulo">Ingresos por día - Enero</h4>
+        <h4 class="grafico-titulo">Ingresos por día</h4>
         <div class="grafico-barras-vertical">
-          <div class="barra-vertical-columna" *ngFor="let item of ingresosPorDia">
+          <div class="barra-vertical-columna" *ngFor="let item of asistenciaReport.ingresosPorDia">
             <span class="barra-valor">{{ item.valor }}</span>
             <div class="barra-grafico">
               <div class="barra-relleno" [style.height.%]="(item.valor / maxIngresosDia) * 100" [class.destacado]="item.destacado"></div>
@@ -63,7 +77,7 @@
       <div class="grafico-card">
         <h4 class="grafico-titulo">Asistencias por día de semana</h4>
         <div class="grafico-barras-horizontal">
-          <div class="barra-horizontal-fila" *ngFor="let item of asistenciasPorDiaSemana">
+          <div class="barra-horizontal-fila" *ngFor="let item of asistenciaReport.asistenciasPorDiaSemana">
             <span class="barra-dia-semana">{{ item.dia }}</span>
             <div class="barra-progreso-contenedor">
               <div class="barra-progreso-relleno" [style.width.%]="item.porcentaje"></div>
@@ -75,22 +89,38 @@
     </div>
   </div>
 
+
   <div class="tab-content" *ngIf="activeTab === 'membresias'">
-    <div class="rejilla-tarjetas">
-      <div class="tarjeta tarjeta--sin-hover" *ngFor="let kpi of kpisReportes">
-        <p class="tarjeta-titulo">{{ kpi.titulo }}</p>
-        <p class="tarjeta-valor" [class.tarjeta-valor--acento]="kpi.destacado">{{ kpi.valor }}</p>
-        <p class="tarjeta-etiqueta">{{ kpi.etiqueta }}</p>
+    <div class="rejilla-tarjetas" *ngIf="membresiaReport">
+      <div class="tarjeta tarjeta--sin-hover">
+        <p class="tarjeta-titulo">Activas</p>
+        <p class="tarjeta-valor tarjeta-valor--acento">{{ membresiaReport.activas }}</p>
+        <p class="tarjeta-etiqueta">Con membresía vigente</p>
+      </div>
+      <div class="tarjeta tarjeta--sin-hover">
+        <p class="tarjeta-titulo">Por vencer (7 días)</p>
+        <p class="tarjeta-valor">{{ membresiaReport.porVencer }}</p>
+        <p class="tarjeta-etiqueta">Requieren renovación</p>
+      </div>
+      <div class="tarjeta tarjeta--sin-hover">
+        <p class="tarjeta-titulo">Vencidas</p>
+        <p class="tarjeta-valor">{{ membresiaReport.vencidas }}</p>
+        <p class="tarjeta-etiqueta">Sin renovar</p>
+      </div>
+      <div class="tarjeta tarjeta--sin-hover">
+        <p class="tarjeta-titulo">Plan más popular</p>
+        <p class="tarjeta-valor">{{ membresiaReport.planMasPopular }}</p>
+        <p class="tarjeta-etiqueta">Plan popular</p>
       </div>
     </div>
 
-    <div class="rejilla-graficos">
+    <div class="rejilla-graficos" *ngIf="membresiaReport">
       <div class="grafico-card">
         <h4 class="grafico-titulo">Distribución por plan</h4>
         <div class="distribucion-contenedor">
-          <div class="grafico-donut"></div>
+          <div class="grafico-donut" [style.background]="getDonutStyle()"></div>
           <div class="leyenda-lista">
-            <div class="leyenda-item" *ngFor="let p of distribucionPlan">
+            <div class="leyenda-item" *ngFor="let p of membresiaReport.distribucionPlan">
               <span class="leyenda-color" [style.background-color]="p.color"></span>
               <span class="leyenda-texto">{{ p.nombre }} — {{ p.miembros }} miembros ({{ p.porcentaje }}%)</span>
             </div>
@@ -99,7 +129,7 @@
       </div>
 
       <div class="grafico-card">
-        <h4 class="grafico-titulo">Próximas a vencer</h4>
+        <h4 class="grafico-titulo">Próximas a vencer / Vencidas recientes</h4>
         <table class="tabla-usuarios">
           <thead>
             <tr>
@@ -110,7 +140,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of proximasVencer">
+            <tr *ngFor="let item of membresiaReport.proximasVencer">
               <td class="columna-nombre">{{ item.miembro }}</td>
               <td>{{ item.plan }}</td>
               <td>{{ item.vence }}</td>
@@ -124,22 +154,37 @@
     </div>
   </div>
 
+
   <div class="tab-content" *ngIf="activeTab === 'entrenadores'">
-    <div class="rejilla-tarjetas">
-      <div class="tarjeta tarjeta--sin-hover" *ngFor="let kpi of kpisEntrenadores">
-        <p class="tarjeta-titulo">{{ kpi.titulo }}</p>
-        <p class="tarjeta-valor" [class.tarjeta-valor--acento]="kpi.destacado">{{ kpi.valor }}</p>
-        <p class="tarjeta-etiqueta">{{ kpi.etiqueta }}</p>
+    <div class="rejilla-tarjetas" *ngIf="entrenadorReport">
+      <div class="tarjeta tarjeta--sin-hover">
+        <p class="tarjeta-titulo">Total entrenadores</p>
+        <p class="tarjeta-valor tarjeta-valor--acento">{{ entrenadorReport.totalEntrenadores }}</p>
+        <p class="tarjeta-etiqueta">Activos</p>
+      </div>
+      <div class="tarjeta tarjeta--sin-hover">
+        <p class="tarjeta-titulo">Total rutinas creadas</p>
+        <p class="tarjeta-valor">{{ entrenadorReport.totalRutinasCreadas }}</p>
+        <p class="tarjeta-etiqueta">Entre todos</p>
+      </div>
+      <div class="tarjeta tarjeta--sin-hover">
+        <p class="tarjeta-titulo">Más miembros</p>
+        <p class="tarjeta-valor">{{ entrenadorReport.masMiembros }}</p>
+        <p class="tarjeta-etiqueta">Con mayor carga</p>
+      </div>
+      <div class="tarjeta tarjeta--sin-hover">
+        <p class="tarjeta-titulo">Promedio alumnos</p>
+        <p class="tarjeta-valor">{{ entrenadorReport.promedioAlumnos }}</p>
+        <p class="tarjeta-etiqueta">Por entrenador</p>
       </div>
     </div>
 
-    <div class="grafico-card full-width">
+    <div class="grafico-card full-width" *ngIf="entrenadorReport">
       <h4 class="grafico-titulo">Comparativa de entrenadores</h4>
       <table class="tabla-usuarios">
         <thead>
           <tr>
             <th>Entrenador</th>
-            <th>Especialidad</th>
             <th>Miembros</th>
             <th>Rutinas</th>
             <th>% Membresías Activas</th>
@@ -147,9 +192,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of comparativaEntrenadores">
+          <tr *ngFor="let item of entrenadorReport.comparativaEntrenadores">
             <td class="columna-nombre">{{ item.entrenador }}</td>
-            <td>{{ item.especialidad }}</td>
             <td>{{ item.miembros }}</td>
             <td>{{ item.rutinas }}</td>
             <td>
