@@ -21,6 +21,7 @@ export const routes: Routes = [
       { path: 'entrenadores', loadComponent: () => import('./features/admin/entrenadores/entrenadores.component').then(m => m.EntrenadoresComponent) },
       { path: 'membresias', loadComponent: () => import('./features/admin/membresias/membresias.component').then(m => m.MembresiasComponent) },
       { path: 'registro-interno', loadComponent: () => import('./features/admin/registro-interno/registro-interno.component').then(m => m.RegistroInternoComponent) },
+      { path: 'asignar-entrenador', loadComponent: () => import('./features/admin/asignar-entrenador/asignar-entrenador.component').then(m => m.AsignarEntrenadorComponent) },
       { path: 'reportes', loadComponent: () => import('./features/admin/reportes/reportes.component').then(m => m.ReportesComponent) },
       { path: 'perfil', loadComponent: () => import('./shared/components/perfil/perfil.component').then(m => m.PerfilComponent) }
     ]

@@ -1,16 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { Router, UrlTree } from '@angular/router';
 import { roleGuard } from './role.guard';
 import { AuthService } from '../services/auth.service';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 describe('roleGuard', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let routerSpy: jasmine.SpyObj<Router>;
+  const dummyUrlTree = {} as UrlTree;
 
   beforeEach(() => {
     const authSpy = jasmine.createSpyObj('AuthService', ['isLoggedIn', 'getRole']);
-    const rSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const rSpy = jasmine.createSpyObj('Router', ['createUrlTree']);
 
     TestBed.configureTestingModule({
       providers: [
@@ -21,6 +22,8 @@ describe('roleGuard', () => {
 
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+
+    routerSpy.createUrlTree.and.returnValue(dummyUrlTree);
   });
 
   it('should allow activation when user is logged in and has expected role', () => {
@@ -32,11 +35,10 @@ describe('roleGuard', () => {
     } as any as ActivatedRouteSnapshot;
 
     const result = TestBed.runInInjectionContext(() => 
-      roleGuard(route, {} as RouterStateSnapshot)
+      roleGuard(route, null as any)
     );
 
     expect(result).toBeTrue();
-    expect(routerSpy.navigate).not.toHaveBeenCalled();
   });
 
   it('should redirect to role dashboard when user has different role', () => {
@@ -48,10 +50,10 @@ describe('roleGuard', () => {
     } as any as ActivatedRouteSnapshot;
 
     const result = TestBed.runInInjectionContext(() => 
-      roleGuard(route, {} as RouterStateSnapshot)
+      roleGuard(route, null as any)
     );
 
-    expect(result).toBeFalse();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/miembro']);
+    expect(result).toBe(dummyUrlTree);
+    expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/miembro']);
   });
 });
