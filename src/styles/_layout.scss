@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@import './variables';
+@import './mixins';
 
 .diseno-panel {
   display: grid;
@@ -29,6 +29,10 @@
   margin-bottom: 1.25rem;
 }
 
+.tabla-usuarios .grupo-campo {
+  margin-bottom: 0;
+}
+
 .grupo-campo label {
   font-size: 0.8rem;
   font-weight: 600;
@@ -45,12 +49,17 @@
   border: 1px solid var(--borde);
   border-radius: var(--radio);
   color: var(--texto);
-  font-family: var(--fuente-cuerpo);
+  font-family: var(--fuente-cuerpo), sans-serif;
   font-size: 0.95rem;
   padding: 0.85rem 1.1rem;
   outline: none;
   width: 100%;
   transition: all 0.3s ease;
+}
+
+.grupo-campo select option {
+  background-color: #141414;
+  color: var(--texto);
 }
 
 .grupo-campo input:focus,
@@ -137,7 +146,7 @@
   font-weight: 600;
   cursor: pointer;
   display: inline-block;
-  
+
   &:hover {
     background-color: var(--acento);
     color: #fff;
@@ -154,7 +163,7 @@
   font-weight: 600;
   cursor: pointer;
   display: inline-block;
-  
+
   &:hover {
     background-color: #f87171;
     color: #fff;
@@ -186,7 +195,7 @@
 
 .tabla-usuarios th {
   background-color: #141414;
-  font-family: var(--fuente-titulo);
+  font-family: var(--fuente-titulo), sans-serif;
   text-transform: uppercase;
   font-size: 1.1rem;
   letter-spacing: 1px;
@@ -227,7 +236,7 @@
   margin-bottom: 2rem;
 
   h1 {
-    font-family: var(--fuente-titulo);
+    font-family: var(--fuente-titulo), sans-serif;
     font-size: 2.2rem;
     font-weight: 700;
 
@@ -244,7 +253,7 @@
 }
 
 .titulo-seccion {
-  font-family: var(--fuente-titulo);
+  font-family: var(--fuente-titulo), sans-serif;
   font-size: 1.3rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -283,7 +292,7 @@
 }
 
 .tarjeta-valor {
-  font-family: var(--fuente-titulo);
+  font-family: var(--fuente-titulo), sans-serif;
   font-size: 2.2rem;
   font-weight: 700;
 }
@@ -325,7 +334,7 @@
 
   .titulo-seccion {
     margin-bottom: 0;
-    font-family: var(--fuente-titulo);
+    font-family: var(--fuente-titulo), sans-serif;
     font-size: 1.5rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -341,7 +350,7 @@
   border-radius: var(--radio);
   color: var(--texto);
   font-size: 0.9rem;
-  
+
   &:focus {
     border-color: var(--acento);
   }
@@ -363,13 +372,13 @@
     border-color: #ef4444;
     color: #ef4444;
   }
-  
+
   &.entrenador {
     background-color: rgba(59, 130, 246, 0.1);
     border-color: #3b82f6;
     color: #3b82f6;
   }
-  
+
   &.miembro {
     background-color: rgba(16, 185, 129, 0.1);
     border-color: #10b981;
@@ -386,19 +395,19 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border: 1px solid transparent;
-  
+
   &.badge-activa {
     background-color: rgba(16, 185, 129, 0.1);
     color: #10b981;
     border-color: #10b981;
   }
-  
+
   &.badge-por-vencer {
     background-color: rgba(245, 158, 11, 0.1);
     color: #f59e0b;
     border-color: #f59e0b;
   }
-  
+
   &.badge-vencida {
     background-color: rgba(239, 68, 68, 0.1);
     color: #ef4444;
