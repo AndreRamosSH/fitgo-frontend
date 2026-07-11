@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { Usuario } from '../models/usuario.model';
 import { Plan } from '../models/plan.model';
 import { Membresia } from '../models/membresia.model';
+import { AsistenciaReport, MembresiaReport, EntrenadorReport } from '../models/reportes.model';
 
 export interface ResumenAdmin {
   totalUsuarios: number;
@@ -89,5 +90,32 @@ export class AdminService {
 
   asignarMembresia(membresia: Membresia): Observable<{ mensaje: string }> {
     return this.http.post<{ mensaje: string }>(`${this.apiUrl}/membresias/asignar`, membresia);
+  }
+
+  getAsistenciasReport(mes?: string, usuarioId?: string): Observable<AsistenciaReport> {
+    let params = '';
+    const parts = [];
+    if (mes) parts.push(`mes=${mes}`);
+    if (usuarioId) parts.push(`usuarioId=${usuarioId}`);
+    if (parts.length > 0) {
+      params = '?' + parts.join('&');
+    }
+    return this.http.get<AsistenciaReport>(`${this.apiUrl}/reportes/asistencias${params}`);
+  }
+
+  getMembresiasReport(): Observable<MembresiaReport> {
+    return this.http.get<MembresiaReport>(`${this.apiUrl}/reportes/membresias`);
+  }
+
+  getEntrenadoresReport(): Observable<EntrenadorReport> {
+    return this.http.get<EntrenadorReport>(`${this.apiUrl}/reportes/entrenadores`);
+  }
+
+  getMiembrosActivos(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.apiUrl}/miembros/activos`);
+  }
+
+  asignarEntrenador(miembroId: number, entrenadorId: number | null): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}/miembros/asignar-entrenador`, { miembroId, entrenadorId });
   }
 }
