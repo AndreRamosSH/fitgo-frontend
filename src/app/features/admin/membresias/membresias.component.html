@@ -3,9 +3,9 @@
   <p>Crea planes y asigna membresías a los miembros del gimnasio.</p>
 </section>
 
-<div class="pestanas-control">
-  <button (click)="cambiarPestana('planes')" [class.activo]="pestanaActiva === 'planes'">Planes de Entrenamiento</button>
-  <button (click)="cambiarPestana('membresias')" [class.activo]="pestanaActiva === 'membresias'">Membresías Asignadas</button>
+<div class="tabs-container">
+  <button type="button" class="tab-pill" (click)="cambiarPestana('planes')" [class.activo]="pestanaActiva === 'planes'">Planes de Entrenamiento</button>
+  <button type="button" class="tab-pill" (click)="cambiarPestana('membresias')" [class.activo]="pestanaActiva === 'membresias'">Membresías Asignadas</button>
 </div>
 
 @if (error) {
@@ -21,7 +21,7 @@
 }
 
 @if (pestanaActiva === 'planes') {
-  <div class="seccion-division">
+  <div class="layout-dos-columnas">
     <div class="tarjeta tarjeta--sin-hover lista-planes">
       <h2 class="titulo-seccion">Planes Disponibles</h2>
 
@@ -94,7 +94,7 @@
 }
 
 @if (pestanaActiva === 'membresias') {
-  <div class="seccion-division">
+  <div class="layout-dos-columnas">
     <div class="tarjeta tarjeta--sin-hover lista-membresias">
       <h2 class="titulo-seccion">Membresías Registradas</h2>
 

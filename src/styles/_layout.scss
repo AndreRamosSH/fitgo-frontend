@@ -576,3 +576,34 @@
     transform: translateY(0);
   }
 }
+
+.tabs-container {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.tab-pill {
+  background-color: var(--fondo-tarjeta);
+  color: var(--texto-suave);
+  border: 1px solid var(--borde);
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+
+  &:hover {
+    color: var(--texto);
+    border-color: var(--texto-suave);
+  }
+
+  &.active, &.activo {
+    background: var(--gradiente);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+  }
+}
