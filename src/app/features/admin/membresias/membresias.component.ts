@@ -30,11 +30,41 @@ export class MembresiasComponent implements OnInit {
   usuarioSeleccionadoId: number | null = null;
   planSeleccionadoId: number | null = null;
 
+  filtroMiembro = '';
+  mostrarDropdownMiembros = false;
+  miembroSeleccionadoTexto = '';
+
   error = '';
   exito = '';
 
   ngOnInit(): void {
     this.cargarDatos();
+  }
+
+  get miembrosFiltrados(): any[] {
+    if (!this.filtroMiembro) {
+      return this.elegibles;
+    }
+    const filter = this.filtroMiembro.toLowerCase();
+    return this.elegibles.filter(u =>
+      u.nombre.toLowerCase().includes(filter) ||
+      u.apellido.toLowerCase().includes(filter) ||
+      u.correo.toLowerCase().includes(filter)
+    );
+  }
+
+  toggleDropdownMiembros(): void {
+    this.mostrarDropdownMiembros = !this.mostrarDropdownMiembros;
+    if (this.mostrarDropdownMiembros) {
+      this.filtroMiembro = '';
+    }
+  }
+
+  seleccionarMiembro(miembro: any): void {
+    this.usuarioSeleccionadoId = miembro.id;
+    this.miembroSeleccionadoTexto = `${miembro.nombre} ${miembro.apellido} - ${miembro.correo}`;
+    this.mostrarDropdownMiembros = false;
+    this.filtroMiembro = '';
   }
 
   cargarDatos(): void {
@@ -148,6 +178,7 @@ export class MembresiasComponent implements OnInit {
       next: () => {
         this.exito = 'Membresía asignada con éxito';
         this.usuarioSeleccionadoId = null;
+        this.miembroSeleccionadoTexto = '';
         this.planSeleccionadoId = null;
         this.cargarDatos();
       },

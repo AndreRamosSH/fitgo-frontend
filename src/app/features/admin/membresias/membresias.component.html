@@ -136,15 +136,35 @@
 
       <form (ngSubmit)="onAsignarMembresia()">
         <div class="grupo-campo">
-          <label for="usuarioId">Miembro elegible</label>
-          <select id="usuarioId" name="usuarioId" [(ngModel)]="usuarioSeleccionadoId" required>
-            <option [ngValue]="null">-- Selecciona un miembro --</option>
-            @for (u of elegibles; track u.id) {
-              <option [value]="u.id">
-                {{ u.nombre }} {{ u.apellido }} - {{ u.correo }}
-              </option>
+          <label>Miembro elegible</label>
+          <div class="dropdown-buscador">
+            <button type="button" class="dropdown-trigger" (click)="toggleDropdownMiembros()">
+              {{ miembroSeleccionadoTexto || '-- Selecciona un miembro --' }}
+            </button>
+            @if (mostrarDropdownMiembros) {
+              <div class="dropdown-backdrop" (click)="mostrarDropdownMiembros = false"></div>
+              <div class="dropdown-menu">
+                <input 
+                  type="text" 
+                  name="filtroMiembro" 
+                  [(ngModel)]="filtroMiembro" 
+                  placeholder="Buscar miembro..." 
+                  class="dropdown-search-input"
+                  autocomplete="off"
+                />
+                <div class="dropdown-options">
+                  @for (u of miembrosFiltrados; track u.id) {
+                    <div class="dropdown-option" (click)="seleccionarMiembro(u)">
+                      {{ u.nombre }} {{ u.apellido }} - {{ u.correo }}
+                    </div>
+                  } @empty {
+                    <div class="dropdown-no-results">No se encontraron miembros</div>
+                  }
+                </div>
+              </div>
             }
-          </select>
+          </div>
+          <input type="hidden" name="usuarioId" [(ngModel)]="usuarioSeleccionadoId" required />
         </div>
 
         <div class="grupo-campo">
