@@ -45,7 +45,7 @@
 .grupo-campo select,
 .grupo-campo textarea,
 .busqueda input {
-  background-color: #141414;
+  background-color: var(--fondo-lateral);
   border: 1px solid var(--borde);
   border-radius: var(--radio);
   color: var(--texto);
@@ -58,7 +58,7 @@
 }
 
 .grupo-campo select option {
-  background-color: #141414;
+  background-color: var(--fondo-lateral);
   color: var(--texto);
 }
 
@@ -454,5 +454,125 @@
   &:hover {
     transform: none;
     border-color: var(--borde);
+  }
+}
+
+.dropdown-buscador {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown-trigger {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  background-color: var(--fondo-lateral);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  color: var(--texto);
+  text-align: left;
+  font-family: var(--fuente-cuerpo), sans-serif;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:focus, &:hover {
+    outline: none;
+    border-color: var(--acento);
+    box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.15);
+  }
+}
+
+.dropdown-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 998;
+  background: transparent;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  width: 100%;
+  background-color: var(--fondo-lateral);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  z-index: 999;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  animation: slideDown 0.2s ease-out;
+}
+
+.dropdown-search-input {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  color: var(--texto);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+  
+  &:focus {
+    border-color: var(--acento);
+  }
+}
+
+.dropdown-options {
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--borde);
+    border-radius: 3px;
+  }
+}
+
+.dropdown-option {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radio);
+  color: var(--texto);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+  
+  &:hover {
+    background-color: rgba(249, 115, 22, 0.08);
+    color: var(--acento);
+  }
+}
+
+.dropdown-no-results {
+  padding: 0.8rem;
+  color: var(--texto);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
