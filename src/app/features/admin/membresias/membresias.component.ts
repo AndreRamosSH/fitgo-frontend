@@ -34,6 +34,9 @@ export class MembresiasComponent implements OnInit {
   mostrarDropdownMiembros = false;
   miembroSeleccionadoTexto = '';
 
+  mostrarDropdownPlanes = false;
+  planSeleccionadoTexto = '';
+
   error = '';
   exito = '';
 
@@ -65,6 +68,16 @@ export class MembresiasComponent implements OnInit {
     this.miembroSeleccionadoTexto = `${miembro.nombre} ${miembro.apellido} - ${miembro.correo}`;
     this.mostrarDropdownMiembros = false;
     this.filtroMiembro = '';
+  }
+
+  toggleDropdownPlanes(): void {
+    this.mostrarDropdownPlanes = !this.mostrarDropdownPlanes;
+  }
+
+  seleccionarPlan(plan: any): void {
+    this.planSeleccionadoId = plan.id;
+    this.planSeleccionadoTexto = `${plan.nombre} (S/ ${plan.precio} - ${plan.duracionDias} días)`;
+    this.mostrarDropdownPlanes = false;
   }
 
   cargarDatos(): void {
@@ -180,6 +193,7 @@ export class MembresiasComponent implements OnInit {
         this.usuarioSeleccionadoId = null;
         this.miembroSeleccionadoTexto = '';
         this.planSeleccionadoId = null;
+        this.planSeleccionadoTexto = '';
         this.cargarDatos();
       },
       error: (err: any) => {

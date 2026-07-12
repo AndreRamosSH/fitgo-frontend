@@ -24,7 +24,7 @@
   <div class="seccion-division">
     <div class="tarjeta tarjeta--sin-hover lista-planes">
       <h2 class="titulo-seccion">Planes Disponibles</h2>
-      
+
       <table class="tabla-usuarios">
         <thead>
           <tr>
@@ -56,7 +56,7 @@
 
     <div class="tarjeta tarjeta--sin-hover formulario-plan">
       <h2 class="titulo-seccion">{{ planIdEditando ? 'Editar Plan' : 'Nuevo Plan' }}</h2>
-      
+
       <form (ngSubmit)="onSubmitPlan()">
         <div class="grupo-campo">
           <label for="planNombre">Nombre del Plan</label>
@@ -116,7 +116,7 @@
               <td>{{ m.fechaInicio | date:'dd/MM/yyyy' }}</td>
               <td>{{ m.fechaFin | date:'dd/MM/yyyy' }}</td>
               <td>
-                <span class="badge-estado" 
+                <span class="badge-estado"
                       [ngClass]="m.estado === 'ACTIVA' ? 'badge-activa' : m.estado === 'POR_VENCER' ? 'badge-por-vencer' : 'badge-vencida'">
                   {{ m.estado }}
                 </span>
@@ -139,16 +139,16 @@
           <label>Miembro elegible</label>
           <div class="dropdown-buscador">
             <button type="button" class="dropdown-trigger" (click)="toggleDropdownMiembros()">
-              {{ miembroSeleccionadoTexto || '-- Selecciona un miembro --' }}
+              {{ miembroSeleccionadoTexto || 'Selecciona un miembro' }}
             </button>
             @if (mostrarDropdownMiembros) {
               <div class="dropdown-backdrop" (click)="mostrarDropdownMiembros = false"></div>
               <div class="dropdown-menu">
-                <input 
-                  type="text" 
-                  name="filtroMiembro" 
-                  [(ngModel)]="filtroMiembro" 
-                  placeholder="Buscar miembro..." 
+                <input
+                  type="text"
+                  name="filtroMiembro"
+                  [(ngModel)]="filtroMiembro"
+                  placeholder="Buscar miembro..."
                   class="dropdown-search-input"
                   autocomplete="off"
                 />
@@ -168,15 +168,27 @@
         </div>
 
         <div class="grupo-campo">
-          <label for="planId">Plan de membresía</label>
-          <select id="planId" name="planId" [(ngModel)]="planSeleccionadoId" required>
-            <option [ngValue]="null">-- Selecciona un plan --</option>
-            @for (p of planes; track p.id) {
-              <option [value]="p.id">
-                {{ p.nombre }} (S/ {{ p.precio }} - {{ p.duracionDias }} días)
-              </option>
+          <label>Plan de membresía</label>
+          <div class="dropdown-buscador">
+            <button type="button" class="dropdown-trigger" (click)="toggleDropdownPlanes()">
+              {{ planSeleccionadoTexto || 'Selecciona un plan' }}
+            </button>
+            @if (mostrarDropdownPlanes) {
+              <div class="dropdown-backdrop" (click)="mostrarDropdownPlanes = false"></div>
+              <div class="dropdown-menu">
+                <div class="dropdown-options">
+                  @for (p of planes; track p.id) {
+                    <div class="dropdown-option" (click)="seleccionarPlan(p)">
+                      {{ p.nombre }} (S/ {{ p.precio }} - {{ p.duracionDias }} días)
+                    </div>
+                  } @empty {
+                    <div class="dropdown-no-results">No hay planes disponibles</div>
+                  }
+                </div>
+              </div>
             }
-          </select>
+          </div>
+          <input type="hidden" name="planId" [(ngModel)]="planSeleccionadoId" required />
         </div>
 
         <button type="submit" class="btn-primary boton-completo">
