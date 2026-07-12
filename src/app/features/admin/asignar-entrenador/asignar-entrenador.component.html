@@ -20,12 +20,20 @@
         <td>{{ m.correo }}</td>
         <td>
           <div class="grupo-campo">
-            <select [ngModel]="m.entrenador ? m.entrenador.id : null" (ngModelChange)="onEntrenadorChange(m.id, $event)">
-              <option [ngValue]="null">Sin asignar</option>
-              <option *ngFor="let ent of entrenadores" [ngValue]="ent.id">
-                {{ ent.usuario?.nombre }} {{ ent.usuario?.apellido }}
-              </option>
-            </select>
+            <div class="dropdown-buscador">
+              <button type="button" class="dropdown-trigger" (click)="toggleDropdown(m.id)">
+                {{ getEntrenadorAsignadoTexto(m) }}
+              </button>
+              <div class="dropdown-backdrop" *ngIf="dropdownAbiertoMiembroId === m.id" (click)="toggleDropdown(m.id)"></div>
+              <div class="dropdown-menu" *ngIf="dropdownAbiertoMiembroId === m.id">
+                <div class="dropdown-options">
+                  <div class="dropdown-option" (click)="seleccionarEntrenador(m.id, null)">Sin asignar</div>
+                  <div class="dropdown-option" *ngFor="let ent of entrenadores" (click)="seleccionarEntrenador(m.id, ent.id)">
+                    {{ ent.usuario?.nombre }} {{ ent.usuario?.apellido }}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </td>
       </tr>

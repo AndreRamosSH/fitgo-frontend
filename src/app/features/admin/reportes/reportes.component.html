@@ -28,13 +28,33 @@
 
   <div class="tab-content" *ngIf="activeTab === 'asistencias'">
     <div class="reportes-filtros">
-      <select [(ngModel)]="mesSeleccionado" (change)="onFiltroChange()" class="filtro-select">
-        <option *ngFor="let m of asistenciaReport?.mesesDisponibles" [value]="m.valor">{{ m.texto }}</option>
-      </select>
+      <div class="dropdown-buscador">
+        <button type="button" class="dropdown-trigger" (click)="toggleDropdownMeses()">
+          {{ mesSeleccionadoTexto || 'Selecciona un mes' }}
+        </button>
+        <div class="dropdown-backdrop" *ngIf="mostrarDropdownMeses" (click)="mostrarDropdownMeses = false"></div>
+        <div class="dropdown-menu" *ngIf="mostrarDropdownMeses">
+          <div class="dropdown-options">
+            <div class="dropdown-option" *ngFor="let m of asistenciaReport?.mesesDisponibles" (click)="seleccionarMes(m.valor)">
+              {{ m.texto }}
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <select [(ngModel)]="miembroSeleccionado" (change)="onFiltroChange()" class="filtro-select">
-        <option *ngFor="let mb of asistenciaReport?.miembrosDisponibles" [value]="mb.valor">{{ mb.texto }}</option>
-      </select>
+      <div class="dropdown-buscador">
+        <button type="button" class="dropdown-trigger" (click)="toggleDropdownMiembros()">
+          {{ miembroSeleccionadoTexto || 'Selecciona un miembro' }}
+        </button>
+        <div class="dropdown-backdrop" *ngIf="mostrarDropdownMiembros" (click)="mostrarDropdownMiembros = false"></div>
+        <div class="dropdown-menu" *ngIf="mostrarDropdownMiembros">
+          <div class="dropdown-options">
+            <div class="dropdown-option" *ngFor="let mb of asistenciaReport?.miembrosDisponibles" (click)="seleccionarMiembro(mb.valor)">
+              {{ mb.texto }}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="rejilla-tarjetas" *ngIf="asistenciaReport">

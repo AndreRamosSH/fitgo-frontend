@@ -15,9 +15,23 @@ export class AsignarEntrenadorComponent implements OnInit {
 
   miembros: any[] = [];
   entrenadores: any[] = [];
+  dropdownAbiertoMiembroId: number | null = null;
 
   ngOnInit(): void {
     this.cargarDatos();
+  }
+
+  toggleDropdown(miembroId: number): void {
+    this.dropdownAbiertoMiembroId = this.dropdownAbiertoMiembroId === miembroId ? null : miembroId;
+  }
+
+  seleccionarEntrenador(miembroId: number, entrenadorId: number | null): void {
+    this.onEntrenadorChange(miembroId, entrenadorId);
+    this.dropdownAbiertoMiembroId = null;
+  }
+
+  getEntrenadorAsignadoTexto(miembro: any): string {
+    return miembro.entrenador ? `${miembro.entrenador.usuario?.nombre} ${miembro.entrenador.usuario?.apellido}` : 'Sin asignar';
   }
 
   cargarDatos(): void {

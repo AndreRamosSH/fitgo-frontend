@@ -19,6 +19,9 @@ export class RegistroInternoComponent {
   error = '';
   exito = '';
 
+  mostrarDropdownRol = false;
+  mostrarDropdownTurno = false;
+
   registroForm = new FormGroup({
     nombre: new FormControl('', [Validators.required, Validators.minLength(2)]),
     apellido: new FormControl('', [Validators.required, Validators.minLength(2)]),
@@ -29,6 +32,41 @@ export class RegistroInternoComponent {
     turno: new FormControl('MANANA'),
     experienciaAnios: new FormControl(0, [Validators.min(0), Validators.max(50)])
   });
+
+  get rolSeleccionadoTexto(): string {
+    const val = this.registroForm.get('rol')?.value;
+    if (val === 'MIEMBRO') return 'Miembro';
+    if (val === 'ENTRENADOR') return 'Entrenador';
+    if (val === 'ADMIN') return 'Administrador';
+    return '';
+  }
+
+  get turnoSeleccionadoTexto(): string {
+    const val = this.registroForm.get('turno')?.value;
+    if (val === 'MANANA') return 'Mañana (6:00 - 12:00)';
+    if (val === 'TARDE') return 'Tarde (12:00 - 18:00)';
+    if (val === 'NOCHE') return 'Noche (18:00 - 23:00)';
+    return '';
+  }
+
+  toggleDropdownRol(): void {
+    this.mostrarDropdownRol = !this.mostrarDropdownRol;
+  }
+
+  toggleDropdownTurno(): void {
+    this.mostrarDropdownTurno = !this.mostrarDropdownTurno;
+  }
+
+  seleccionarRol(rol: string): void {
+    this.registroForm.patchValue({ rol });
+    this.mostrarDropdownRol = false;
+    this.registroForm.get('rol')?.markAsTouched();
+  }
+
+  seleccionarTurno(turno: string): void {
+    this.registroForm.patchValue({ turno });
+    this.mostrarDropdownTurno = false;
+  }
 
   onSubmit(): void {
     if (this.registroForm.invalid) {

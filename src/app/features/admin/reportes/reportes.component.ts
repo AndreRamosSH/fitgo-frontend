@@ -17,10 +17,50 @@ export class ReportesComponent implements OnInit {
   activeTab: 'asistencias' | 'membresias' | 'entrenadores' = 'asistencias';
   mesSeleccionado: string = '';
   miembroSeleccionado: string = 'todos';
+  mostrarDropdownMeses = false;
+  mostrarDropdownMiembros = false;
 
   asistenciaReport?: AsistenciaReport;
   membresiaReport?: MembresiaReport;
   entrenadorReport?: EntrenadorReport;
+
+  get mesSeleccionadoTexto(): string {
+    if (!this.asistenciaReport?.mesesDisponibles) return '';
+    const match = this.asistenciaReport.mesesDisponibles.find(m => m.valor === this.mesSeleccionado);
+    return match ? match.texto : '';
+  }
+
+  get miembroSeleccionadoTexto(): string {
+    if (!this.asistenciaReport?.miembrosDisponibles) return '';
+    const match = this.asistenciaReport.miembrosDisponibles.find(mb => mb.valor === this.miembroSeleccionado);
+    return match ? match.texto : '';
+  }
+
+  toggleDropdownMeses(): void {
+    this.mostrarDropdownMeses = !this.mostrarDropdownMeses;
+    if (this.mostrarDropdownMeses) {
+      this.mostrarDropdownMiembros = false;
+    }
+  }
+
+  toggleDropdownMiembros(): void {
+    this.mostrarDropdownMiembros = !this.mostrarDropdownMiembros;
+    if (this.mostrarDropdownMiembros) {
+      this.mostrarDropdownMeses = false;
+    }
+  }
+
+  seleccionarMes(valor: string): void {
+    this.mesSeleccionado = valor;
+    this.mostrarDropdownMeses = false;
+    this.onFiltroChange();
+  }
+
+  seleccionarMiembro(valor: string): void {
+    this.miembroSeleccionado = valor;
+    this.mostrarDropdownMiembros = false;
+    this.onFiltroChange();
+  }
 
   ngOnInit() {
     this.cargarReporte();

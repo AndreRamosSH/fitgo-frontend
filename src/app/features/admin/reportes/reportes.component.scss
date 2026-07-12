@@ -63,22 +63,9 @@
       align-items: center;
       margin-bottom: 30px;
 
-      .filtro-select {
-        background-color: var(--fondo-principal);
-        border: 1px solid var(--borde);
-        border-radius: var(--radio);
-        color: var(--texto);
-        font-family: var(--fuente-cuerpo), sans-serif;
-        font-size: 0.95rem;
-        padding: 0.75rem 1.25rem;
-        outline: none;
+      .dropdown-buscador {
         min-width: 180px;
-        transition: all 0.3s ease;
-
-        &:focus {
-          border-color: var(--acento);
-          box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.15);
-        }
+        width: auto;
       }
 
       .btn-secondary {

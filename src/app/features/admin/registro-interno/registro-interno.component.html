@@ -59,13 +59,23 @@
       </div>
 
       <div class="grupo-campo">
-        <label for="rol">Rol</label>
-        <select id="rol" formControlName="rol">
-          <option value="">-- Selecciona un rol --</option>
-          <option value="MIEMBRO">Miembro</option>
-          <option value="ENTRENADOR">Entrenador</option>
-          <option value="ADMIN">Administrador</option>
-        </select>
+        <label>Rol</label>
+        <div class="dropdown-buscador">
+          <button type="button" class="dropdown-trigger" (click)="toggleDropdownRol()">
+            {{ rolSeleccionadoTexto || 'Selecciona un rol' }}
+          </button>
+          @if (mostrarDropdownRol) {
+            <div class="dropdown-backdrop" (click)="mostrarDropdownRol = false"></div>
+            <div class="dropdown-menu">
+              <div class="dropdown-options">
+                <div class="dropdown-option" (click)="seleccionarRol('MIEMBRO')">Miembro</div>
+                <div class="dropdown-option" (click)="seleccionarRol('ENTRENADOR')">Entrenador</div>
+                <div class="dropdown-option" (click)="seleccionarRol('ADMIN')">Administrador</div>
+              </div>
+            </div>
+          }
+        </div>
+        <input type="hidden" formControlName="rol" />
         <div *ngIf="registroForm.get('rol')?.touched && registroForm.get('rol')?.invalid" class="texto-error-validacion">
           <small *ngIf="registroForm.get('rol')?.errors?.['required']">El rol es obligatorio.</small>
         </div>
@@ -73,12 +83,23 @@
 
       <div *ngIf="registroForm.get('rol')?.value === 'ENTRENADOR'" class="seccion-entrenador">
         <div class="grupo-campo">
-          <label for="turno">Turno</label>
-          <select id="turno" formControlName="turno">
-            <option value="MANANA">Mañana (6:00 - 12:00)</option>
-            <option value="TARDE">Tarde (12:00 - 18:00)</option>
-            <option value="NOCHE">Noche (18:00 - 23:00)</option>
-          </select>
+          <label>Turno</label>
+          <div class="dropdown-buscador">
+            <button type="button" class="dropdown-trigger" (click)="toggleDropdownTurno()">
+              {{ turnoSeleccionadoTexto || 'Selecciona un turno' }}
+            </button>
+            @if (mostrarDropdownTurno) {
+              <div class="dropdown-backdrop" (click)="mostrarDropdownTurno = false"></div>
+              <div class="dropdown-menu">
+                <div class="dropdown-options">
+                  <div class="dropdown-option" (click)="seleccionarTurno('MANANA')">Mañana (6:00 - 12:00)</div>
+                  <div class="dropdown-option" (click)="seleccionarTurno('TARDE')">Tarde (12:00 - 18:00)</div>
+                  <div class="dropdown-option" (click)="seleccionarTurno('NOCHE')">Noche (18:00 - 23:00)</div>
+                </div>
+              </div>
+            }
+          </div>
+          <input type="hidden" formControlName="turno" />
         </div>
 
         <div class="grupo-campo">
