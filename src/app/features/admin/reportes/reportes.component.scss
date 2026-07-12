@@ -39,7 +39,7 @@
 
     h3 {
       margin-top: 0;
-      font-family: var(--fuente-titulo);
+      font-family: var(--fuente-titulo), sans-serif;
       font-size: 24px;
       color: var(--texto);
       letter-spacing: 0.5px;
@@ -68,7 +68,7 @@
         border: 1px solid var(--borde);
         border-radius: var(--radio);
         color: var(--texto);
-        font-family: var(--fuente-cuerpo);
+        font-family: var(--fuente-cuerpo), sans-serif;
         font-size: 0.95rem;
         padding: 0.75rem 1.25rem;
         outline: none;
@@ -109,7 +109,7 @@
       }
 
       .grafico-titulo {
-        font-family: var(--fuente-titulo);
+        font-family: var(--fuente-titulo), sans-serif;
         font-size: 1.3rem;
         color: var(--texto);
         text-transform: uppercase;
@@ -202,7 +202,7 @@
           .barra-total-asistencias {
             width: 25px;
             text-align: right;
-            font-family: var(--fuente-titulo);
+            font-family: var(--fuente-titulo), sans-serif;
             font-size: 0.95rem;
             font-weight: 600;
             color: var(--texto);
