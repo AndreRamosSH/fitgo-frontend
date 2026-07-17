@@ -1,7 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { LucideX } from '@lucide/angular';
 
 interface NavItem {
   label: string;
@@ -12,11 +13,12 @@ interface NavItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterLinkActive, LucideX],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent implements OnInit {
+  @Output() closeSidebar = new EventEmitter<void>();
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -93,6 +95,10 @@ export class SidebarComponent implements OnInit {
         }
       ];
     }
+  }
+
+  closeSidebarEvent(): void {
+    this.closeSidebar.emit();
   }
 
   logout(): void {

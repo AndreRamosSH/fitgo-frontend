@@ -76,3 +76,43 @@ nav a {
     background-color: rgba(248, 113, 113, 0.05) !important;
   }
 }
+
+.cabecera-lateral-movil {
+  display: none;
+  justify-content: flex-end;
+  padding: 0 1.5rem 0.5rem;
+}
+
+.btn-cerrar-lateral {
+  background: none;
+  border: none;
+  color: var(--texto-suave);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--texto);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.icono-cerrar {
+  width: 24px;
+  height: 24px;
+}
+
+@media (max-width: 992px) {
+  .cabecera-lateral-movil {
+    display: flex;
+  }
+}
+

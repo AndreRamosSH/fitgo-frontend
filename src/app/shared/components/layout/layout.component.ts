@@ -21,6 +21,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   private router = inject(Router);
 
   mostrarModalPendiente = false;
+  sidebarAbierto = false;
   paso2Estado: 'activo' | 'completado' = 'activo';
   paso3Estado: 'inactivo' | 'completado' = 'inactivo';
   private pollingSub?: Subscription;

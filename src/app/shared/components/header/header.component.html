@@ -1,5 +1,8 @@
 <header class="encabezado-panel">
   <div class="seccion-info">
+    <button class="btn-toggle-sidebar" (click)="toggleSidebarEvent()" aria-label="Abrir menú">
+      <svg lucideMenu class="icono-burger"></svg>
+    </button>
     <span class="tag-especial" [ngClass]="rolClase">
       {{ rolTexto }}
     </span>

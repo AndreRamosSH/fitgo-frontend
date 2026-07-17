@@ -1,17 +1,19 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { Usuario } from '../../../core/models/usuario.model';
+import { LucideMenu } from '@lucide/angular';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideMenu],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
+  @Output() toggleSidebar = new EventEmitter<void>();
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -42,6 +44,10 @@ export class HeaderComponent implements OnInit {
     const rol = this.user?.rol?.toLowerCase() || 'miembro';
     this.router.navigate([`/${rol}/perfil`]);
     this.menuVisible = false;
+  }
+
+  toggleSidebarEvent(): void {
+    this.toggleSidebar.emit();
   }
 
   logout(): void {

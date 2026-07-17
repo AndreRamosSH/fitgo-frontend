@@ -25,13 +25,23 @@
 @media (max-width: 992px) {
   .diseno-panel {
     grid-template-columns: 1fr;
-    grid-template-rows: var(--encabezado-alto) auto 1fr;
+    grid-template-rows: var(--encabezado-alto) 1fr;
   }
   
   .area-lateral {
-    grid-row: 2;
-    grid-column: 1;
-    height: auto;
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    grid-row: unset;
+    grid-column: unset;
+    
+    &.mostrar {
+      left: 0;
+    }
   }
   
   .area-header {
@@ -41,9 +51,31 @@
   
   .area-principal {
     grid-column: 1;
-    grid-row: 3;
-    height: auto;
+    grid-row: 2;
+    height: calc(100vh - var(--encabezado-alto));
     padding: 1.25rem;
+  }
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 999;
+  animation: overlayFadeIn 0.25s ease forwards;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
