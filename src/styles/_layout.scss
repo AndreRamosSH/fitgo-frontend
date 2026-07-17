@@ -182,8 +182,23 @@
   margin-top: 1rem;
   background-color: var(--fondo-tarjeta);
   border-radius: var(--radio);
-  overflow: hidden;
   box-shadow: var(--sombra);
+}
+
+.tabla-usuarios th:first-child {
+  border-top-left-radius: var(--radio);
+}
+
+.tabla-usuarios th:last-child {
+  border-top-right-radius: var(--radio);
+}
+
+.tabla-usuarios tr:last-child td:first-child {
+  border-bottom-left-radius: var(--radio);
+}
+
+.tabla-usuarios tr:last-child td:last-child {
+  border-bottom-right-radius: var(--radio);
 }
 
 .tabla-usuarios th,
