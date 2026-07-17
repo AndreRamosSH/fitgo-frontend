@@ -1,11 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
+import { LucideChevronLeft, LucideChevronRight } from '@lucide/angular';
 
 @Component({
   selector: 'app-admin-resumen',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideChevronLeft, LucideChevronRight],
   templateUrl: './resumen.component.html',
   styleUrl: './resumen.component.scss'
 })
@@ -19,8 +20,42 @@ export class ResumenComponent implements OnInit {
   asistenciasHoy = 0;
   usuarios: any[] = [];
 
+  paginaActual = 1;
+  limitePorPagina = 6;
+
   ngOnInit(): void {
     this.cargarResumen();
+  }
+
+  get totalPaginas(): number {
+    return Math.ceil(this.usuarios.length / this.limitePorPagina);
+  }
+
+  get usuariosPaginados(): any[] {
+    const inicio = (this.paginaActual - 1) * this.limitePorPagina;
+    return this.usuarios.slice(inicio, inicio + this.limitePorPagina);
+  }
+
+  get paginas(): number[] {
+    return Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
+  }
+
+  paginaAnterior(): void {
+    if (this.paginaActual > 1) {
+      this.paginaActual--;
+    }
+  }
+
+  paginaSiguiente(): void {
+    if (this.paginaActual < this.totalPaginas) {
+      this.paginaActual++;
+    }
+  }
+
+  irAPagina(p: number): void {
+    if (p >= 1 && p <= this.totalPaginas) {
+      this.paginaActual = p;
+    }
   }
 
   cargarResumen(): void {
@@ -38,6 +73,7 @@ export class ResumenComponent implements OnInit {
     this.adminService.getUsuarios().subscribe({
       next: (res: any) => {
         this.usuarios = res || [];
+        this.paginaActual = 1;
       },
       error: (err: any) => console.error(err)
     });

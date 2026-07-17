@@ -30,7 +30,18 @@
 </section>
 
 <section class="seccion">
-  <h2 class="titulo-seccion">Usuarios del Sistema</h2>
+  <div class="cabecera-seccion">
+    <h2 class="titulo-seccion">Usuarios del Sistema</h2>
+    <div class="paginacion-compacta" *ngIf="totalPaginas > 1">
+      <button class="btn-pag-compacto" [disabled]="paginaActual === 1" (click)="paginaAnterior()" aria-label="Página anterior">
+        <svg lucideChevronLeft class="icono-paginacion"></svg>
+      </button>
+      <span class="info-paginas">{{ paginaActual }} / {{ totalPaginas }}</span>
+      <button class="btn-pag-compacto" [disabled]="paginaActual === totalPaginas" (click)="paginaSiguiente()" aria-label="Página siguiente">
+        <svg lucideChevronRight class="icono-paginacion"></svg>
+      </button>
+    </div>
+  </div>
 
   <table class="tabla-usuarios">
     <thead>
@@ -42,7 +53,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let u of usuarios">
+      <tr *ngFor="let u of usuariosPaginados">
         <td class="columna-nombre">{{ u.nombre }}</td>
         <td>{{ u.apellido }}</td>
         <td>{{ u.correo }}</td>
@@ -55,4 +66,21 @@
       </tr>
     </tbody>
   </table>
+
+  <div class="paginacion-completa" *ngIf="totalPaginas > 1">
+    <button class="btn-paginacion-nav" [disabled]="paginaActual === 1" (click)="paginaAnterior()">
+      Anterior
+    </button>
+    <div class="paginacion-numeros">
+      <button *ngFor="let p of paginas" 
+              class="btn-paginacion-num" 
+              [class.activo]="paginaActual === p" 
+              (click)="irAPagina(p)">
+        {{ p }}
+      </button>
+    </div>
+    <button class="btn-paginacion-nav" [disabled]="paginaActual === totalPaginas" (click)="paginaSiguiente()">
+      Siguiente
+    </button>
+  </div>
 </section>
