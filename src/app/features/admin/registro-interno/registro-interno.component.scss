@@ -9,3 +9,92 @@
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.grid-dos-columnas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.seccion-registro-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: start;
+  width: 100%;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+}
+
+.tarjeta-formulario {
+  max-width: none !important; // Override global max-width 550px
+  width: 100%;
+}
+
+.panel-ayuda-roles {
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 2rem;
+  box-shadow: var(--sombra);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+
+  h2 {
+    font-family: var(--fuente-titulo), sans-serif;
+    font-size: 1.3rem;
+    color: var(--texto);
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--borde);
+    padding-bottom: 0.75rem;
+  }
+}
+
+.tarjeta-rol-info {
+  padding: 1.25rem;
+  border-radius: var(--radio);
+  border: 1px solid var(--borde);
+  background-color: rgba(255, 255, 255, 0.01);
+  transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: var(--acento);
+    background-color: rgba(255, 255, 255, 0.02);
+  }
+
+  .cabecera-rol {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.6rem;
+    color: var(--acento);
+
+    .icono-rol {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+    }
+
+    h3 {
+      font-family: var(--fuente-titulo), sans-serif;
+      font-size: 1.1rem;
+      margin: 0;
+      color: var(--texto);
+    }
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: var(--texto-suave);
+    line-height: 1.5;
+    margin: 0;
+  }
+}

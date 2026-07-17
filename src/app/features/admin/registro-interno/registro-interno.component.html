@@ -3,7 +3,7 @@
   <p>Completa los datos para agregar un miembro, entrenador o administrador al sistema.</p>
 </section>
 
-<section class="seccion">
+<section class="seccion-registro-layout">
   <div class="tarjeta-formulario">
     <div *ngIf="error" class="alerta-error">
       <span>{{ error }}</span>
@@ -14,100 +14,108 @@
     </div>
 
     <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
-      <div class="grupo-campo">
-        <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" formControlName="nombre" placeholder="Nombre">
-        <div *ngIf="registroForm.get('nombre')?.touched && registroForm.get('nombre')?.invalid" class="texto-error-validacion">
-          <small *ngIf="registroForm.get('nombre')?.errors?.['required']">El nombre es obligatorio.</small>
-          <small *ngIf="registroForm.get('nombre')?.errors?.['minlength']">Mínimo 2 caracteres.</small>
-        </div>
-      </div>
-
-      <div class="grupo-campo">
-        <label for="apellido">Apellido</label>
-        <input type="text" id="apellido" formControlName="apellido" placeholder="Apellido">
-        <div *ngIf="registroForm.get('apellido')?.touched && registroForm.get('apellido')?.invalid" class="texto-error-validacion">
-          <small *ngIf="registroForm.get('apellido')?.errors?.['required']">El apellido es obligatorio.</small>
-          <small *ngIf="registroForm.get('apellido')?.errors?.['minlength']">Mínimo 2 caracteres.</small>
-        </div>
-      </div>
-
-      <div class="grupo-campo">
-        <label for="correo">Correo electrónico</label>
-        <input type="email" id="correo" formControlName="correo" placeholder="correo@fitgo.com">
-        <div *ngIf="registroForm.get('correo')?.touched && registroForm.get('correo')?.invalid" class="texto-error-validacion">
-          <small *ngIf="registroForm.get('correo')?.errors?.['required']">El correo es obligatorio.</small>
-          <small *ngIf="registroForm.get('correo')?.errors?.['email']">Debe ser un correo válido.</small>
-        </div>
-      </div>
-
-      <div class="grupo-campo">
-        <label for="telefono">Número telefónico</label>
-        <input type="text" id="telefono" formControlName="telefono" placeholder="+51 987 654 321">
-        <div *ngIf="registroForm.get('telefono')?.touched && registroForm.get('telefono')?.invalid" class="texto-error-validacion">
-          <small *ngIf="registroForm.get('telefono')?.errors?.['pattern']">Número telefónico inválido.</small>
-        </div>
-      </div>
-
-      <div class="grupo-campo">
-        <label for="password">Contraseña</label>
-        <input type="password" id="password" formControlName="password" placeholder="Mínimo 6 caracteres">
-        <div *ngIf="registroForm.get('password')?.touched && registroForm.get('password')?.invalid" class="texto-error-validacion">
-          <small *ngIf="registroForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</small>
-          <small *ngIf="registroForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres.</small>
-        </div>
-      </div>
-
-      <div class="grupo-campo">
-        <label>Rol</label>
-        <div class="dropdown-buscador">
-          <button type="button" class="dropdown-trigger" (click)="toggleDropdownRol()">
-            {{ rolSeleccionadoTexto || 'Selecciona un rol' }}
-          </button>
-          @if (mostrarDropdownRol) {
-            <div class="dropdown-backdrop" (click)="mostrarDropdownRol = false"></div>
-            <div class="dropdown-menu">
-              <div class="dropdown-options">
-                <div class="dropdown-option" (click)="seleccionarRol('MIEMBRO')">Miembro</div>
-                <div class="dropdown-option" (click)="seleccionarRol('ENTRENADOR')">Entrenador</div>
-                <div class="dropdown-option" (click)="seleccionarRol('ADMIN')">Administrador</div>
-              </div>
-            </div>
-          }
-        </div>
-        <input type="hidden" formControlName="rol" />
-        <div *ngIf="registroForm.get('rol')?.touched && registroForm.get('rol')?.invalid" class="texto-error-validacion">
-          <small *ngIf="registroForm.get('rol')?.errors?.['required']">El rol es obligatorio.</small>
-        </div>
-      </div>
-
-      <div *ngIf="registroForm.get('rol')?.value === 'ENTRENADOR'" class="seccion-entrenador">
+      <div class="grid-dos-columnas">
         <div class="grupo-campo">
-          <label>Turno</label>
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" formControlName="nombre" placeholder="Nombre">
+          <div *ngIf="registroForm.get('nombre')?.touched && registroForm.get('nombre')?.invalid" class="texto-error-validacion">
+            <small *ngIf="registroForm.get('nombre')?.errors?.['required']">El nombre es obligatorio.</small>
+            <small *ngIf="registroForm.get('nombre')?.errors?.['minlength']">Mínimo 2 caracteres.</small>
+          </div>
+        </div>
+
+        <div class="grupo-campo">
+          <label for="apellido">Apellido</label>
+          <input type="text" id="apellido" formControlName="apellido" placeholder="Apellido">
+          <div *ngIf="registroForm.get('apellido')?.touched && registroForm.get('apellido')?.invalid" class="texto-error-validacion">
+            <small *ngIf="registroForm.get('apellido')?.errors?.['required']">El apellido es obligatorio.</small>
+            <small *ngIf="registroForm.get('apellido')?.errors?.['minlength']">Mínimo 2 caracteres.</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-dos-columnas">
+        <div class="grupo-campo">
+          <label for="correo">Correo electrónico</label>
+          <input type="email" id="correo" formControlName="correo" placeholder="correo@fitgo.com">
+          <div *ngIf="registroForm.get('correo')?.touched && registroForm.get('correo')?.invalid" class="texto-error-validacion">
+            <small *ngIf="registroForm.get('correo')?.errors?.['required']">El correo es obligatorio.</small>
+            <small *ngIf="registroForm.get('correo')?.errors?.['email']">Debe ser un correo válido.</small>
+          </div>
+        </div>
+
+        <div class="grupo-campo">
+          <label for="telefono">Número telefónico</label>
+          <input type="text" id="telefono" formControlName="telefono" placeholder="+51 987 654 321">
+          <div *ngIf="registroForm.get('telefono')?.touched && registroForm.get('telefono')?.invalid" class="texto-error-validacion">
+            <small *ngIf="registroForm.get('telefono')?.errors?.['pattern']">Número telefónico inválido.</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-dos-columnas">
+        <div class="grupo-campo">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" formControlName="password" placeholder="Mínimo 6 caracteres">
+          <div *ngIf="registroForm.get('password')?.touched && registroForm.get('password')?.invalid" class="texto-error-validacion">
+            <small *ngIf="registroForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</small>
+            <small *ngIf="registroForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres.</small>
+          </div>
+        </div>
+
+        <div class="grupo-campo">
+          <label>Rol</label>
           <div class="dropdown-buscador">
-            <button type="button" class="dropdown-trigger" (click)="toggleDropdownTurno()">
-              {{ turnoSeleccionadoTexto || 'Selecciona un turno' }}
+            <button type="button" class="dropdown-trigger" (click)="toggleDropdownRol()">
+              {{ rolSeleccionadoTexto || 'Selecciona un rol' }}
             </button>
-            @if (mostrarDropdownTurno) {
-              <div class="dropdown-backdrop" (click)="mostrarDropdownTurno = false"></div>
+            @if (mostrarDropdownRol) {
+              <div class="dropdown-backdrop" (click)="mostrarDropdownRol = false"></div>
               <div class="dropdown-menu">
                 <div class="dropdown-options">
-                  <div class="dropdown-option" (click)="seleccionarTurno('MANANA')">Mañana (6:00 - 12:00)</div>
-                  <div class="dropdown-option" (click)="seleccionarTurno('TARDE')">Tarde (12:00 - 18:00)</div>
-                  <div class="dropdown-option" (click)="seleccionarTurno('NOCHE')">Noche (18:00 - 23:00)</div>
+                  <div class="dropdown-option" (click)="seleccionarRol('MIEMBRO')">Miembro</div>
+                  <div class="dropdown-option" (click)="seleccionarRol('ENTRENADOR')">Entrenador</div>
+                  <div class="dropdown-option" (click)="seleccionarRol('ADMIN')">Administrador</div>
                 </div>
               </div>
             }
           </div>
-          <input type="hidden" formControlName="turno" />
+          <input type="hidden" formControlName="rol" />
+          <div *ngIf="registroForm.get('rol')?.touched && registroForm.get('rol')?.invalid" class="texto-error-validacion">
+            <small *ngIf="registroForm.get('rol')?.errors?.['required']">El rol es obligatorio.</small>
+          </div>
         </div>
+      </div>
 
-        <div class="grupo-campo">
-          <label for="experienciaAnios">Años de experiencia</label>
-          <input type="number" id="experienciaAnios" formControlName="experienciaAnios" min="0" max="50">
-          <div *ngIf="registroForm.get('experienciaAnios')?.touched && registroForm.get('experienciaAnios')?.invalid" class="texto-error-validacion">
-            <small *ngIf="registroForm.get('experienciaAnios')?.errors?.['min']">Mínimo 0 años.</small>
-            <small *ngIf="registroForm.get('experienciaAnios')?.errors?.['max']">Máximo 50 años.</small>
+      <div *ngIf="registroForm.get('rol')?.value === 'ENTRENADOR'" class="seccion-entrenador">
+        <div class="grid-dos-columnas">
+          <div class="grupo-campo">
+            <label>Turno</label>
+            <div class="dropdown-buscador">
+              <button type="button" class="dropdown-trigger" (click)="toggleDropdownTurno()">
+                {{ turnoSeleccionadoTexto || 'Selecciona un turno' }}
+              </button>
+              @if (mostrarDropdownTurno) {
+                <div class="dropdown-backdrop" (click)="mostrarDropdownTurno = false"></div>
+                <div class="dropdown-menu">
+                  <div class="dropdown-options">
+                    <div class="dropdown-option" (click)="seleccionarTurno('MANANA')">Mañana (6:00 - 12:00)</div>
+                    <div class="dropdown-option" (click)="seleccionarTurno('TARDE')">Tarde (12:00 - 18:00)</div>
+                    <div class="dropdown-option" (click)="seleccionarTurno('NOCHE')">Noche (18:00 - 23:00)</div>
+                  </div>
+                </div>
+              }
+            </div>
+            <input type="hidden" formControlName="turno" />
+          </div>
+
+          <div class="grupo-campo">
+            <label for="experienciaAnios">Años de experiencia</label>
+            <input type="number" id="experienciaAnios" formControlName="experienciaAnios" min="0" max="50">
+            <div *ngIf="registroForm.get('experienciaAnios')?.touched && registroForm.get('experienciaAnios')?.invalid" class="texto-error-validacion">
+              <small *ngIf="registroForm.get('experienciaAnios')?.errors?.['min']">Mínimo 0 años.</small>
+              <small *ngIf="registroForm.get('experienciaAnios')?.errors?.['max']">Máximo 50 años.</small>
+            </div>
           </div>
         </div>
       </div>
@@ -121,5 +129,33 @@
         </a>
       </div>
     </form>
+  </div>
+
+  <div class="panel-ayuda-roles">
+    <h2>Guía de Roles del Sistema</h2>
+    
+    <div class="tarjeta-rol-info admin">
+      <div class="cabecera-rol">
+        <svg lucideShield class="icono-rol"></svg>
+        <h3>Administrador</h3>
+      </div>
+      <p>Acceso total al sistema. Puede registrar otros usuarios, asignar entrenadores, gestionar membresías y ver reportes generales.</p>
+    </div>
+
+    <div class="tarjeta-rol-info entrenador">
+      <div class="cabecera-rol">
+        <svg lucideDumbbell class="icono-rol"></svg>
+        <h3>Entrenador</h3>
+      </div>
+      <p>Personal del staff. Puede gestionar la asistencia, crear planes de entrenamiento y realizar seguimiento a los miembros asignados.</p>
+    </div>
+
+    <div class="tarjeta-rol-info miembro">
+      <div class="cabecera-rol">
+        <svg lucideUser class="icono-rol"></svg>
+        <h3>Miembro</h3>
+      </div>
+      <p>Cliente del gimnasio. Puede acceder a las instalaciones mediante asistencia, ver la información de su membresía y su entrenador asignado.</p>
+    </div>
   </div>
 </section>
