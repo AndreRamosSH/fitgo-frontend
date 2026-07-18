@@ -20,6 +20,7 @@
   padding: 2rem;
   overflow-y: auto;
   height: calc(100vh - var(--encabezado-alto));
+  min-width: 0;
 }
 
 @media (max-width: 992px) {

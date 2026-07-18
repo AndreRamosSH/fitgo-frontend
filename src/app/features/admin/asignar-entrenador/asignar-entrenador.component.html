@@ -4,42 +4,44 @@
 </section>
 
 <section class="seccion">
-  <table class="tabla-usuarios">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Correo</th>
-        <th>Entrenador Asignado</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let m of miembros">
-        <td class="columna-nombre">{{ m.nombre }}</td>
-        <td>{{ m.apellido }}</td>
-        <td>{{ m.correo }}</td>
-        <td>
-          <div class="grupo-campo">
-            <div class="dropdown-buscador">
-              <button type="button" class="dropdown-trigger" (click)="toggleDropdown(m.id)">
-                {{ getEntrenadorAsignadoTexto(m) }}
-              </button>
-              <div class="dropdown-backdrop" *ngIf="dropdownAbiertoMiembroId === m.id" (click)="toggleDropdown(m.id)"></div>
-              <div class="dropdown-menu" *ngIf="dropdownAbiertoMiembroId === m.id">
-                <div class="dropdown-options">
-                  <div class="dropdown-option" (click)="seleccionarEntrenador(m.id, null)">Sin asignar</div>
-                  <div class="dropdown-option" *ngFor="let ent of entrenadores" (click)="seleccionarEntrenador(m.id, ent.id)">
-                    {{ ent.usuario?.nombre }} {{ ent.usuario?.apellido }}
+  <div class="tabla-responsive">
+    <table class="tabla-usuarios">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Correo</th>
+          <th>Entrenador Asignado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let m of miembros">
+          <td class="columna-nombre">{{ m.nombre }}</td>
+          <td>{{ m.apellido }}</td>
+          <td>{{ m.correo }}</td>
+          <td>
+            <div class="grupo-campo">
+              <div class="dropdown-buscador">
+                <button type="button" class="dropdown-trigger" (click)="toggleDropdown(m.id)">
+                  {{ getEntrenadorAsignadoTexto(m) }}
+                </button>
+                <div class="dropdown-backdrop" *ngIf="dropdownAbiertoMiembroId === m.id" (click)="toggleDropdown(m.id)"></div>
+                <div class="dropdown-menu" *ngIf="dropdownAbiertoMiembroId === m.id">
+                  <div class="dropdown-options">
+                    <div class="dropdown-option" (click)="seleccionarEntrenador(m.id, null)">Sin asignar</div>
+                    <div class="dropdown-option" *ngFor="let ent of entrenadores" (click)="seleccionarEntrenador(m.id, ent.id)">
+                      {{ ent.usuario?.nombre }} {{ ent.usuario?.apellido }}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </td>
-      </tr>
-      <tr *ngIf="miembros.length === 0">
-        <td colspan="4" class="texto-vacio">No hay miembros activos con suscripción vigente en este momento.</td>
-      </tr>
-    </tbody>
-  </table>
+          </td>
+        </tr>
+        <tr *ngIf="miembros.length === 0">
+          <td colspan="4" class="texto-vacio">No hay miembros activos con suscripción vigente en este momento.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </section>

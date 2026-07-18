@@ -12,41 +12,43 @@
     </div>
   </div>
 
-  <table class="tabla-usuarios">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Turno / Nivel</th>
-        <th>Experiencia</th>
-        <th class="texto-derecha">Acción</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let ent of entrenadoresFiltrados">
-        <td class="columna-nombre">{{ ent.usuario.nombre }} {{ ent.usuario.apellido }}</td>
-        <td>
-          <span class="badge-turno" [ngClass]="'badge-turno-' + ent.turno.toLowerCase()">
-            {{ ent.turno }}
-          </span>
-        </td>
-        <td>
-          <span class="tag-especial">{{ ent.experienciaAnios }} años</span>
-        </td>
-        <td class="texto-derecha">
-          <span *ngIf="esCoachActual(ent.id)" class="tag-especial miembro">
-            Tu Coach Actual
-          </span>
-          
-          <button *ngIf="!esCoachActual(ent.id)" 
-                  (click)="elegir(ent.id)" 
-                  class="btn-editar">
-            Seleccionar
-          </button>
-        </td>
-      </tr>
-      <tr *ngIf="entrenadoresFiltrados.length === 0">
-        <td colspan="4" class="texto-vacio">No hay entrenadores disponibles por el momento.</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="tabla-responsive">
+    <table class="tabla-usuarios">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Turno / Nivel</th>
+          <th>Experiencia</th>
+          <th class="texto-derecha">Accion</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ent of entrenadoresFiltrados">
+          <td class="columna-nombre">{{ ent.usuario.nombre }} {{ ent.usuario.apellido }}</td>
+          <td>
+            <span class="badge-turno" [ngClass]="'badge-turno-' + ent.turno.toLowerCase()">
+              {{ ent.turno }}
+            </span>
+          </td>
+          <td>
+            <span class="tag-especial">{{ ent.experienciaAnios }} años</span>
+          </td>
+          <td class="texto-derecha">
+            <span *ngIf="esCoachActual(ent.id)" class="tag-especial miembro">
+              Tu Coach Actual
+            </span>
+            
+            <button *ngIf="!esCoachActual(ent.id)" 
+                    (click)="elegir(ent.id)" 
+                    class="btn-editar">
+              Seleccionar
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="entrenadoresFiltrados.length === 0">
+          <td colspan="4" class="texto-vacio">No hay entrenadores disponibles por el momento.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </section>

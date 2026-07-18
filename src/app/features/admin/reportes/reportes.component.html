@@ -83,13 +83,15 @@
     <div class="rejilla-graficos" *ngIf="asistenciaReport">
       <div class="grafico-card">
         <h4 class="grafico-titulo">Ingresos por día</h4>
-        <div class="grafico-barras-vertical">
-          <div class="barra-vertical-columna" *ngFor="let item of asistenciaReport.ingresosPorDia">
-            <span class="barra-valor">{{ item.valor }}</span>
-            <div class="barra-grafico">
-              <div class="barra-relleno" [style.height.%]="(item.valor / maxIngresosDia) * 100" [class.destacado]="item.destacado"></div>
+        <div class="contenedor-grafico-scroll">
+          <div class="grafico-barras-vertical">
+            <div class="barra-vertical-columna" *ngFor="let item of asistenciaReport.ingresosPorDia">
+              <span class="barra-valor">{{ item.valor }}</span>
+              <div class="barra-grafico">
+                <div class="barra-relleno" [style.height.%]="(item.valor / maxIngresosDia) * 100" [class.destacado]="item.destacado"></div>
+              </div>
+              <span class="barra-dia">{{ item.dia }}</span>
             </div>
-            <span class="barra-dia">{{ item.dia }}</span>
           </div>
         </div>
       </div>
@@ -150,26 +152,28 @@
 
       <div class="grafico-card">
         <h4 class="grafico-titulo">Próximas a vencer / Vencidas recientes</h4>
-        <table class="tabla-usuarios">
-          <thead>
-            <tr>
-              <th>Miembro</th>
-              <th>Plan</th>
-              <th>Vence</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of membresiaReport.proximasVencer">
-              <td class="columna-nombre">{{ item.miembro }}</td>
-              <td>{{ item.plan }}</td>
-              <td>{{ item.vence }}</td>
-              <td>
-                <span class="badge-estado" [ngClass]="'badge-' + item.estado">{{ item.dias }}</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="tabla-responsive">
+          <table class="tabla-usuarios">
+            <thead>
+              <tr>
+                <th>Miembro</th>
+                <th>Plan</th>
+                <th>Vence</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of membresiaReport.proximasVencer">
+                <td class="columna-nombre">{{ item.miembro }}</td>
+                <td>{{ item.plan }}</td>
+                <td>{{ item.vence }}</td>
+                <td>
+                  <span class="badge-estado" [ngClass]="'badge-' + item.estado">{{ item.dias }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -201,32 +205,34 @@
 
     <div class="grafico-card full-width" *ngIf="entrenadorReport">
       <h4 class="grafico-titulo">Comparativa de entrenadores</h4>
-      <table class="tabla-usuarios">
-        <thead>
-          <tr>
-            <th>Entrenador</th>
-            <th>Miembros</th>
-            <th>Rutinas</th>
-            <th>% Membresías Activas</th>
-            <th>Carga</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of entrenadorReport.comparativaEntrenadores">
-            <td class="columna-nombre">{{ item.entrenador }}</td>
-            <td>{{ item.miembros }}</td>
-            <td>{{ item.rutinas }}</td>
-            <td>
-              <span class="badge-estado" [ngClass]="'badge-' + item.estadoMembresia">{{ item.membresiasActivas }}</span>
-            </td>
-            <td>
-              <div class="barra-progreso-carga-contenedor">
-                <div class="barra-progreso-carga-relleno" [style.width.%]="item.carga" [style.background-color]="item.colorCarga"></div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="tabla-responsive">
+        <table class="tabla-usuarios">
+          <thead>
+            <tr>
+              <th>Entrenador</th>
+              <th>Miembros</th>
+              <th>Rutinas</th>
+              <th>% Membresías Activas</th>
+              <th>Carga</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of entrenadorReport.comparativaEntrenadores">
+              <td class="columna-nombre">{{ item.entrenador }}</td>
+              <td>{{ item.miembros }}</td>
+              <td>{{ item.rutinas }}</td>
+              <td>
+                <span class="badge-estado" [ngClass]="'badge-' + item.estadoMembresia">{{ item.membresiasActivas }}</span>
+              </td>
+              <td>
+                <div class="barra-progreso-carga-contenedor">
+                  <div class="barra-progreso-carga-relleno" [style.width.%]="item.carga" [style.background-color]="item.colorCarga"></div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

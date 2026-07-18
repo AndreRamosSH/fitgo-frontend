@@ -176,6 +176,13 @@
   margin-top: 1rem;
 }
 
+.tabla-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+
 .tabla-usuarios {
   width: 100%;
   border-collapse: collapse;
@@ -331,11 +338,21 @@
   display: flex;
   gap: 1rem;
   margin-top: 2rem;
+  flex-wrap: wrap;
 
   button, a {
-    flex: 1;
+    flex: 1 1 calc(50% - 0.5rem);
     text-align: center;
     display: inline-block;
+    min-width: 120px;
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    button, a {
+      flex: 1 1 100%;
+      width: 100%;
+    }
   }
 }
 
@@ -596,6 +613,19 @@
   display: flex;
   gap: 15px;
   margin-bottom: 30px;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 5px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 .tab-pill {

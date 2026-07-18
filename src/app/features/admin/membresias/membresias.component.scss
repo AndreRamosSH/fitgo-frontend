@@ -3,6 +3,10 @@
   grid-template-columns: 1.6fr 1fr;
   gap: 2rem;
   align-items: start;
+
+  & > * {
+    min-width: 0;
+  }
 }
 
 @media (max-width: 992px) {

@@ -43,29 +43,31 @@
     </div>
   </div>
 
-  <table class="tabla-usuarios">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Correo electrónico</th>
-        <th>Rol</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let u of usuariosPaginados">
-        <td class="columna-nombre">{{ u.nombre }}</td>
-        <td>{{ u.apellido }}</td>
-        <td>{{ u.correo }}</td>
-        <td>
-          <span class="tag-especial" [ngClass]="u.rol.toLowerCase()">{{ u.rol }}</span>
-        </td>
-      </tr>
-      <tr *ngIf="usuarios.length === 0">
-        <td colspan="4" class="texto-vacio">No hay usuarios registrados.</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="tabla-responsive">
+    <table class="tabla-usuarios">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Correo electrónico</th>
+          <th>Rol</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of usuariosPaginados">
+          <td class="columna-nombre">{{ u.nombre }}</td>
+          <td>{{ u.apellido }}</td>
+          <td>{{ u.correo }}</td>
+          <td>
+            <span class="tag-especial" [ngClass]="u.rol.toLowerCase()">{{ u.rol }}</span>
+          </td>
+        </tr>
+        <tr *ngIf="usuarios.length === 0">
+          <td colspan="4" class="texto-vacio">No hay usuarios registrados.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <div class="paginacion-completa" *ngIf="totalPaginas > 1">
     <button class="btn-paginacion-nav" [disabled]="paginaActual === 1" (click)="paginaAnterior()">

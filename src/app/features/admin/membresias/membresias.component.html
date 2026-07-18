@@ -25,33 +25,35 @@
     <div class="tarjeta tarjeta--sin-hover lista-planes">
       <h2 class="titulo-seccion">Planes Disponibles</h2>
 
-      <table class="tabla-usuarios">
-        <thead>
-          <tr>
-            <th>Plan</th>
-            <th>Precio</th>
-            <th>Duración</th>
-            <th class="texto-derecha">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (p of planes; track p.id) {
+      <div class="tabla-responsive">
+        <table class="tabla-usuarios">
+          <thead>
             <tr>
-              <td class="columna-nombre">{{ p.nombre }}</td>
-              <td>S/ {{ p.precio }}</td>
-              <td>{{ p.duracionDias }} días</td>
-              <td class="celda-acciones">
-                <button (click)="editarPlan(p)" class="btn-editar">Editar</button>
-                <button (click)="eliminarPlan(p.id)" class="btn-eliminar">Eliminar</button>
-              </td>
+              <th>Plan</th>
+              <th>Precio</th>
+              <th>Duración</th>
+              <th class="texto-derecha">Acciones</th>
             </tr>
-          } @empty {
-            <tr>
-              <td colspan="4" class="texto-vacio">No hay planes registrados.</td>
-            </tr>
-          }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            @for (p of planes; track p.id) {
+              <tr>
+                <td class="columna-nombre">{{ p.nombre }}</td>
+                <td>S/ {{ p.precio }}</td>
+                <td>{{ p.duracionDias }} días</td>
+                <td class="celda-acciones">
+                  <button (click)="editarPlan(p)" class="btn-editar">Editar</button>
+                  <button (click)="eliminarPlan(p.id)" class="btn-eliminar">Eliminar</button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="4" class="texto-vacio">No hay planes registrados.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="tarjeta tarjeta--sin-hover formulario-plan">
@@ -98,37 +100,39 @@
     <div class="tarjeta tarjeta--sin-hover lista-membresias">
       <h2 class="titulo-seccion">Membresías Registradas</h2>
 
-      <table class="tabla-usuarios">
-        <thead>
-          <tr>
-            <th>Miembro</th>
-            <th>Plan</th>
-            <th>Inicio</th>
-            <th>Fin</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (m of membresias; track m.id) {
+      <div class="tabla-responsive">
+        <table class="tabla-usuarios">
+          <thead>
             <tr>
-              <td class="columna-nombre">{{ m.usuario.nombre }} {{ m.usuario.apellido }}</td>
-              <td>{{ m.plan.nombre }}</td>
-              <td>{{ m.fechaInicio | date:'dd/MM/yyyy' }}</td>
-              <td>{{ m.fechaFin | date:'dd/MM/yyyy' }}</td>
-              <td>
-                <span class="badge-estado"
-                      [ngClass]="m.estado === 'ACTIVA' ? 'badge-activa' : m.estado === 'POR_VENCER' ? 'badge-por-vencer' : 'badge-vencida'">
-                  {{ m.estado }}
-                </span>
-              </td>
+              <th>Miembro</th>
+              <th>Plan</th>
+              <th>Inicio</th>
+              <th>Fin</th>
+              <th>Estado</th>
             </tr>
-          } @empty {
-            <tr>
-              <td colspan="5" class="texto-vacio">No hay membresías asignadas.</td>
-            </tr>
-          }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            @for (m of membresias; track m.id) {
+              <tr>
+                <td class="columna-nombre">{{ m.usuario.nombre }} {{ m.usuario.apellido }}</td>
+                <td>{{ m.plan.nombre }}</td>
+                <td>{{ m.fechaInicio | date:'dd/MM/yyyy' }}</td>
+                <td>{{ m.fechaFin | date:'dd/MM/yyyy' }}</td>
+                <td>
+                  <span class="badge-estado"
+                        [ngClass]="m.estado === 'ACTIVA' ? 'badge-activa' : m.estado === 'POR_VENCER' ? 'badge-por-vencer' : 'badge-vencida'">
+                    {{ m.estado }}
+                  </span>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="5" class="texto-vacio">No hay membresías asignadas.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="tarjeta tarjeta--sin-hover formulario-membresia">

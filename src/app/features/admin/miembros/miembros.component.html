@@ -41,38 +41,40 @@
     </div>
   </div>
 
-  <table class="tabla-usuarios">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Correo</th>
-        <th>Entrenador</th>
-        <th class="texto-derecha">Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (m of miembrosPaginados; track m.id) {
+  <div class="tabla-responsive">
+    <table class="tabla-usuarios">
+      <thead>
         <tr>
-          <td class="columna-nombre">{{ m.nombre }}</td>
-          <td>{{ m.apellido }}</td>
-          <td>{{ m.correo }}</td>
-          <td>
-            {{ m.entrenador ? m.entrenador.usuario.nombre + ' ' + m.entrenador.usuario.apellido : 'Sin asignar' }}
-          </td>
-          <td class="texto-derecha">
-            <button (click)="eliminar(m.id)" class="btn-eliminar">
-              Eliminar
-            </button>
-          </td>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Correo</th>
+          <th>Entrenador</th>
+          <th class="texto-derecha">Acciones</th>
         </tr>
-      } @empty {
-        <tr>
-          <td colspan="5" class="texto-vacio">No hay miembros registrados.</td>
-        </tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        @for (m of miembrosPaginados; track m.id) {
+          <tr>
+            <td class="columna-nombre">{{ m.nombre }}</td>
+            <td>{{ m.apellido }}</td>
+            <td>{{ m.correo }}</td>
+            <td>
+              {{ m.entrenador ? m.entrenador.usuario.nombre + ' ' + m.entrenador.usuario.apellido : 'Sin asignar' }}
+            </td>
+            <td class="texto-derecha">
+              <button (click)="eliminar(m.id)" class="btn-eliminar">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="texto-vacio">No hay miembros registrados.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 
   <div class="paginacion-completa" *ngIf="totalPaginas > 1">
     <button class="btn-paginacion-nav" [disabled]="paginaActual === 1" (click)="paginaAnterior()">
