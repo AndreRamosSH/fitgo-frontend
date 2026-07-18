@@ -1,0 +1,87 @@
+<div class="encabezado-tabla-flex">
+  <div class="seccion-bienvenida">
+    <h1>Mis Rutinas</h1>
+    <p>Rutinas del entrenador y rutinas propias</p>
+  </div>
+  <button class="btn-crear-rutina">+ Crear rutina</button>
+</div>
+
+<div class="categoria-seccion">
+  <p class="etiqueta-grupo">Del Entrenador</p>
+  
+  <div class="contenedor-rutinas">
+    <div *ngFor="let rut of rutinasDelEntrenador" class="tarjeta-rutina" [class.abierto]="rut.expanded">
+      <!-- Cabecera de la rutina -->
+      <div class="rutina-cabecera" (click)="toggleRutina(rut)">
+        <div class="rutina-info-basica">
+          <h3>{{ rut.nombre }}</h3>
+          <p class="rutina-sub-label">{{ rut.dias }} · {{ rut.ejerciciosCount }} ejercicios</p>
+        </div>
+        <div class="rutina-badges">
+          <span class="badge-rutina badge-asignada">Asignada</span>
+          <span class="icono-flecha" [class.rotado]="rut.expanded">▼</span>
+        </div>
+      </div>
+
+      <!-- Ejercicios y botón de iniciar (GO) -->
+      <div *ngIf="rut.expanded" class="rutina-detalle">
+        <div class="lista-ejercicios">
+          <div *ngFor="let ej of rut.ejercicios; let idx = index" class="item-ejercicio">
+            <div class="numero-ejercicio">{{ idx + 1 }}</div>
+            <div class="info-ejercicio">
+              <h4>{{ ej.nombre }}</h4>
+              <p>{{ ej.series }}×{{ ej.reps }} · {{ ej.peso }} · {{ ej.descanso > 0 ? ej.descanso + 's' : '--' }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <button class="btn-go">
+          <svg class="play-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          GO
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="categoria-seccion">
+  <p class="etiqueta-grupo">Mis Rutinas</p>
+  
+  <div class="contenedor-rutinas">
+    <div *ngFor="let rut of rutinasPropias" class="tarjeta-rutina" [class.abierto]="rut.expanded">
+      <!-- Cabecera de la rutina -->
+      <div class="rutina-cabecera" (click)="toggleRutina(rut)">
+        <div class="rutina-info-basica">
+          <h3>{{ rut.nombre }}</h3>
+          <p class="rutina-sub-label">{{ rut.dias }} · {{ rut.ejerciciosCount }} ejercicios</p>
+        </div>
+        <div class="rutina-badges">
+          <span class="badge-rutina badge-propia">Propia</span>
+          <span class="icono-flecha" [class.rotado]="rut.expanded">▼</span>
+        </div>
+      </div>
+
+      <!-- Ejercicios y botón de iniciar (GO) -->
+      <div *ngIf="rut.expanded" class="rutina-detalle">
+        <div class="lista-ejercicios">
+          <div *ngFor="let ej of rut.ejercicios; let idx = index" class="item-ejercicio">
+            <div class="numero-ejercicio">{{ idx + 1 }}</div>
+            <div class="info-ejercicio">
+              <h4>{{ ej.nombre }}</h4>
+              <p>{{ ej.series }}×{{ ej.reps }} · {{ ej.peso }} · {{ ej.descanso > 0 ? ej.descanso + 's' : '--' }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <button class="btn-go">
+          <svg class="play-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          GO
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
