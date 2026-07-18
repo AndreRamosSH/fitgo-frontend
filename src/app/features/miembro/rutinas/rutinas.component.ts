@@ -157,6 +157,18 @@ export class RutinasComponent implements OnInit {
   edicionPeso = '20';
   edicionDescanso = 60;
 
+  // Toast de validación
+  toastVisible = false;
+  toastMensaje = '';
+  private toastTimeout: any = null;
+
+  mostrarToast(mensaje: string): void {
+    this.toastMensaje = mensaje;
+    this.toastVisible = true;
+    if (this.toastTimeout) clearTimeout(this.toastTimeout);
+    this.toastTimeout = setTimeout(() => { this.toastVisible = false; }, 3000);
+  }
+
   ngOnInit(): void {
     this.cargarRutinas();
   }
@@ -323,17 +335,17 @@ export class RutinasComponent implements OnInit {
 
   guardarRutina(): void {
     if (!this.nuevoNombre.trim()) {
-      alert('Por favor, ingresa un nombre para la rutina');
+      this.mostrarToast('Ingresa un nombre para la rutina.');
       return;
     }
 
     if (this.nuevosDias.length === 0) {
-      alert('Por favor, selecciona al menos un día de la semana');
+      this.mostrarToast('Selecciona al menos un día de la semana.');
       return;
     }
 
     if (this.ejerciciosAgregados.length === 0) {
-      alert('Por favor, agrega al menos un ejercicio a la rutina');
+      this.mostrarToast('Agrega al menos un ejercicio a la rutina.');
       return;
     }
 
