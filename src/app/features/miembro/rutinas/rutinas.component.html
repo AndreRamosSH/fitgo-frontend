@@ -1,87 +1,341 @@
-<div class="encabezado-tabla-flex">
-  <div class="seccion-bienvenida">
-    <h1>Mis Rutinas</h1>
-    <p>Rutinas del entrenador y rutinas propias</p>
+<ng-container *ngIf="vista === 'LISTA'">
+  <!-- Vista de lista de rutinas (original) -->
+  <div class="encabezado-tabla-flex">
+    <div class="seccion-bienvenida">
+      <h1>Mis Rutinas</h1>
+      <p>Rutinas del entrenador y rutinas propias</p>
+    </div>
+    <button class="btn-crear-rutina" (click)="irACrear()">+ Crear rutina</button>
   </div>
-  <button class="btn-crear-rutina">+ Crear rutina</button>
-</div>
 
-<div class="categoria-seccion">
-  <p class="etiqueta-grupo">Del Entrenador</p>
-  
-  <div class="contenedor-rutinas">
-    <div *ngFor="let rut of rutinasDelEntrenador" class="tarjeta-rutina" [class.abierto]="rut.expanded">
-      <!-- Cabecera de la rutina -->
-      <div class="rutina-cabecera" (click)="toggleRutina(rut)">
-        <div class="rutina-info-basica">
-          <h3>{{ rut.nombre }}</h3>
-          <p class="rutina-sub-label">{{ rut.dias }} · {{ rut.ejerciciosCount }} ejercicios</p>
-        </div>
-        <div class="rutina-badges">
-          <span class="badge-rutina badge-asignada">Asignada</span>
-          <span class="icono-flecha" [class.rotado]="rut.expanded">▼</span>
-        </div>
-      </div>
-
-      <!-- Ejercicios y botón de iniciar (GO) -->
-      <div *ngIf="rut.expanded" class="rutina-detalle">
-        <div class="lista-ejercicios">
-          <div *ngFor="let ej of rut.ejercicios; let idx = index" class="item-ejercicio">
-            <div class="numero-ejercicio">{{ idx + 1 }}</div>
-            <div class="info-ejercicio">
-              <h4>{{ ej.nombre }}</h4>
-              <p>{{ ej.series }}×{{ ej.reps }} · {{ ej.peso }} · {{ ej.descanso > 0 ? ej.descanso + 's' : '--' }}</p>
-            </div>
+  <div class="categoria-seccion">
+    <p class="etiqueta-grupo">Del Entrenador</p>
+    
+    <div class="contenedor-rutinas">
+      <div *ngFor="let rut of rutinasDelEntrenador" class="tarjeta-rutina" [class.abierto]="rut.expanded">
+        <!-- Cabecera de la rutina -->
+        <div class="rutina-cabecera" (click)="toggleRutina(rut)">
+          <div class="rutina-info-basica">
+            <h3>{{ rut.nombre }}</h3>
+            <p class="rutina-sub-label">{{ rut.dias }} · {{ rut.ejerciciosCount }} ejercicios</p>
+          </div>
+          <div class="rutina-badges">
+            <span class="badge-rutina badge-asignada">Asignada</span>
+            <span class="icono-flecha" [class.rotado]="rut.expanded">▼</span>
           </div>
         </div>
-        
-        <button class="btn-go">
-          <svg class="play-svg" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M8 5v14l11-7z"/>
-          </svg>
-          GO
-        </button>
+
+        <!-- Ejercicios y botón de iniciar (GO) -->
+        <div *ngIf="rut.expanded" class="rutina-detalle">
+          <div class="lista-ejercicios">
+            <div *ngFor="let ej of rut.ejercicios; let idx = index" class="item-ejercicio">
+              <div class="numero-ejercicio">{{ idx + 1 }}</div>
+              <div class="info-ejercicio">
+                <h4>{{ ej.nombre }}</h4>
+                <p>{{ ej.series }}×{{ ej.reps }} · {{ ej.peso }} · {{ ej.descanso > 0 ? ej.descanso + 's' : '--' }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <button class="btn-go">
+            <svg class="play-svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            GO
+          </button>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <div class="categoria-seccion">
+    <p class="etiqueta-grupo">Mis Rutinas</p>
+    
+    <div class="contenedor-rutinas">
+      <div *ngFor="let rut of rutinasPropias" class="tarjeta-rutina" [class.abierto]="rut.expanded">
+        <!-- Cabecera de la rutina -->
+        <div class="rutina-cabecera" (click)="toggleRutina(rut)">
+          <div class="rutina-info-basica">
+            <h3>{{ rut.nombre }}</h3>
+            <p class="rutina-sub-label">{{ rut.dias }} · {{ rut.ejerciciosCount }} ejercicios</p>
+          </div>
+          <div class="rutina-badges">
+            <span class="badge-rutina badge-propia">Propia</span>
+            <span class="icono-flecha" [class.rotado]="rut.expanded">▼</span>
+          </div>
+        </div>
+
+        <!-- Ejercicios y botón de iniciar (GO) -->
+        <div *ngIf="rut.expanded" class="rutina-detalle">
+          <div class="lista-ejercicios">
+            <div *ngFor="let ej of rut.ejercicios; let idx = index" class="item-ejercicio">
+              <div class="numero-ejercicio">{{ idx + 1 }}</div>
+              <div class="info-ejercicio">
+                <h4>{{ ej.nombre }}</h4>
+                <p>{{ ej.series }}×{{ ej.reps }} · {{ ej.peso }} · {{ ej.descanso > 0 ? ej.descanso + 's' : '--' }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <button class="btn-go">
+            <svg class="play-svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            GO
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="vista === 'CREAR'">
+  <!-- Vista de creador de rutinas -->
+  <div class="encabezado-tabla-flex">
+    <div class="seccion-bienvenida">
+      <h1>Crear rutina propia</h1>
+      <p>Configure los datos de su rutina y añada ejercicios</p>
+    </div>
+    <button class="btn-crear-rutina" (click)="cancelarCreacion()">Volver</button>
+  </div>
+
+  <div class="editor-columnas">
+    <!-- Columna Izquierda: Datos de la rutina y ejercicios agregados -->
+    <div class="columna-izquierda">
+      <!-- Tarjeta 1: Datos de la rutina -->
+      <article class="tarjeta-editor">
+        <h2 class="subtitulo-editor">Datos de la rutina</h2>
+        
+        <div class="grupo-campo">
+          <label>Nombre de la rutina</label>
+          <input type="text" [(ngModel)]="nuevoNombre" placeholder="Nombre de la rutina...">
+        </div>
+
+        <div class="grupo-campo">
+          <label>Días de entrenamiento</label>
+          <div class="selector-dias">
+            <button 
+              *ngFor="let dia of diasSemana" 
+              type="button" 
+              class="dia-btn" 
+              [class.activo]="diaSeleccionado(dia)" 
+              (click)="toggleDia(dia)">
+              {{ dia }}
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Tarjeta 2: Ejercicios agregados -->
+      <article class="tarjeta-editor">
+        <h2 class="subtitulo-editor">Ejercicios agregados ({{ ejerciciosAgregados.length }})</h2>
+        
+        <div class="lista-ejercicios-agregados">
+          <div *ngFor="let ejAg of ejerciciosAgregados; let idx = index" class="item-agregado">
+            <!-- Imagen del ejercicio -->
+            <div class="ejercicio-imagen-contenedor">
+              <img [src]="ejAg.ejercicio.imagen" alt="Thumbnail" class="ejercicio-thumb">
+            </div>
+            
+            <div class="info-agregado">
+              <h4>{{ ejAg.ejercicio.nombre }}</h4>
+              <p class="detalles-ejercicio">
+                {{ ejAg.series }} series · {{ ejAg.reps }} reps · {{ ejAg.peso }} · {{ ejAg.descanso }}s de descanso
+              </p>
+            </div>
+
+            <!-- Acciones del ejercicio agregado -->
+            <div class="acciones-agregado">
+              <button class="btn-accion-icon btn-editar-ej" (click)="abrirEdicion(idx)" title="Configurar series/reps">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+              </button>
+              <button class="btn-accion-icon btn-eliminar-ej" (click)="eliminarEjercicio(idx)" title="Eliminar de la lista">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="ejerciciosAgregados.length === 0" class="texto-vacio-agregados">
+            No has agregado ejercicios a la rutina todavía. Búscalos y agrégalos desde el panel derecho.
+          </div>
+        </div>
+
+        <button class="btn-guardar-rutina" (click)="guardarRutina()">
+          Guardar rutina
+        </button>
+      </article>
+    </div>
+
+    <!-- Columna Derecha: Buscar ejercicios -->
+    <div class="columna-derecha">
+      <article class="tarjeta-editor search-panel">
+        <h2 class="subtitulo-editor">Buscar ejercicios</h2>
+
+        <div class="busqueda-caja">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lupa-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" [(ngModel)]="filtroNombre" placeholder="Buscar por nombre o músculo...">
+        </div>
+
+        <div class="filtros-row">
+          <!-- Botón Filtro Músculo -->
+          <button type="button" class="btn-filtro-trigger" (click)="mostrarModalMusculo = true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="filtro-icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            Músculo
+          </button>
+          
+          <!-- Botón Filtro Tipo -->
+          <button type="button" class="btn-filtro-trigger" (click)="mostrarModalTipo = true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="filtro-icon"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+            Tipo
+          </button>
+        </div>
+
+        <!-- Lista de Resultados de búsqueda -->
+        <div class="resultados-ejercicios">
+          <div *ngFor="let ej of ejerciciosFiltrados" class="item-resultado">
+            <div class="resultado-imagen-contenedor">
+              <img [src]="ej.imagen" alt="Thumbnail" class="ejercicio-thumb">
+            </div>
+
+            <div class="resultado-info">
+              <h4>{{ ej.nombre }}</h4>
+              <div class="tags-resultado">
+                <span class="tag-resultado-musculo">{{ ej.musculo }}</span>
+                <span class="tag-resultado-tipo">{{ ej.tipo }}</span>
+              </div>
+            </div>
+
+            <!-- Botón Agregar (Cuadrado con símbolo "+") -->
+            <button class="btn-agregar-plus" (click)="agregarEjercicio(ej)" title="Añadir a la rutina">
+              <span>+</span>
+            </button>
+          </div>
+
+          <div *ngIf="ejerciciosFiltrados.length === 0" class="texto-vacio-resultados">
+            No se encontraron ejercicios con los filtros seleccionados.
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</ng-container>
+
+<!-- MODALES FLOTANTES -->
+
+<!-- 1. Modal Filtro Músculo -->
+<div class="modal-overlay" *ngIf="mostrarModalMusculo" (click)="mostrarModalMusculo = false">
+  <div class="modal-tarjeta" (click)="$event.stopPropagation()">
+    <div class="modal-cabecera">
+      <h3>Filtrar por Músculo</h3>
+      <button class="btn-cerrar-modal" (click)="mostrarModalMusculo = false">×</button>
+    </div>
+    
+    <div class="modal-cuerpo">
+      <!-- Checkbox Tren Superior -->
+      <div class="grupo-checkbox-padre">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="filtroTrenSuperior">
+          <span class="checkbox-custom"></span>
+          <strong>Tren Superior</strong>
+        </label>
+        
+        <!-- Opciones Tren Superior -->
+        <div class="sub-opciones-checkbox" *ngIf="filtroTrenSuperior">
+          <label class="checkbox-label" *ngFor="let mus of ['pecho', 'espalda', 'biceps', 'triceps', 'antebrazos', 'hombros']">
+            <input type="checkbox" [(ngModel)]="subMusculos[mus]">
+            <span class="checkbox-custom"></span>
+            {{ mus === 'biceps' ? 'Bíceps' : (mus === 'triceps' ? 'Tríceps' : (mus | titlecase)) }}
+          </label>
+        </div>
+      </div>
+
+      <!-- Checkbox Tren Inferior -->
+      <div class="grupo-checkbox-padre">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="filtroTrenInferior">
+          <span class="checkbox-custom"></span>
+          <strong>Tren Inferior</strong>
+        </label>
+        
+        <!-- Opciones Tren Inferior -->
+        <div class="sub-opciones-checkbox" *ngIf="filtroTrenInferior">
+          <label class="checkbox-label" *ngFor="let mus of ['cuadriceps', 'femorales', 'gluteos', 'pantorrillas', 'aductores', 'abductores']">
+            <input type="checkbox" [(ngModel)]="subMusculos[mus]">
+            <span class="checkbox-custom"></span>
+            {{ mus === 'cuadriceps' ? 'Cuádriceps' : (mus | titlecase) }}
+          </label>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-pie">
+      <button class="btn-modal-aplicar" (click)="mostrarModalMusculo = false">Aplicar filtros</button>
     </div>
   </div>
 </div>
 
-<div class="categoria-seccion">
-  <p class="etiqueta-grupo">Mis Rutinas</p>
-  
-  <div class="contenedor-rutinas">
-    <div *ngFor="let rut of rutinasPropias" class="tarjeta-rutina" [class.abierto]="rut.expanded">
-      <!-- Cabecera de la rutina -->
-      <div class="rutina-cabecera" (click)="toggleRutina(rut)">
-        <div class="rutina-info-basica">
-          <h3>{{ rut.nombre }}</h3>
-          <p class="rutina-sub-label">{{ rut.dias }} · {{ rut.ejerciciosCount }} ejercicios</p>
-        </div>
-        <div class="rutina-badges">
-          <span class="badge-rutina badge-propia">Propia</span>
-          <span class="icono-flecha" [class.rotado]="rut.expanded">▼</span>
-        </div>
+<!-- 2. Modal Filtro Tipo -->
+<div class="modal-overlay" *ngIf="mostrarModalTipo" (click)="mostrarModalTipo = false">
+  <div class="modal-tarjeta" (click)="$event.stopPropagation()">
+    <div class="modal-cabecera">
+      <h3>Filtrar por Tipo</h3>
+      <button class="btn-cerrar-modal" (click)="mostrarModalTipo = false">×</button>
+    </div>
+    
+    <div class="modal-cuerpo">
+      <div class="lista-checkboxes-tipo">
+        <label class="checkbox-label" *ngFor="let tipo of ['Poleas', 'Smith', 'Maquina libre', 'Peso Corporal']">
+          <input type="checkbox" [(ngModel)]="tiposSeleccionados[tipo]">
+          <span class="checkbox-custom"></span>
+          {{ tipo }}
+        </label>
+      </div>
+    </div>
+    
+    <div class="modal-pie">
+      <button class="btn-modal-aplicar" (click)="mostrarModalTipo = false">Aplicar filtros</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Modal Editar Parámetros del Ejercicio -->
+<div class="modal-overlay" *ngIf="mostrarModalEditar" (click)="mostrarModalEditar = false">
+  <div class="modal-tarjeta" (click)="$event.stopPropagation()">
+    <div class="modal-cabecera">
+      <h3>Configurar Ejercicio</h3>
+      <button class="btn-cerrar-modal" (click)="mostrarModalEditar = false">×</button>
+    </div>
+    
+    <div class="modal-cuerpo">
+      <!-- Selector de Series (1 a 6) -->
+      <div class="grupo-campo">
+        <label>Series (máx. 6)</label>
+        <select [(ngModel)]="edicionSeries">
+          <option *ngFor="let s of [1,2,3,4,5,6]" [value]="s">{{ s }} series</option>
+        </select>
       </div>
 
-      <!-- Ejercicios y botón de iniciar (GO) -->
-      <div *ngIf="rut.expanded" class="rutina-detalle">
-        <div class="lista-ejercicios">
-          <div *ngFor="let ej of rut.ejercicios; let idx = index" class="item-ejercicio">
-            <div class="numero-ejercicio">{{ idx + 1 }}</div>
-            <div class="info-ejercicio">
-              <h4>{{ ej.nombre }}</h4>
-              <p>{{ ej.series }}×{{ ej.reps }} · {{ ej.peso }} · {{ ej.descanso > 0 ? ej.descanso + 's' : '--' }}</p>
-            </div>
-          </div>
-        </div>
-        
-        <button class="btn-go">
-          <svg class="play-svg" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M8 5v14l11-7z"/>
-          </svg>
-          GO
-        </button>
+      <!-- Repeticiones (Entrada libre por teclado) -->
+      <div class="grupo-campo">
+        <label>Repeticiones</label>
+        <input type="number" [(ngModel)]="edicionReps" placeholder="Ej: 12">
       </div>
+
+      <!-- Peso total (Entrada libre por teclado) -->
+      <div class="grupo-campo">
+        <label>Peso Total (kg) (ej. '0' para peso corporal)</label>
+        <input type="text" [(ngModel)]="edicionPeso" placeholder="Ej: 60">
+      </div>
+
+      <!-- Descanso (Segundos) -->
+      <div class="grupo-campo">
+        <label>Descanso (segundos)</label>
+        <input type="number" [(ngModel)]="edicionDescanso" placeholder="Ej: 60">
+      </div>
+    </div>
+    
+    <div class="modal-pie">
+      <button class="btn-modal-aplicar" (click)="guardarEdicion()">Guardar cambios</button>
     </div>
   </div>
 </div>
