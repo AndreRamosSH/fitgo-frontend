@@ -1,3 +1,6 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
 .alerta-vencimiento-aviso {
   background-color: rgba(245, 158, 11, 0.1);
   border: 1px solid var(--acento);
@@ -30,5 +33,112 @@
   
   strong {
     font-weight: 600;
+  }
+}
+
+.destacado {
+  color: var(--acento) !important;
+}
+
+.dashboard-secundario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+
+  @include responds-to(tablet) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.card-detallada {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .card-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--borde);
+    padding-bottom: 0.75rem;
+
+    h2 {
+      font-family: var(--fuente-titulo), sans-serif;
+      font-size: 1.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0;
+      color: var(--texto);
+    }
+
+    .tag-membresia {
+      background-color: rgba(249, 115, 22, 0.1);
+      border: 1px solid var(--acento);
+      color: var(--acento);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+  }
+
+  .card-cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.fila-metrica {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--borde);
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  .metrica-label {
+    color: var(--texto-suave);
+    font-size: 0.95rem;
+  }
+
+  .metrica-valor {
+    color: var(--texto);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+}
+
+.progreso-membresia {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .progreso-textos {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+  }
+
+  .barra-progreso-contenedor {
+    background-color: var(--borde);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .barra-progreso-llenado {
+    background: var(--gradiente);
+    height: 100%;
+    border-radius: 3px;
   }
 }

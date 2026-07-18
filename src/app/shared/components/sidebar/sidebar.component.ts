@@ -81,6 +81,7 @@ export class SidebarComponent implements OnInit {
           title: 'Entrenamiento',
           items: [
             { label: 'Mi zona', route: '/miembro/resumen' },
+            { label: 'Mis Rutinas', route: '/miembro/rutinas'},
             { label: 'Mis Metricas', route: '/miembro/metricas'},
             { label: 'Progreso', route: '/miembro/progreso' },
             { label: 'Mi Membresía', route: '/miembro/membresia' },

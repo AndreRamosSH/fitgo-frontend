@@ -1,6 +1,6 @@
 <section class="seccion-bienvenida">
-  <h1>Hola, <span>{{ nombreUsuario }}</span></h1>
-  <p>Hoy es un gran día para superar tus límites. Revisa tu progreso actual y los entrenadores de nuestra comunidad.</p>
+  <h1>Bienvenido, <span>{{ nombreUsuario }}</span></h1>
+  <p>Martes 21 de enero · Semana 3 de tu rutina</p>
 </section>
 
 <div *ngIf="mostrarAlertaVencimiento" class="alerta-vencimiento-aviso">
@@ -21,63 +21,74 @@
 
 <section class="rejilla-tarjetas">
   <article class="tarjeta">
-    <p class="tarjeta-titulo">Racha actual</p>
-    <p class="tarjeta-valor">{{ rachaActual }} Días</p>
-    <p class="tarjeta-etiqueta" *ngIf="rachaActual > 0">¡Sigue así!</p>
-    <p class="tarjeta-etiqueta" *ngIf="rachaActual === 0">¡Inicia hoy tu racha!</p>
+    <p class="tarjeta-titulo">Asistencias este mes</p>
+    <p class="tarjeta-valor destacado">14</p>
+    <p class="tarjeta-etiqueta">de 20 días hábiles</p>
   </article>
 
   <article class="tarjeta">
-    <p class="tarjeta-titulo">Último Peso Registrado</p>
-    <p class="tarjeta-valor">{{ pesoFormateado }}</p>
-    <p class="tarjeta-etiqueta">Mantén tu progreso actualizado</p>
+    <p class="tarjeta-titulo">Días hasta vencimiento</p>
+    <p class="tarjeta-valor">18</p>
+    <p class="tarjeta-etiqueta">Membresía mensual</p>
   </article>
 
   <article class="tarjeta">
-    <p class="tarjeta-titulo">Próximo Pago</p>
-    <p class="tarjeta-valor">
-      {{ fechaProximoPago ? (fechaProximoPago | date:'dd MMM yyyy') : '--' }}
-    </p>
-    <p class="tarjeta-etiqueta">
-      {{ planActivo }}
-    </p>
+    <p class="tarjeta-titulo">IMC actual</p>
+    <p class="tarjeta-valor">23.4</p>
+    <p class="tarjeta-etiqueta">Peso normal</p>
   </article>
 </section>
 
-<section class="seccion">
-  <div class="encabezado-tabla-flex">
-    <h2 class="titulo-seccion">Comunidad FitGO - Entrenadores</h2>
-
-    <div class="busqueda">
-      <input type="text" [(ngModel)]="filtro" placeholder="Filtrar por nombre o turno...">
+<div class="dashboard-secundario">
+  <!-- Tarjeta de Membresía -->
+  <article class="tarjeta card-detallada">
+    <div class="card-cabecera">
+      <h2>Membresía</h2>
+      <span class="tag-membresia">Mensual · Activa</span>
     </div>
-  </div>
+    <div class="card-cuerpo">
+      <div class="fila-metrica">
+        <span class="metrica-label">Inicio</span>
+        <span class="metrica-valor">03 ene 2025</span>
+      </div>
+      <div class="fila-metrica">
+        <span class="metrica-label">Vence</span>
+        <span class="metrica-valor">03 feb 2025</span>
+      </div>
+      <div class="progreso-membresia">
+        <div class="progreso-textos">
+          <span>18 días restantes</span>
+          <span>40%</span>
+        </div>
+        <div class="barra-progreso-contenedor">
+          <div class="barra-progreso-llenado" style="width: 40%"></div>
+        </div>
+      </div>
+    </div>
+  </article>
 
-  <table class="tabla-usuarios">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Turno / Nivel</th>
-        <th>Especialidad / Experiencia</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let ent of entrenadoresFiltrados">
-        <td class="columna-nombre">{{ ent.usuario.nombre }}</td>
-        <td>{{ ent.usuario.apellido }}</td>
-        <td>
-          <span class="badge-turno" [ngClass]="'badge-turno-' + ent.turno.toLowerCase()">
-            {{ ent.turno }}
-          </span>
-        </td>
-        <td>
-          <span class="tag-especial">{{ ent.experienciaAnios }} años de exp.</span>
-        </td>
-      </tr>
-      <tr *ngIf="entrenadoresFiltrados.length === 0">
-        <td colspan="4" class="texto-vacio">No hay entrenadores disponibles por el momento.</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+  <!-- Tarjeta de Última métrica -->
+  <article class="tarjeta card-detallada">
+    <div class="card-cabecera">
+      <h2>Última métrica</h2>
+    </div>
+    <div class="card-cuerpo">
+      <div class="fila-metrica">
+        <span class="metrica-label">Peso</span>
+        <span class="metrica-valor">72.5 kg</span>
+      </div>
+      <div class="fila-metrica">
+        <span class="metrica-label">Talla</span>
+        <span class="metrica-valor">1.76 m</span>
+      </div>
+      <div class="fila-metrica">
+        <span class="metrica-label">Masa muscular</span>
+        <span class="metrica-valor">38.2%</span>
+      </div>
+      <div class="fila-metrica">
+        <span class="metrica-label">Grasa corporal</span>
+        <span class="metrica-valor">16.4%</span>
+      </div>
+    </div>
+  </article>
+</div>

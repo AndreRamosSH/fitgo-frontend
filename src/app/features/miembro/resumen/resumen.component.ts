@@ -17,8 +17,6 @@ export class ResumenComponent implements OnInit {
   rachaActual = 0;
   pesoActual = 0;
   membresia: any = null;
-  entrenadores: any[] = [];
-  filtro = '';
   mostrarAlertaVencimiento = false;
   mostrarAlertaGracia = false;
   diasRestantes = 0;
@@ -34,7 +32,6 @@ export class ResumenComponent implements OnInit {
         this.rachaActual = res.rachaActual;
         this.pesoActual = res.pesoActual;
         this.membresia = res.membresia;
-        this.entrenadores = res.entrenadores || [];
         this.calcularAlertas();
       },
       error: (err: any) => console.error(err)
@@ -77,29 +74,7 @@ export class ResumenComponent implements OnInit {
     }
   }
 
-  get entrenadoresFiltrados(): any[] {
-    if (!this.filtro.trim()) return this.entrenadores;
-    const f = this.filtro.toLowerCase();
-    return this.entrenadores.filter(e => 
-      e.usuario.nombre.toLowerCase().includes(f) ||
-      e.usuario.apellido.toLowerCase().includes(f) ||
-      e.turno.toLowerCase().includes(f)
-    );
-  }
-
   get nombreUsuario(): string {
     return this.usuario?.nombre || 'Usuario';
-  }
-
-  get pesoFormateado(): string {
-    return this.pesoActual > 0 ? this.pesoActual + ' kg' : '-- kg';
-  }
-
-  get fechaProximoPago(): Date | null {
-    return this.membresia?.fechaFin || null;
-  }
-
-  get planActivo(): string {
-    return this.membresia?.plan ? 'Plan ' + this.membresia.plan.nombre : 'Sin plan activo';
   }
 }

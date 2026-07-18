@@ -50,6 +50,7 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'resumen', pathMatch: 'full' },
       { path: 'resumen', loadComponent: () => import('./features/miembro/resumen/resumen.component').then(m => m.ResumenComponent) },
+      { path: 'rutinas', loadComponent: () => import('./features/miembro/rutinas/rutinas.component').then(m => m.RutinasComponent) },
       { path: 'progreso', loadComponent: () => import('./features/miembro/progreso/progreso.component').then(m => m.ProgresoComponent) },
       { path: 'membresia', loadComponent: () => import('./features/miembro/membresia/membresia.component').then(m => m.MembresiaComponent) },
       { path: 'entrenadores', loadComponent: () => import('./features/miembro/entrenadores/entrenadores.component').then(m => m.EntrenadoresComponent) },
