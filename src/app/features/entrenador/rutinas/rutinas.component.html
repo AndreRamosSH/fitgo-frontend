@@ -1,9 +1,10 @@
 <ng-container *ngIf="vista === 'LISTA'">
-  <!-- Vista de lista de rutinas (original) -->
-    <div class="seccion-bienvenida">
-      <h1>Mis Rutinas</h1>
-      <p>Rutinas del entrenador y rutinas propias</p>
-    </div>
+  <!-- Vista de Lista de Rutinas del Entrenador -->
+  <div class="seccion-bienvenida">
+    <h1>Gestión de Rutinas</h1>
+    <p>Diseña rutinas y asígnalas a tus miembros</p>
+  </div>
+
   <div class="encabezado-tabla-apilado">
     <button class="btn-crear-rutina" (click)="irACrear()">
       <svg lucidePlus class="btn-icon"></svg>
@@ -12,55 +13,10 @@
   </div>
 
   <div class="categoria-seccion">
-    <h2 class="titulo-seccion">del entrenador</h2>
-
-    <div class="contenedor-rutinas">
-      <div *ngFor="let rut of rutinasDelEntrenador" class="tarjeta-rutina" [class.abierto]="rut.expanded">
-        <!-- Cabecera de la rutina -->
-        <div class="rutina-cabecera" (click)="toggleRutina(rut)">
-          <div class="rutina-info-basica">
-            <h3>{{ rut.nombre }}</h3>
-            <p class="rutina-sub-label">{{ rut.dias }} · {{ rut.ejerciciosCount }} ejercicios</p>
-          </div>
-          <div class="rutina-badges">
-            <span class="tag-especial miembro">Asignada</span>
-            <svg lucideChevronDown class="icono-flecha" [class.rotado]="rut.expanded"></svg>
-          </div>
-        </div>
-
-        <!-- Ejercicios y botón de iniciar (GO) -->
-        <div *ngIf="rut.expanded" class="rutina-detalle">
-          <div class="lista-ejercicios">
-            <div *ngFor="let ej of rut.ejercicios; let idx = index" class="item-ejercicio">
-              <div class="numero-ejercicio">{{ idx + 1 }}</div>
-              <div class="info-ejercicio">
-                <h4>{{ ej.nombre }}</h4>
-                <p>{{ ej.series }}×{{ ej.reps }} · {{ ej.peso }} · {{ ej.descanso > 0 ? ej.descanso + 's' : '--' }}</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="rutina-acciones-footer">
-            <button class="btn-go" (click)="iniciarEntreno(rut)">
-              GO
-            </button>
-            <div class="botones-gestion-rutina">
-              <button type="button" class="btn-gestion btn-editar-rut" (click)="editarRutina(rut)" title="Editar rutina">
-                <svg lucideEdit class="btn-icon"></svg>
-                Editar
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="categoria-seccion">
     <h2 class="titulo-seccion">mis rutinas</h2>
 
     <div class="contenedor-rutinas">
-      <div *ngFor="let rut of rutinasPropias" class="tarjeta-rutina" [class.abierto]="rut.expanded">
+      <div *ngFor="let rut of rutinas" class="tarjeta-rutina" [class.abierto]="rut.expanded">
         <!-- Cabecera de la rutina -->
         <div class="rutina-cabecera" (click)="toggleRutina(rut)">
           <div class="rutina-info-basica">
@@ -68,11 +24,17 @@
             <p class="rutina-sub-label">{{ rut.dias }} · {{ rut.ejerciciosCount }} ejercicios</p>
           </div>
           <div class="rutina-badges">
+            <span *ngIf="rut.asignados && rut.asignados.length > 0" class="tag-especial miembro">
+              Asignada ({{ rut.asignados.length }})
+            </span>
+            <span *ngIf="!rut.asignados || rut.asignados.length === 0" class="tag-especial sin-asignar">
+              Sin asignar
+            </span>
             <svg lucideChevronDown class="icono-flecha" [class.rotado]="rut.expanded"></svg>
           </div>
         </div>
 
-        <!-- Ejercicios y botón de iniciar (GO) -->
+        <!-- Ejercicios y Botones de Gestión (Asignar, Editar, Eliminar) -->
         <div *ngIf="rut.expanded" class="rutina-detalle">
           <div class="lista-ejercicios">
             <div *ngFor="let ej of rut.ejercicios; let idx = index" class="item-ejercicio">
@@ -85,8 +47,10 @@
           </div>
 
           <div class="rutina-acciones-footer">
-            <button class="btn-go" (click)="iniciarEntreno(rut)">
-              GO
+            <!-- Botón Asignar reemplaza al botón GO -->
+            <button class="btn-asignar" (click)="abrirModalAsignar(rut)">
+              <svg lucideCheck class="btn-icon"></svg>
+              Asignar
             </button>
             <div class="botones-gestion-rutina">
               <button type="button" class="btn-gestion btn-editar-rut" (click)="editarRutina(rut)" title="Editar rutina">
@@ -101,91 +65,84 @@
           </div>
         </div>
       </div>
+
+      <div *ngIf="rutinas.length === 0" class="tarjeta-vacia">
+        <p>Aún no has creado rutinas. Haz clic en <strong>"+ Crear rutina"</strong> para diseñar tu primera rutina.</p>
+      </div>
     </div>
   </div>
 </ng-container>
 
 <ng-container *ngIf="vista === 'CREAR'">
-  <!-- Vista de creador de rutinas -->
+  <!-- Vista de Creación y Edición de Rutina -->
   <div class="encabezado-tabla-apilado">
     <div class="seccion-bienvenida">
-      <h1>Crear rutina propia</h1>
-      <p>Configure los datos de su rutina y añada ejercicios</p>
+      <h1>{{ rutinaEditandoId ? 'Editar Rutina' : 'Crear Nueva Rutina' }}</h1>
+      <p>Diseña la rutina y selecciona los ejercicios</p>
     </div>
     <button class="btn-crear-rutina" (click)="cancelarCreacion()">Volver</button>
   </div>
 
   <div class="editor-columnas">
-    <!-- Columna Izquierda: Datos de la rutina y ejercicios agregados -->
+    <!-- Columna Izquierda: Formulario de Datos y Ejercicios Seleccionados -->
     <div class="columna-izquierda">
       <!-- Tarjeta 1: Datos de la rutina -->
       <article class="tarjeta-editor">
-        <h2 class="subtitulo-editor">Datos de la rutina</h2>
+        <h2 class="subtitulo-editor">Datos Básicos</h2>
 
         <div class="grupo-campo">
           <label>Nombre de la rutina</label>
-          <input type="text" [(ngModel)]="nuevoNombre" placeholder="Nombre de la rutina...">
+          <input type="text" [(ngModel)]="nuevoNombre" placeholder="Ej: Rutina Hipertrofia Pecho y Tríceps">
         </div>
 
         <div class="grupo-campo">
           <label>Días de entrenamiento</label>
           <div class="selector-dias">
-            <button
-              *ngFor="let dia of diasSemana"
-              type="button"
-              class="dia-btn"
-              [class.activo]="diaSeleccionado(dia)"
-              (click)="toggleDia(dia)">
+            <button *ngFor="let dia of diasSemana" type="button" class="dia-btn" [class.activo]="diaSeleccionado(dia)" (click)="toggleDia(dia)">
               {{ dia }}
             </button>
           </div>
         </div>
       </article>
 
-      <!-- Tarjeta 2: Ejercicios agregados -->
+      <!-- Tarjeta 2: Ejercicios Agregados -->
       <article class="tarjeta-editor">
-        <h2 class="subtitulo-editor">Ejercicios agregados ({{ ejerciciosAgregados.length }})</h2>
+        <h2 class="subtitulo-editor">Ejercicios Agregados ({{ ejerciciosAgregados.length }})</h2>
 
         <div class="lista-ejercicios-agregados">
-          <div *ngFor="let ejAg of ejerciciosAgregados; let idx = index" class="item-agregado">
-            <!-- Imagen del ejercicio -->
+          <div *ngFor="let item of ejerciciosAgregados; let i = index" class="item-agregado">
             <div class="ejercicio-imagen-contenedor">
-              <img [ngSrc]="ejAg.ejercicio.imagen" alt="Thumbnail" class="ejercicio-thumb" width="44" height="44">
+              <img [ngSrc]="item.ejercicio.imagen" alt="Thumbnail" class="ejercicio-thumb" width="44" height="44">
             </div>
-
             <div class="info-agregado">
-              <h4>{{ ejAg.ejercicio.nombre }}</h4>
-              <p class="detalles-ejercicio">
-                {{ ejAg.series }} series · {{ ejAg.reps }} reps · {{ ejAg.peso }} · {{ ejAg.descanso }}s de descanso
-              </p>
+              <h4>{{ item.ejercicio.nombre }}</h4>
+              <p class="detalles-ejercicio">{{ item.series }} series · {{ item.reps }} reps · {{ item.peso }} · {{ item.descanso }}s de descanso</p>
             </div>
-
-            <!-- Acciones del ejercicio agregado -->
             <div class="acciones-agregado">
-              <button class="btn-accion-icon btn-editar-ej" (click)="abrirEdicion(idx)" title="Configurar series/reps">
+              <button type="button" class="btn-accion-icon btn-editar-ej" (click)="abrirEdicion(i)" title="Configurar series y peso">
                 <svg lucideSquarePen class="icon-svg"></svg>
               </button>
-              <button class="btn-accion-icon btn-eliminar-ej" (click)="eliminarEjercicio(idx)" title="Eliminar de la lista">
+              <button type="button" class="btn-accion-icon btn-eliminar-ej" (click)="eliminarEjercicio(i)" title="Remover ejercicio">
                 <svg lucideTrash2 class="icon-svg"></svg>
               </button>
             </div>
           </div>
 
           <div *ngIf="ejerciciosAgregados.length === 0" class="texto-vacio-agregados">
-            No has agregado ejercicios a la rutina todavía. Búscalos y agrégalos desde el panel derecho.
+            No has agregado ejercicios a la rutina aún. Selecciona de la lista a la derecha.
           </div>
         </div>
 
         <button class="btn-guardar-rutina" (click)="guardarRutina()">
-          Guardar rutina
+          {{ rutinaEditandoId ? 'Actualizar rutina' : 'Guardar rutina' }}
         </button>
       </article>
     </div>
 
-    <!-- Columna Derecha: Buscar ejercicios -->
+    <!-- Columna Derecha: Buscador de Ejercicios -->
     <div class="columna-derecha">
       <article class="tarjeta-editor search-panel">
-        <h2 class="subtitulo-editor">Buscar ejercicios</h2>
+        <h2 class="subtitulo-editor">Buscar Ejercicios</h2>
 
         <div class="busqueda-caja">
           <svg lucideSearch class="lupa-icon"></svg>
@@ -193,20 +150,16 @@
         </div>
 
         <div class="filtros-row">
-          <!-- Botón Filtro Músculo -->
           <button type="button" class="btn-filtro-trigger" (click)="mostrarModalMusculo = true">
             <svg lucideCirclePlus class="filtro-icon"></svg>
             Músculo
           </button>
-
-          <!-- Botón Filtro Tipo -->
           <button type="button" class="btn-filtro-trigger" (click)="mostrarModalTipo = true">
             <svg lucideFunnel class="filtro-icon"></svg>
             Tipo
           </button>
         </div>
 
-        <!-- Lista de Resultados de búsqueda -->
         <div class="resultados-ejercicios">
           <div *ngFor="let ej of ejerciciosFiltrados" class="item-resultado">
             <div class="resultado-imagen-contenedor">
@@ -221,7 +174,6 @@
               </div>
             </div>
 
-            <!-- Botón Agregar (Cuadrado con símbolo "+") -->
             <button class="btn-agregar-plus" (click)="agregarEjercicio(ej)" title="Añadir a la rutina">
               <svg lucidePlus class="plus-icon"></svg>
             </button>
@@ -235,6 +187,51 @@
     </div>
   </div>
 </ng-container>
+
+<!-- MODAL ASIGNAR A MIEMBROS -->
+<div class="modal-overlay" *ngIf="mostrarModalAsignar" (click)="mostrarModalAsignar = false">
+  <div class="modal-tarjeta modal-miembros-width" (click)="$event.stopPropagation()">
+    <div class="modal-cabecera">
+      <h3>Asignar Rutina</h3>
+      <button class="btn-cerrar-modal" (click)="mostrarModalAsignar = false">×</button>
+    </div>
+
+    <div class="modal-cuerpo">
+      <p class="modal-subtitulo">
+        Selecciona los miembros a los que deseas asignar <strong>"{{ rutinaAsignando?.nombre }}"</strong>:
+      </p>
+
+      <div class="lista-miembros-asignacion">
+        <div *ngFor="let m of misMiembros" class="item-miembro-asignar">
+          <div class="info-miembro">
+            <div class="avatar-miembro">
+              <svg lucideUser class="icono-user"></svg>
+            </div>
+            <div class="datos-miembro">
+              <h4>{{ m.nombre }} {{ m.apellido }}</h4>
+              <p>{{ m.correo }}</p>
+            </div>
+          </div>
+
+          <button type="button"
+                  class="btn-check-miembro"
+                  [class.seleccionado]="esMiembroSeleccionado(m.id)"
+                  (click)="toggleSeleccionMiembro(m.id)">
+            <svg lucideCheck class="check-icon" *ngIf="esMiembroSeleccionado(m.id)"></svg>
+          </button>
+        </div>
+
+        <div *ngIf="misMiembros.length === 0" class="texto-vacio">
+          No tienes miembros asignados bajo tu gestión.
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-pie">
+      <button class="btn-modal-aplicar" (click)="guardarAsignacion()">Guardar asignación</button>
+    </div>
+  </div>
+</div>
 
 <!-- MODALES FLOTANTES -->
 
@@ -356,9 +353,7 @@
   </div>
 </div>
 
-<!-- TOAST DE VALIDACIÓN -->
-<div class="toast-error" [class.visible]="toastVisible">
-  <svg lucideCircleAlert class="toast-icon"></svg>
-  <span>{{ toastMensaje }}</span>
+<!-- TOAST DE NOTIFICACIÓN -->
+<div class="toast-notificacion" [class.mostrar]="toastVisible">
+  {{ toastMensaje }}
 </div>
-

@@ -27,7 +27,8 @@
         <div class="envoltorio-contrasena">
           <input [type]="verContrasena ? 'text' : 'password'" id="password" formControlName="password" placeholder="Contraseña" autocomplete="current-password">
           <button type="button" (click)="alternarContrasena()" class="boton-ojo" aria-label="Mostrar u ocultar contraseña">
-            <span class="icono-ojo">{{ verContrasena ? 'Ocultar' : 'Mostrar' }}</span>
+            <svg *ngIf="verContrasena" lucideEyeOff class="ojo-icon"></svg>
+            <svg *ngIf="!verContrasena" lucideEye class="ojo-icon"></svg>
           </button>
         </div>
         <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" class="texto-error-validacion">

@@ -1,0 +1,800 @@
+// --- ESTILOS COMUNES DE RUTINAS (COMPARTIDOS MIEMBRO / ENTRENADOR) ---
+
+.item-ejercicio, .item-agregado, .item-resultado {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.btn-go, .btn-asignar, .btn-guardar-rutina, .btn-modal-aplicar {
+  border: none;
+  border-radius: var(--radio);
+  cursor: pointer;
+}
+
+.ejercicio-imagen-contenedor, .resultado-imagen-contenedor {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  border: 1px solid var(--borde);
+  background: #000;
+  overflow: hidden;
+
+  .ejercicio-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.encabezado-tabla-apilado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.btn-crear-rutina {
+  background: transparent;
+  color: var(--texto);
+  border: 1px solid var(--texto-suave);
+  padding: 0.5rem 1.25rem;
+  font-weight: 600;
+  border-radius: var(--radio);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  .btn-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    border-color: var(--acento);
+    color: var(--acento);
+    background: rgba(249, 115, 22, 0.05);
+  }
+}
+
+.categoria-seccion {
+  margin-top: 2rem;
+  .titulo-seccion, .etiqueta-grupo {
+    font-family: var(--fuente-titulo), sans-serif;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--borde);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.contenedor-rutinas {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.tarjeta-rutina {
+  background: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+  &:hover { border-color: rgba(250, 250, 250, 0.1); }
+}
+
+.rutina-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  &:hover { background: rgba(255, 255, 255, 0.01); }
+
+  .rutina-info-basica {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    h3 { font-size: 1.15rem; font-weight: 600; color: var(--texto); margin: 0; }
+    .rutina-sub-label { font-size: 0.8rem; color: var(--texto-suave); }
+  }
+}
+
+.rutina-badges {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .icono-flecha {
+    color: var(--texto-suave);
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+    &.rotado { transform: rotate(180deg); }
+  }
+
+  .tag-especial {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+
+    &.miembro {
+      background: rgba(16, 185, 129, 0.1);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    &.sin-asignar {
+      background: rgba(148, 163, 184, 0.1);
+      color: #94a3b8;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+  }
+}
+
+.rutina-detalle {
+  padding: 0 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  border-top: 1px solid var(--borde);
+  padding-top: 1.25rem;
+}
+
+.lista-ejercicios {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.item-ejercicio {
+  padding: 0.4rem 0;
+  .numero-ejercicio {
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--texto-suave);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-family: var(--fuente-titulo), sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px solid var(--borde);
+  }
+  .info-ejercicio {
+    h4 { font-size: 1rem; font-weight: 500; color: var(--texto); margin: 0; }
+    p { font-size: 0.8rem; color: var(--texto-suave); margin-top: 0.1rem; }
+  }
+}
+
+// --- BOTÓN PRINCIPAL MIEMBRO (GO) ---
+.btn-go {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  width: 100%;
+  .play-svg { width: 14px; height: 14px; }
+  &:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.35);
+  }
+}
+
+// --- BOTÓN PRINCIPAL ENTRENADOR (ASIGNAR) ---
+.btn-asignar {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  width: auto;
+  .btn-icon {
+    width: 16px;
+    height: 16px;
+    stroke-width: 3px;
+  }
+  &:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.35);
+  }
+}
+
+// --- VISTA CREAR (EDITOR) ---
+.editor-columnas {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.5rem;
+  align-items: start;
+  margin-top: 1rem;
+  @include responds-to(desktop-sm) {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+.tarjeta-editor {
+  background: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 1.5rem;
+  box-shadow: var(--sombra);
+  margin-bottom: 1.25rem;
+
+  .subtitulo-editor {
+    font-family: var(--fuente-titulo), sans-serif;
+    font-size: 1.2rem;
+    border-bottom: 1px solid var(--borde);
+    padding-bottom: 0.4rem;
+    margin-bottom: 1.25rem;
+    color: var(--texto);
+  }
+}
+
+.grupo-campo {
+  margin-bottom: 1.25rem;
+  label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+    margin-bottom: 0.4rem;
+  }
+  input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--fondo-lateral);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    color: var(--texto);
+    font-size: 0.95rem;
+    outline: none;
+    font-family: var(--fuente-cuerpo), sans-serif;
+    transition: all 0.3s ease;
+
+    &:focus {
+      border-color: var(--acento);
+      background: #1a1a1a;
+    }
+  }
+}
+
+.selector-dias {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+
+  .dia-btn {
+    background: var(--fondo-lateral);
+    border: 1px solid var(--borde);
+    color: var(--texto-suave);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    &:hover { border-color: var(--acento); color: var(--acento); }
+    &.activo {
+      background: rgba(249, 115, 22, 0.1);
+      border-color: var(--acento);
+      color: var(--acento);
+    }
+  }
+}
+
+.lista-ejercicios-agregados {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.resultados-ejercicios {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-height: 450px;
+  overflow-y: auto;
+  padding-right: 4px;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+}
+
+.item-agregado, .item-resultado {
+  padding: 0.6rem;
+  background: var(--fondo-lateral);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+}
+
+.info-agregado h4, .resultado-info h4 {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--texto);
+  margin: 0;
+}
+
+.item-agregado {
+  .info-agregado {
+    flex-grow: 1;
+    .detalles-ejercicio { font-size: 0.75rem; color: var(--texto-suave); margin-top: 0.15rem; }
+  }
+
+  .acciones-agregado {
+    display: flex;
+    gap: 0.3rem;
+    .btn-accion-icon {
+      background: transparent;
+      border: 1px solid var(--borde);
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--texto-suave);
+      cursor: pointer;
+      .icon-svg { width: 13px; height: 13px; }
+      &:hover { background: rgba(255, 255, 255, 0.02); }
+    }
+    .btn-editar-ej:hover { color: var(--acento); border-color: var(--acento); background: rgba(249, 115, 22, 0.05); }
+    .btn-eliminar-ej:hover { color: #ef4444; border-color: #ef4444; background: rgba(239, 68, 68, 0.05); }
+  }
+}
+
+.texto-vacio-agregados, .texto-vacio-resultados {
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  border-radius: var(--radio);
+}
+.texto-vacio-agregados { border: 1px dashed var(--borde); }
+
+.btn-guardar-rutina {
+  background: var(--gradiente);
+  color: #fff;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25);
+  &:hover { filter: brightness(1.1); }
+}
+
+.busqueda-caja {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+  .lupa-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--texto-suave);
+    pointer-events: none;
+  }
+  input {
+    background: var(--fondo-lateral);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    color: var(--texto);
+    font-size: 0.9rem;
+    padding: 0.65rem 1rem 0.65rem 2.5rem;
+    outline: none;
+    width: 100%;
+    font-family: var(--fuente-cuerpo), sans-serif;
+    transition: all 0.3s ease;
+    &:focus {
+      border-color: var(--acento);
+      background: #1a1a1a;
+    }
+  }
+}
+
+.filtros-row {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.75rem 0 1.25rem;
+
+  .btn-filtro-trigger {
+    flex: 1;
+    background: var(--fondo-lateral);
+    border: 1px solid var(--borde);
+    color: var(--texto);
+    padding: 0.5rem 0.85rem;
+    border-radius: var(--radio);
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    .filtro-icon { width: 14px; height: 14px; color: var(--texto-suave); }
+    &:hover { border-color: var(--acento); color: var(--acento); .filtro-icon { color: var(--acento); } }
+  }
+}
+
+.item-resultado {
+  .resultado-info {
+    flex-grow: 1;
+    .tags-resultado {
+      display: flex;
+      gap: 0.3rem;
+      margin-top: 0.2rem;
+      span { padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; }
+      .tag-resultado-musculo { background: rgba(255, 255, 255, 0.03); color: var(--texto-suave); }
+      .tag-resultado-tipo {
+        background: rgba(249, 115, 22, 0.03);
+        color: var(--acento);
+        border: 1px solid rgba(249, 115, 22, 0.1);
+      }
+    }
+  }
+
+  .btn-agregar-plus {
+    background: var(--acento);
+    color: #fff;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    cursor: pointer;
+    span { line-height: 1; display: block; margin-top: -2px; }
+    &:hover { background: #ea580c; }
+  }
+}
+
+// --- MODALES FLOTANTES ---
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 1rem;
+}
+
+.modal-tarjeta {
+  background: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+
+  &.modal-miembros-width {
+    max-width: 480px;
+  }
+}
+
+.modal-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--borde);
+  h3 { font-family: var(--fuente-titulo), sans-serif; font-size: 1.2rem; color: var(--texto); margin: 0; }
+  .btn-cerrar-modal { background: transparent; border: none; color: var(--texto-suave); font-size: 1.5rem; line-height: 1; cursor: pointer; &:hover { color: #ef4444; } }
+}
+
+.modal-cuerpo {
+  padding: 1rem;
+  max-height: 320px;
+  overflow-y: auto;
+
+  .modal-subtitulo {
+    font-size: 0.9rem;
+    color: var(--texto-suave);
+    margin-bottom: 1rem;
+    strong { color: var(--texto); }
+  }
+}
+
+.modal-pie {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--borde);
+  text-align: right;
+
+  .btn-modal-aplicar {
+    background: var(--gradiente);
+    color: #fff;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.85rem;
+    &:hover { filter: brightness(1.1); }
+  }
+}
+
+.sub-opciones-checkbox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.4rem 0 0.4rem 1.25rem;
+  border-left: 1px solid var(--borde);
+  margin: 0.4rem 0 0 0.5rem;
+  label { flex: 1 1 40%; }
+}
+
+.lista-checkboxes-tipo, .lista-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 1.85rem;
+  user-select: none;
+  font-size: 0.9rem;
+  color: var(--texto);
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    height: 0; width: 0;
+    &:checked ~ .checkbox-custom {
+      background: var(--acento);
+      border-color: var(--acento);
+      &:after { display: block; }
+    }
+  }
+
+  .checkbox-custom {
+    position: absolute;
+    top: 1px; left: 0;
+    height: 18px; width: 18px;
+    background: var(--fondo-lateral);
+    border: 1px solid var(--borde);
+    border-radius: 5px;
+
+    &:after {
+      content: "";
+      position: absolute;
+      display: none;
+      left: 5px; top: 2px;
+      width: 4px; height: 8px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
+  &:hover input ~ .checkbox-custom { border-color: var(--acento); }
+}
+
+// --- TOAST DE NOTIFICACIÓN/ERROR ---
+.toast-error, .toast-notificacion {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: #1a1a1a;
+  border: 1px solid #ef4444;
+  border-left: 4px solid #ef4444;
+  color: var(--texto);
+  border-radius: var(--radio);
+  padding: 0.9rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  max-width: 320px;
+  font-size: 0.9rem;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  &.visible, &.mostrar {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .toast-icon {
+    width: 20px;
+    height: 20px;
+    color: #ef4444;
+    flex-shrink: 0;
+  }
+
+  span {
+    line-height: 1.4;
+    font-weight: 500;
+  }
+}
+
+.toast-notificacion {
+  border-color: var(--acento);
+  border-left-color: var(--acento);
+}
+
+// --- BOTONES DE ACCIÓN DE TARJETA DE RUTINAS ---
+.rutina-acciones-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+}
+
+.botones-gestion-rutina {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+
+  .btn-gestion {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: var(--radio);
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.2s ease;
+
+    .btn-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    &.btn-editar-rut {
+      border: 1px solid var(--texto-suave);
+      color: var(--texto);
+      &:hover {
+        border-color: var(--acento);
+        color: var(--acento);
+        background: rgba(249, 115, 22, 0.05);
+      }
+    }
+
+    &.btn-eliminar-rut {
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #f87171;
+      &:hover {
+        border-color: #ef4444;
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.05);
+      }
+    }
+  }
+}
+
+// --- MODAL ASIGNAR A MIEMBROS (ENTRENADOR) ---
+.lista-miembros-asignacion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.item-miembro-asignar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+  background: var(--fondo-lateral);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+
+  .info-miembro {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    .avatar-miembro {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(249, 115, 22, 0.15);
+      color: var(--acento);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .icono-user {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .datos-miembro {
+      h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--texto);
+      }
+      p {
+        margin: 0.15rem 0 0 0;
+        font-size: 0.8rem;
+        color: var(--texto-suave);
+      }
+    }
+  }
+}
+
+.btn-check-miembro {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--borde);
+  background: transparent;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  .check-icon {
+    width: 18px;
+    height: 18px;
+    stroke-width: 3px;
+  }
+
+  &.seleccionado {
+    background: #10b981;
+    border-color: #10b981;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+  }
+
+  &:hover {
+    border-color: #10b981;
+  }
+}

@@ -36,6 +36,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'resumen', pathMatch: 'full' },
       { path: 'resumen', loadComponent: () => import('./features/entrenador/resumen/resumen.component').then(m => m.ResumenComponent) },
       { path: 'miembros', loadComponent: () => import('./features/entrenador/miembros/miembros.component').then(m => m.MiembrosComponent) },
+      { path: 'rutinas', loadComponent: () => import('./features/entrenador/rutinas/rutinas.component').then(m => m.RutinasComponent) },
       { path: 'asistencia', loadComponent: () => import('./features/entrenador/asistencia/asistencia.component').then(m => m.AsistenciaComponent) },
       { path: 'horario', loadComponent: () => import('./features/entrenador/horario/horario.component').then(m => m.HorarioComponent) },
       { path: 'perfil', loadComponent: () => import('./shared/components/perfil/perfil.component').then(m => m.PerfilComponent) }
