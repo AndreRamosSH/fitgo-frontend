@@ -1,0 +1,170 @@
+<div class="entreno-pantalla" *ngIf="!entrenoCompletado">
+  <!-- Título de Entreno -->
+  <div class="entreno-titulo-bloque">
+    <div class="entreno-titulo-seccion">
+      <span class="sub-entreno-label">MODO ENTRENO ACTIVO</span>
+      <h2>{{ rutinaNombre }}</h2>
+    </div>
+    <div class="entreno-header-right">
+      <span class="tiempo-label">Tiempo total</span>
+      <span class="tiempo-valor">{{ getTiempoFormateado() }}</span>
+    </div>
+  </div>
+
+  <div class="entreno-grid">
+    <!-- Columna Principal: Ejercicio actual, GIF, Series, Navegación -->
+    <div class="entreno-principal">
+      <!-- Ejercicio Activo Card -->
+      <div class="ejercicio-activo-card" *ngIf="datosEntreno && datosEntreno[ejercicioActivoIndex]">
+        <!-- Barra de Progreso de Ejercicios -->
+        <div class="progreso-barra-vacia">
+          <div class="progreso-barra-llena" [style.width.%]="getProgresoEntreno()"></div>
+        </div>
+
+        <h2 class="ejercicio-activo-titulo">{{ datosEntreno[ejercicioActivoIndex].nombre }}</h2>
+
+        <!-- Contenedor del GIF Grande -->
+        <div class="tarjeta-gif-grande">
+          <img [ngSrc]="datosEntreno[ejercicioActivoIndex].imagen" alt="Animación del ejercicio" width="400" height="300">
+        </div>
+
+        <!-- Cuadrícula de Series -->
+        <div class="seccion-series-entreno">
+          <h3>Series</h3>
+          <div class="grilla-series-entreno" [class.mas-de-tres]="datosEntreno[ejercicioActivoIndex].series.length > 3">
+            <div *ngFor="let s of datosEntreno[ejercicioActivoIndex].series; let sIdx = index"
+                 class="caja-serie-entreno"
+                 [class.completada]="s.completada"
+                 [class.activa]="sIdx === serieActivaIndex"
+                 [class.pendiente]="!s.completada && sIdx !== serieActivaIndex">
+              <span class="serie-valores-tag">{{ s.reps }} reps · {{ s.peso > 0 ? s.peso + 'kg' : 'Corporal' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inputs de Edición Rápida -->
+        <div class="inputs-edicion-rapida" *ngIf="datosEntreno[ejercicioActivoIndex].series[serieActivaIndex]">
+          <div class="grupo-campo">
+            <label>Repeticiones</label>
+            <input type="number" [(ngModel)]="datosEntreno[ejercicioActivoIndex].series[serieActivaIndex].reps" min="1" max="99">
+          </div>
+          <div class="grupo-campo">
+            <label>Peso (kg)</label>
+            <input type="number" [(ngModel)]="datosEntreno[ejercicioActivoIndex].series[serieActivaIndex].peso" min="0" max="999">
+          </div>
+        </div>
+
+        <!-- Botones de Navegación -->
+        <div class="botones-entreno-footer">
+          <button type="button" class="btn-entreno-control btn-entreno-anterior"
+                  (click)="retrocederSerie()"
+                  [disabled]="ejercicioActivoIndex === 0 && serieActivaIndex === 0">
+            <svg lucideUndo2 class="btn-icon"></svg>
+          </button>
+          <button type="button" class="btn-entreno-control btn-entreno-completar"
+                  (click)="completarSerie()">
+            <svg lucideCheck class="btn-icon"></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna Lateral: Cola de ejercicios y botón de STOP -->
+    <div class="entreno-lateral">
+      <div class="cola-ejercicios-tarjeta">
+        <h2>Cola de Ejercicios</h2>
+        <div class="cola-ejercicios-lista">
+          <div *ngFor="let ej of datosEntreno; let eIdx = index"
+               class="cola-ejercicio-item"
+               [class.en-curso]="eIdx === ejercicioActivoIndex"
+               [class.completado]="ej.completado">
+            <div class="cola-ejercicio-index">{{ eIdx + 1 }}</div>
+            <div class="cola-ejercicio-info">
+              <h3>{{ ej.nombre }}</h3>
+              <span class="cola-ejercicio-detalle">{{ ej.series.length }} series</span>
+            </div>
+            <div class="cola-ejercicio-status" *ngIf="ej.completado">
+              <span class="tag-status-entreno completado">Listo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón STOP -->
+      <button type="button" class="btn-stop-entreno" (click)="pararEntreno()">
+        STOP
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Vista de Éxito: Resumen de Entrenamiento Completo -->
+<div class="entreno-exito-pantalla" *ngIf="entrenoCompletado">
+  <!-- Party Popper Animado con efecto rebote -->
+  <div class="party-popper-animacion">
+    <svg lucidePartyPopper class="icono-party"></svg>
+  </div>
+
+  <div class="exito-cabecera">
+    <h1>¡Entreno completado!</h1>
+    <p class="exito-sublabel">
+      {{ rutinaNombre }} · {{ getFechaHoy() }} · Guardado automáticamente
+    </p>
+  </div>
+
+  <!-- Fila de Tarjetas de Resumen (Stats Grid) -->
+  <div class="stats-resumen-grid">
+    <!-- Tarjeta 1: Tiempo Total -->
+    <div class="stats-resumen-tarjeta">
+      <span class="stats-resumen-valor tiempo">{{ getTiempoFormateado() }}</span>
+      <span class="stats-resumen-label">Tiempo total</span>
+    </div>
+
+    <!-- Tarjeta 2: Ejercicios -->
+    <div class="stats-resumen-tarjeta">
+      <span class="stats-resumen-valor">{{ datosEntreno.length }}</span>
+      <span class="stats-resumen-label">Ejercicios</span>
+    </div>
+
+    <!-- Tarjeta 3: Series Totales -->
+    <div class="stats-resumen-tarjeta">
+      <span class="stats-resumen-valor">{{ getSeriesTotales() }}</span>
+      <span class="stats-resumen-label">Series totales</span>
+    </div>
+  </div>
+
+  <!-- Detalle por ejercicio -->
+  <div class="detalle-ejercicios-resumen">
+    <h3>Detalle por ejercicio</h3>
+    <div class="tabla-resumen-contenedor">
+      <table class="tabla-resumen-ejercicios">
+        <thead>
+          <tr>
+            <th class="col-ejercicio">Ejercicio</th>
+            <th class="col-series text-center">Series</th>
+            <th class="col-reps text-center">Reps</th>
+            <th class="col-peso text-center">Peso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ej of datosEntreno">
+            <td class="col-ejercicio font-bold">{{ ej.nombre }}</td>
+            <td class="col-series text-center font-semibold">{{ ej.series.length }}</td>
+            <td class="col-reps text-center font-semibold">{{ obtenerRepsResumen(ej) }}</td>
+            <td class="col-peso text-center font-semibold">{{ obtenerPesoResumen(ej) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Botones de Acción Finales -->
+  <div class="exito-acciones-footer">
+    <button type="button" class="btn-exito-accion btn-exito-progreso" (click)="verProgreso()">
+      Ver progreso
+    </button>
+    <button type="button" class="btn-exito-accion btn-exito-inicio" (click)="volverAlInicio()">
+      Volver al inicio
+    </button>
+  </div>
+</div>
