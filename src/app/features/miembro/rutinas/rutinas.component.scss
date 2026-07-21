@@ -23,6 +23,14 @@
   .ejercicio-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
 }
 
+.encabezado-tabla-apilado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
 .btn-crear-rutina {
   background: transparent;
   color: var(--texto);
@@ -30,6 +38,17 @@
   padding: 0.5rem 1.25rem;
   font-weight: 600;
   border-radius: var(--radio);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  .btn-icon {
+    width: 16px;
+    height: 16px;
+  }
+
   &:hover {
     border-color: var(--acento);
     color: var(--acento);
@@ -85,17 +104,6 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-
-  .badge-rutina {
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    border: 1px solid;
-    &.badge-asignada { background: rgba(16, 185, 129, 0.1); border-color: #10b981; color: #34d399; }
-    &.badge-propia { background: rgba(59, 130, 246, 0.1); border-color: #3b82f6; color: #60a5fa; }
-  }
 
   .icono-flecha {
     color: var(--texto-suave);
@@ -525,3 +533,59 @@
     font-weight: 500;
   }
 }
+
+// --- BOTONES DE ACCIÓN DE RUTINAS ---
+.rutina-acciones-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+}
+
+.botones-gestion-rutina {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+
+  .btn-gestion {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: var(--radio);
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.2s ease;
+
+    .btn-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    &.btn-editar-rut {
+      border: 1px solid var(--texto-suave);
+      color: var(--texto);
+      &:hover {
+        border-color: var(--acento);
+        color: var(--acento);
+        background: rgba(249, 115, 22, 0.05);
+      }
+    }
+
+    &.btn-eliminar-rut {
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #f87171;
+      &:hover {
+        border-color: #ef4444;
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.05);
+      }
+    }
+  }
+
+}
+

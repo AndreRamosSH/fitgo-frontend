@@ -1,18 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
-interface Ejercicio {
-  id: string;
-  nombre: string;
-  musculo: string; // biceps, triceps, pecho, etc.
-  tipo: string; // Poleas, Smith, Maquina libre, Peso Corporal
-  imagen: string; // URL de la imagen en CDN
-}
+import { ConfirmService } from '../../../core/services/confirm.service';
+import { LayoutComponent } from '../../../shared/components/layout/layout.component';
+import { SharedLucideIconsModule } from '../../../shared/icons/lucide-icons.module';
+import { EJERCICIOS_BASE, EjercicioBase } from '../../../shared/data/ejercicios-base';
 
 interface EjercicioAgregado {
-  ejercicio: Ejercicio;
+  ejercicio: EjercicioBase;
   series: number;
   reps: number;
   peso: string;
@@ -39,12 +35,22 @@ interface Rutina {
 @Component({
   selector: 'app-miembro-rutinas',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [
+    CommonModule, 
+    RouterLink, 
+    FormsModule,
+    NgOptimizedImage,
+    SharedLucideIconsModule
+  ],
   templateUrl: './rutinas.component.html',
   styleUrl: './rutinas.component.scss'
 })
-export class RutinasComponent implements OnInit {
+export class RutinasComponent implements OnInit, OnDestroy {
+  private confirmService = inject(ConfirmService);
+  private router = inject(Router);
+  private layout = inject(LayoutComponent, { optional: true });
   vista: 'LISTA' | 'CREAR' = 'LISTA';
+  rutinaEditandoId: string | null = null;
 
   // Rutinas en memoria
   rutinasDelEntrenador: Rutina[] = [];
@@ -56,155 +62,107 @@ export class RutinasComponent implements OnInit {
   nuevosDias: string[] = [];
   ejerciciosAgregados: EjercicioAgregado[] = [];
 
-  // Buscador de Ejercicios (Estático / API Mock)
+  // Buscador de Ejercicios
   filtroNombre = '';
-  ejerciciosBase: Ejercicio[] = [
-    {
-      id: 'bench-press',
-      nombre: 'Press de banca (Bench Press)',
-      musculo: 'pecho',
-      tipo: 'Maquina libre',
-      imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/pectorals/barbell-bench-press.thumb.webp'
-    },
-    {
-      id: 'cable-fly',
-      nombre: 'Aperturas en polea (Cable Fly)',
-      musculo: 'pecho',
-      tipo: 'Poleas',
-      imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/pectorals/cable-cross-over-variation.thumb.webp'
-    },
-    {
-      id: 'push-up',
-      nombre: 'Flexiones de pecho (Push Up)',
-      musculo: 'pecho',
-      tipo: 'Peso Corporal',
-      imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/pectorals/push-up.thumb.webp'
-    },
-    {
-      id: 'dumbbell-curl',
-      nombre: 'Curl de bíceps con mancuernas',
-      musculo: 'biceps',
-      tipo: 'Maquina libre',
-      imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/biceps/dumbbell-alternate-biceps-curl.thumb.webp'
-    },
-    {
-      id: 'squat',
-      nombre: 'Sentadilla libre con barra',
-      musculo: 'cuadriceps',
-      tipo: 'Maquina libre',
-      imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/quads/barbell-squat.thumb.webp'
-    },
-    {
-      id: 'leg-press',
-      nombre: 'Prensa de piernas (Leg Press)',
-      musculo: 'cuadriceps',
-      tipo: 'Maquina libre',
-      imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/quads/leg-press.thumb.webp'
-    },
-    {
-      id: 'triceps-pushdown',
-      nombre: 'Tríceps en polea alta',
-      musculo: 'triceps',
-      tipo: 'Poleas',
-      imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/triceps/cable-pushdown.thumb.webp'
-    },
-    {
-      id: 'pull-up',
-      nombre: 'Dominadas libres (Pull Up)',
-      musculo: 'espalda',
-      tipo: 'Peso Corporal',
-      imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/lats/pull-up.thumb.webp'
-    },
-    {
-      id: 'smith-squat',
-      nombre: 'Sentadillas en máquina Smith',
-      musculo: 'cuadriceps',
-      tipo: 'Smith',
-      imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/quads/smith-squad.thumb.webp'
-    },
-    {
-      id: 'calf-raise',
-      nombre: 'Elevación de pantorrillas',
-      musculo: 'pantorrillas',
-      tipo: 'Peso Corporal',
-      imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/calves/standing-calf-raise.thumb.webp'
-    }
-  ];
+  ejerciciosBase: EjercicioBase[] = EJERCICIOS_BASE;
 
-  // Modales de Filtro y sus variables
+  // Filtros de Búsqueda
   mostrarModalMusculo = false;
   mostrarModalTipo = false;
-
   filtroTrenSuperior = false;
   filtroTrenInferior = false;
-  subMusculos: { [key: string]: boolean } = {
-    biceps: false, triceps: false, antebrazos: false, hombros: false, pecho: false, espalda: false,
+  subMusculos: Record<string, boolean> = {
+    pecho: false, espalda: false, biceps: false, triceps: false, antebrazos: false, hombros: false,
     cuadriceps: false, femorales: false, gluteos: false, pantorrillas: false, aductores: false, abductores: false
   };
 
-  tiposSeleccionados: { [key: string]: boolean } = {
+  tiposSeleccionados: Record<string, boolean> = {
     'Poleas': false,
     'Smith': false,
     'Maquina libre': false,
     'Peso Corporal': false
   };
 
-  // Modal de Edición de Ejercicio Agregado
+  filtrosMusculo = {
+    pecho: false,
+    espalda: false,
+    piernas: false,
+    hombros: false,
+    biceps: false,
+    triceps: false
+  };
+
+  filtrosTipo = {
+    poleas: false,
+    smith: false,
+    maquinaLibre: false,
+    pesoCorporal: false
+  };
+
+  // Edición de Ejercicio Agregado Modal
   mostrarModalEditar = false;
-  ejercicioEnEdicionIndex: number | null = null;
-  edicionSeries = 4;
+  ejercicioEditandoIndex: number | null = null;
+  edicionSeries = 3;
   edicionReps = 12;
-  edicionPeso = '20';
+  edicionPeso = '15kg';
   edicionDescanso = 60;
 
-  // Toast de validación
+  // Toast de Validación
   toastVisible = false;
   toastMensaje = '';
-  private toastTimeout: any = null;
-
-  mostrarToast(mensaje: string): void {
-    this.toastMensaje = mensaje;
-    this.toastVisible = true;
-    if (this.toastTimeout) clearTimeout(this.toastTimeout);
-    this.toastTimeout = setTimeout(() => { this.toastVisible = false; }, 3000);
-  }
 
   ngOnInit(): void {
-    this.cargarRutinas();
+    this.cargarRutinasMock();
   }
 
-  cargarRutinas(): void {
+  ngOnDestroy(): void {
+  }
+
+  cargarRutinasMock(): void {
     this.rutinasDelEntrenador = [
       {
-        id: '1',
-        nombre: 'Rutina Piernas — Carlos Ríos',
+        id: 'r1',
+        nombre: 'Rutina Hipertrofia Pecho y Tríceps',
         dias: 'Lun · Mié · Vie',
-        autor: 'Carlos Ríos',
+        autor: 'Entrenador Carlos',
         tipo: 'ASIGNADA',
         ejerciciosCount: 4,
-        expanded: true,
+        expanded: false,
         ejercicios: [
-          { nombre: 'Sentadilla', series: 4, reps: 12, peso: '60kg', descanso: 60 },
-          { nombre: 'Prensa de piernas', series: 3, reps: 15, peso: '80kg', descanso: 45 },
-          { nombre: 'Extensión cuádriceps', series: 3, reps: 12, peso: '40kg', descanso: 60 },
-          { nombre: 'Curl femoral', series: 3, reps: 12, peso: '35kg', descanso: 60 }
+          { nombre: 'Press de banca (Bench Press)', series: 4, reps: 10, peso: '60kg', descanso: 90 },
+          { nombre: 'Aperturas en polea (Cable Fly)', series: 3, reps: 12, peso: '15kg', descanso: 60 },
+          { nombre: 'Flexiones de pecho (Push Up)', series: 3, reps: 15, peso: 'Corporal', descanso: 45 },
+          { nombre: 'Extensión de tríceps en polea', series: 4, reps: 12, peso: '20kg', descanso: 60 }
+        ]
+      },
+      {
+        id: 'r2',
+        nombre: 'Fuerza Espalda y Bíceps',
+        dias: 'Mar · Jue',
+        autor: 'Entrenador Carlos',
+        tipo: 'ASIGNADA',
+        ejerciciosCount: 3,
+        expanded: false,
+        ejercicios: [
+          { nombre: 'Jalón al pecho (Lat Pulldown)', series: 4, reps: 8, peso: '50kg', descanso: 90 },
+          { nombre: 'Remo con barra (Barbell Row)', series: 4, reps: 8, peso: '55kg', descanso: 90 },
+          { nombre: 'Curl de bíceps con mancuernas', series: 3, reps: 10, peso: '14kg', descanso: 60 }
         ]
       }
     ];
 
     this.rutinasPropias = [
       {
-        id: '2',
-        nombre: 'Cardio mañanero',
-        dias: 'Mar · Jue',
-        autor: 'Propia',
+        id: 'rp1',
+        nombre: 'Mi Rutina de Pierna Intensa',
+        dias: 'Sáb',
+        autor: 'Yo',
         tipo: 'PROPIA',
-        ejerciciosCount: 3,
+        ejerciciosCount: 2,
         expanded: false,
         ejercicios: [
-          { nombre: 'Cinta de correr', series: 1, reps: 20, peso: '--', descanso: 0 },
-          { nombre: 'Elíptica', series: 1, reps: 15, peso: '--', descanso: 0 },
-          { nombre: 'Remo', series: 3, reps: 10, peso: '20kg', descanso: 45 }
+          { nombre: 'Sentadillas con barra (Squat)', series: 4, reps: 10, peso: '80kg', descanso: 120 },
+          { nombre: 'Prensa de piernas (Leg Press)', series: 4, reps: 12, peso: '120kg', descanso: 90 }
         ]
       }
     ];
@@ -214,14 +172,55 @@ export class RutinasComponent implements OnInit {
     rutina.expanded = !rutina.expanded;
   }
 
-  // --- LÓGICA DE CREACIÓN ---
   irACrear(): void {
-    this.vista = 'CREAR';
+    this.rutinaEditandoId = null;
     this.nuevoNombre = '';
     this.nuevosDias = [];
     this.ejerciciosAgregados = [];
-    this.filtroNombre = '';
-    this.limpiarFiltros();
+    this.vista = 'CREAR';
+  }
+
+  editarRutina(rutina: Rutina): void {
+    this.rutinaEditandoId = rutina.id;
+    this.nuevoNombre = rutina.nombre;
+    
+    // Mapear días
+    const diasArray = rutina.dias.split('·').map(d => d.trim());
+    this.nuevosDias = [...diasArray];
+
+    // Mapear ejercicios agregados
+    this.ejerciciosAgregados = (rutina.ejercicios || []).map(e => {
+      const ejBase = this.ejerciciosBase.find(eb => eb.nombre === e.nombre) || {
+        id: 'custom',
+        nombre: e.nombre,
+        musculo: 'General',
+        tipo: 'Libre',
+        imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/pectorals/cable-cross-over-variation.gif'
+      };
+      return {
+        ejercicio: ejBase,
+        series: e.series,
+        reps: e.reps,
+        peso: e.peso,
+        descanso: e.descanso
+      };
+    });
+
+    this.vista = 'CREAR';
+  }
+
+  async eliminarRutina(rutina: Rutina): Promise<void> {
+    const confirmado = await this.confirmService.confirmar({
+      titulo: 'Eliminar Rutina',
+      mensaje: `¿Estás seguro de que deseas eliminar la rutina "${rutina.nombre}"?`,
+      textoConfirmar: 'Eliminar',
+      textoCancelar: 'Cancelar'
+    });
+
+    if (confirmado) {
+      this.rutinasPropias = this.rutinasPropias.filter(r => r.id !== rutina.id);
+      this.rutinasDelEntrenador = this.rutinasDelEntrenador.filter(r => r.id !== rutina.id);
+    }
   }
 
   cancelarCreacion(): void {
@@ -241,106 +240,85 @@ export class RutinasComponent implements OnInit {
     return this.nuevosDias.includes(dia);
   }
 
-  // Filtros de búsqueda
-  limpiarFiltros(): void {
-    this.filtroTrenSuperior = false;
-    this.filtroTrenInferior = false;
-    Object.keys(this.subMusculos).forEach(k => this.subMusculos[k] = false);
-    Object.keys(this.tiposSeleccionados).forEach(k => this.tiposSeleccionados[k] = false);
-  }
+  get ejerciciosFiltrados(): EjercicioBase[] {
+    return this.ejerciciosBase.filter(ej => {
+      // Filtro por nombre
+      if (this.filtroNombre && !ej.nombre.toLowerCase().includes(this.filtroNombre.toLowerCase()) && !ej.musculo.toLowerCase().includes(this.filtroNombre.toLowerCase())) {
+        return false;
+      }
 
-  get ejerciciosFiltrados(): Ejercicio[] {
-    let result = this.ejerciciosBase;
+      // Filtro por Músculo
+      const musculosActivos = Object.keys(this.filtrosMusculo).filter(m => (this.filtrosMusculo as any)[m]);
+      if (musculosActivos.length > 0 && !musculosActivos.includes(ej.musculo.toLowerCase())) {
+        return false;
+      }
 
-    // Filtro por nombre o músculo ingresado en la caja
-    if (this.filtroNombre.trim()) {
-      const query = this.filtroNombre.toLowerCase();
-      result = result.filter(ex => 
-        ex.nombre.toLowerCase().includes(query) || 
-        ex.musculo.toLowerCase().includes(query)
-      );
-    }
+      // Filtro por Tipo
+      const tiposActivos = Object.keys(this.filtrosTipo).filter(t => (this.filtrosTipo as any)[t]);
+      if (tiposActivos.length > 0) {
+        const tipoNormalizado = ej.tipo.toLowerCase().replace(/\s+/g, '');
+        const coincide = tiposActivos.some(t => tipoNormalizado.includes(t.toLowerCase()));
+        if (!coincide) return false;
+      }
 
-    // Filtro por Musculos seleccionados en el modal
-    const musculosActivos = Object.keys(this.subMusculos).filter(k => {
-      // Solo filtrar por submusculos si el tren padre está activo
-      const esSuperior = ['biceps', 'triceps', 'antebrazos', 'hombros', 'pecho', 'espalda'].includes(k);
-      const esInferior = ['cuadriceps', 'femorales', 'gluteos', 'pantorrillas', 'aductores', 'abductores'].includes(k);
-      if (esSuperior && !this.filtroTrenSuperior) return false;
-      if (esInferior && !this.filtroTrenInferior) return false;
-      return this.subMusculos[k];
+      return true;
     });
-
-    if (musculosActivos.length > 0) {
-      result = result.filter(ex => musculosActivos.includes(ex.musculo));
-    }
-
-    // Filtro por Tipos seleccionados en el modal
-    const tiposActivos = Object.keys(this.tiposSeleccionados).filter(k => this.tiposSeleccionados[k]);
-    if (tiposActivos.length > 0) {
-      result = result.filter(ex => tiposActivos.includes(ex.tipo));
-    }
-
-    // Limitar al máximo 4 de ejemplo para no romper la pantalla, como solicitó el usuario
-    return result.slice(0, 4);
   }
 
-  // Ejercicios agregados
-  agregarEjercicio(ej: Ejercicio): void {
-    // Si ya está agregado, podemos agregarlo nuevamente para poder configurar otro set
+  agregarEjercicio(ejercicio: EjercicioBase): void {
     this.ejerciciosAgregados.push({
-      ejercicio: ej,
-      series: 4,
+      ejercicio,
+      series: 3,
       reps: 12,
-      peso: '20kg',
+      peso: '15kg',
       descanso: 60
     });
   }
 
-  eliminarEjercicio(idx: number): void {
-    this.ejerciciosAgregados.splice(idx, 1);
+  eliminarEjercicio(index: number): void {
+    this.ejerciciosAgregados.splice(index, 1);
   }
 
-  // Edición del ejercicio agregado
   abrirEdicion(index: number): void {
-    this.ejercicioEnEdicionIndex = index;
-    const ejAg = this.ejerciciosAgregados[index];
-    this.edicionSeries = ejAg.series;
-    this.edicionReps = ejAg.reps;
-    
-    // Quitar "kg" del peso para editar solo el número
-    this.edicionPeso = ejAg.peso.replace('kg', '').replace(' ', '');
-    this.edicionDescanso = ejAg.descanso;
+    this.ejercicioEditandoIndex = index;
+    const item = this.ejerciciosAgregados[index];
+    this.edicionSeries = item.series;
+    this.edicionReps = item.reps;
+    this.edicionPeso = item.peso;
+    this.edicionDescanso = item.descanso;
     this.mostrarModalEditar = true;
   }
 
   guardarEdicion(): void {
-    if (this.ejercicioEnEdicionIndex !== null) {
-      const ejAg = this.ejerciciosAgregados[this.ejercicioEnEdicionIndex];
-      ejAg.series = this.edicionSeries;
-      ejAg.reps = this.edicionReps;
-      
-      // Agregar "kg" si el peso es numérico o dejarlo como "Peso cuerpo" si es 0
-      const pesoNum = parseFloat(this.edicionPeso);
-      if (isNaN(pesoNum) || pesoNum === 0) {
-        ejAg.peso = 'Peso cuerpo';
-      } else {
-        ejAg.peso = `${pesoNum}kg`;
-      }
-      ejAg.descanso = this.edicionDescanso;
+    if (this.ejercicioEditandoIndex !== null) {
+      this.ejerciciosAgregados[this.ejercicioEditandoIndex] = {
+        ...this.ejerciciosAgregados[this.ejercicioEditandoIndex],
+        series: this.edicionSeries,
+        reps: this.edicionReps,
+        peso: this.edicionPeso,
+        descanso: this.edicionDescanso
+      };
+      this.ejercicioEditandoIndex = null;
     }
     this.mostrarModalEditar = false;
-    this.ejercicioEnEdicionIndex = null;
+  }
+
+  mostrarToast(mensaje: string): void {
+    this.toastMensaje = mensaje;
+    this.toastVisible = true;
+    setTimeout(() => {
+      this.toastVisible = false;
+    }, 3500);
   }
 
   guardarRutina(): void {
     if (!this.nuevoNombre.trim()) {
-      this.mostrarToast('Ingresa un nombre para la rutina.');
+      this.mostrarToast('Por favor, ingresa el nombre de la rutina.');
       return;
     }
 
     if (this.nuevosDias.length === 0) {
-      this.mostrarToast('Selecciona al menos un día de la semana.');
+      this.mostrarToast('Selecciona al menos un día para realizar la rutina.');
       return;
     }
 
@@ -349,31 +327,54 @@ export class RutinasComponent implements OnInit {
       return;
     }
 
-    // Ordenar los días seleccionados según la semana para que se vea ordenado (Lun -> Dom)
-    const ordenSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-    const diasOrdenados = [...this.nuevosDias].sort((a, b) => ordenSemana.indexOf(a) - ordenSemana.indexOf(b));
+    const diasTexto = this.diasSemana
+      .filter(d => this.nuevosDias.includes(d))
+      .join(' · ');
 
-    const nuevaRutina: Rutina = {
-      id: Date.now().toString(),
-      nombre: this.nuevoNombre,
-      dias: diasOrdenados.join(' · '),
-      autor: 'Propia',
-      tipo: 'PROPIA',
-      ejerciciosCount: this.ejerciciosAgregados.length,
-      expanded: false,
-      ejercicios: this.ejerciciosAgregados.map(ea => ({
-        nombre: ea.ejercicio.nombre,
-        series: ea.series,
-        reps: ea.reps,
-        peso: ea.peso,
-        descanso: ea.descanso
-      }))
-    };
+    const ejerciciosParaRutina = this.ejerciciosAgregados.map(ea => ({
+      nombre: ea.ejercicio.nombre,
+      series: ea.series,
+      reps: ea.reps,
+      peso: ea.peso,
+      descanso: ea.descanso
+    }));
 
-    // Añadir a las rutinas propias
-    this.rutinasPropias.push(nuevaRutina);
+    if (this.rutinaEditandoId) {
+      // Modo Edición
+      const rutinaOriginal = [...this.rutinasPropias, ...this.rutinasDelEntrenador].find(r => r.id === this.rutinaEditandoId);
+      if (rutinaOriginal) {
+        rutinaOriginal.nombre = this.nuevoNombre.trim();
+        rutinaOriginal.dias = diasTexto;
+        rutinaOriginal.ejerciciosCount = ejerciciosParaRutina.length;
+        rutinaOriginal.ejercicios = ejerciciosParaRutina;
+      }
+    } else {
+      // Modo Crear Nueva
+      const nuevaRutinaObj: Rutina = {
+        id: 'rp_' + Date.now(),
+        nombre: this.nuevoNombre.trim(),
+        dias: diasTexto,
+        autor: 'Yo',
+        tipo: 'PROPIA',
+        ejerciciosCount: ejerciciosParaRutina.length,
+        expanded: false,
+        ejercicios: ejerciciosParaRutina
+      };
+      this.rutinasPropias.unshift(nuevaRutinaObj);
+    }
 
-    // Redirigir a lista
     this.vista = 'LISTA';
+  }
+
+  iniciarEntreno(rutina: Rutina): void {
+    this.router.navigate(['/miembro/rutinas/entreno', rutina.id], {
+      state: { rutina }
+    });
+  }
+
+  toggleSidebar(): void {
+    if (this.layout) {
+      this.layout.sidebarAbierto = !this.layout.sidebarAbierto;
+    }
   }
 }

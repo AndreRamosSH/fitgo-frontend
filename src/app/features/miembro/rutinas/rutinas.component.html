@@ -1,16 +1,20 @@
 <ng-container *ngIf="vista === 'LISTA'">
   <!-- Vista de lista de rutinas (original) -->
-  <div class="encabezado-tabla-flex">
+
     <div class="seccion-bienvenida">
       <h1>Mis Rutinas</h1>
       <p>Rutinas del entrenador y rutinas propias</p>
     </div>
-    <button class="btn-crear-rutina" (click)="irACrear()">+ Crear rutina</button>
+  <div class="encabezado-tabla-apilado">
+    <button class="btn-crear-rutina" (click)="irACrear()">
+      <svg lucidePlus class="btn-icon"></svg>
+      Crear rutina
+    </button>
   </div>
 
   <div class="categoria-seccion">
-    <p class="etiqueta-grupo">Del Entrenador</p>
-    
+    <h2 class="titulo-seccion">del entrenador</h2>
+
     <div class="contenedor-rutinas">
       <div *ngFor="let rut of rutinasDelEntrenador" class="tarjeta-rutina" [class.abierto]="rut.expanded">
         <!-- Cabecera de la rutina -->
@@ -20,8 +24,8 @@
             <p class="rutina-sub-label">{{ rut.dias }} · {{ rut.ejerciciosCount }} ejercicios</p>
           </div>
           <div class="rutina-badges">
-            <span class="badge-rutina badge-asignada">Asignada</span>
-            <span class="icono-flecha" [class.rotado]="rut.expanded">▼</span>
+            <span class="tag-especial miembro">Asignada</span>
+            <svg lucideChevronDown class="icono-flecha" [class.rotado]="rut.expanded"></svg>
           </div>
         </div>
 
@@ -36,21 +40,26 @@
               </div>
             </div>
           </div>
-          
-          <button class="btn-go">
-            <svg class="play-svg" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M8 5v14l11-7z"/>
-            </svg>
-            GO
-          </button>
+
+          <div class="rutina-acciones-footer">
+            <button class="btn-go" (click)="iniciarEntreno(rut)">
+              GO
+            </button>
+            <div class="botones-gestion-rutina">
+              <button type="button" class="btn-gestion btn-editar-rut" (click)="editarRutina(rut)" title="Editar rutina">
+                <svg lucideEdit class="btn-icon"></svg>
+                Editar
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <div class="categoria-seccion">
-    <p class="etiqueta-grupo">Mis Rutinas</p>
-    
+    <h2 class="titulo-seccion">mis rutinas</h2>
+
     <div class="contenedor-rutinas">
       <div *ngFor="let rut of rutinasPropias" class="tarjeta-rutina" [class.abierto]="rut.expanded">
         <!-- Cabecera de la rutina -->
@@ -60,8 +69,7 @@
             <p class="rutina-sub-label">{{ rut.dias }} · {{ rut.ejerciciosCount }} ejercicios</p>
           </div>
           <div class="rutina-badges">
-            <span class="badge-rutina badge-propia">Propia</span>
-            <span class="icono-flecha" [class.rotado]="rut.expanded">▼</span>
+            <svg lucideChevronDown class="icono-flecha" [class.rotado]="rut.expanded"></svg>
           </div>
         </div>
 
@@ -76,13 +84,22 @@
               </div>
             </div>
           </div>
-          
-          <button class="btn-go">
-            <svg class="play-svg" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M8 5v14l11-7z"/>
-            </svg>
-            GO
-          </button>
+
+          <div class="rutina-acciones-footer">
+            <button class="btn-go" (click)="iniciarEntreno(rut)">
+              GO
+            </button>
+            <div class="botones-gestion-rutina">
+              <button type="button" class="btn-gestion btn-editar-rut" (click)="editarRutina(rut)" title="Editar rutina">
+                <svg lucideSquarePen class="btn-icon"></svg>
+                Editar
+              </button>
+              <button type="button" class="btn-gestion btn-eliminar-rut" (click)="eliminarRutina(rut)" title="Eliminar rutina">
+                <svg lucideTrash2 class="btn-icon"></svg>
+                Eliminar
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -91,7 +108,7 @@
 
 <ng-container *ngIf="vista === 'CREAR'">
   <!-- Vista de creador de rutinas -->
-  <div class="encabezado-tabla-flex">
+  <div class="encabezado-tabla-apilado">
     <div class="seccion-bienvenida">
       <h1>Crear rutina propia</h1>
       <p>Configure los datos de su rutina y añada ejercicios</p>
@@ -105,7 +122,7 @@
       <!-- Tarjeta 1: Datos de la rutina -->
       <article class="tarjeta-editor">
         <h2 class="subtitulo-editor">Datos de la rutina</h2>
-        
+
         <div class="grupo-campo">
           <label>Nombre de la rutina</label>
           <input type="text" [(ngModel)]="nuevoNombre" placeholder="Nombre de la rutina...">
@@ -114,11 +131,11 @@
         <div class="grupo-campo">
           <label>Días de entrenamiento</label>
           <div class="selector-dias">
-            <button 
-              *ngFor="let dia of diasSemana" 
-              type="button" 
-              class="dia-btn" 
-              [class.activo]="diaSeleccionado(dia)" 
+            <button
+              *ngFor="let dia of diasSemana"
+              type="button"
+              class="dia-btn"
+              [class.activo]="diaSeleccionado(dia)"
               (click)="toggleDia(dia)">
               {{ dia }}
             </button>
@@ -129,14 +146,14 @@
       <!-- Tarjeta 2: Ejercicios agregados -->
       <article class="tarjeta-editor">
         <h2 class="subtitulo-editor">Ejercicios agregados ({{ ejerciciosAgregados.length }})</h2>
-        
+
         <div class="lista-ejercicios-agregados">
           <div *ngFor="let ejAg of ejerciciosAgregados; let idx = index" class="item-agregado">
             <!-- Imagen del ejercicio -->
             <div class="ejercicio-imagen-contenedor">
-              <img [src]="ejAg.ejercicio.imagen" alt="Thumbnail" class="ejercicio-thumb">
+              <img [ngSrc]="ejAg.ejercicio.imagen" alt="Thumbnail" class="ejercicio-thumb" width="44" height="44">
             </div>
-            
+
             <div class="info-agregado">
               <h4>{{ ejAg.ejercicio.nombre }}</h4>
               <p class="detalles-ejercicio">
@@ -147,10 +164,10 @@
             <!-- Acciones del ejercicio agregado -->
             <div class="acciones-agregado">
               <button class="btn-accion-icon btn-editar-ej" (click)="abrirEdicion(idx)" title="Configurar series/reps">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                <svg lucideSquarePen class="icon-svg"></svg>
               </button>
               <button class="btn-accion-icon btn-eliminar-ej" (click)="eliminarEjercicio(idx)" title="Eliminar de la lista">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <svg lucideTrash2 class="icon-svg"></svg>
               </button>
             </div>
           </div>
@@ -172,20 +189,20 @@
         <h2 class="subtitulo-editor">Buscar ejercicios</h2>
 
         <div class="busqueda-caja">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lupa-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <svg lucideSearch class="lupa-icon"></svg>
           <input type="text" [(ngModel)]="filtroNombre" placeholder="Buscar por nombre o músculo...">
         </div>
 
         <div class="filtros-row">
           <!-- Botón Filtro Músculo -->
           <button type="button" class="btn-filtro-trigger" (click)="mostrarModalMusculo = true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="filtro-icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            <svg lucideCirclePlus class="filtro-icon"></svg>
             Músculo
           </button>
-          
+
           <!-- Botón Filtro Tipo -->
           <button type="button" class="btn-filtro-trigger" (click)="mostrarModalTipo = true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="filtro-icon"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+            <svg lucideFunnel class="filtro-icon"></svg>
             Tipo
           </button>
         </div>
@@ -194,7 +211,7 @@
         <div class="resultados-ejercicios">
           <div *ngFor="let ej of ejerciciosFiltrados" class="item-resultado">
             <div class="resultado-imagen-contenedor">
-              <img [src]="ej.imagen" alt="Thumbnail" class="ejercicio-thumb">
+              <img [ngSrc]="ej.imagen" alt="Thumbnail" class="ejercicio-thumb" width="44" height="44">
             </div>
 
             <div class="resultado-info">
@@ -207,7 +224,7 @@
 
             <!-- Botón Agregar (Cuadrado con símbolo "+") -->
             <button class="btn-agregar-plus" (click)="agregarEjercicio(ej)" title="Añadir a la rutina">
-              <span>+</span>
+              <svg lucidePlus class="plus-icon"></svg>
             </button>
           </div>
 
@@ -229,7 +246,7 @@
       <h3>Filtrar por Músculo</h3>
       <button class="btn-cerrar-modal" (click)="mostrarModalMusculo = false">×</button>
     </div>
-    
+
     <div class="modal-cuerpo">
       <!-- Checkbox Tren Superior -->
       <div class="grupo-checkbox-padre">
@@ -238,7 +255,7 @@
           <span class="checkbox-custom"></span>
           <strong>Tren Superior</strong>
         </label>
-        
+
         <!-- Opciones Tren Superior -->
         <div class="sub-opciones-checkbox" *ngIf="filtroTrenSuperior">
           <label class="checkbox-label" *ngFor="let mus of ['pecho', 'espalda', 'biceps', 'triceps', 'antebrazos', 'hombros']">
@@ -256,7 +273,7 @@
           <span class="checkbox-custom"></span>
           <strong>Tren Inferior</strong>
         </label>
-        
+
         <!-- Opciones Tren Inferior -->
         <div class="sub-opciones-checkbox" *ngIf="filtroTrenInferior">
           <label class="checkbox-label" *ngFor="let mus of ['cuadriceps', 'femorales', 'gluteos', 'pantorrillas', 'aductores', 'abductores']">
@@ -267,7 +284,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="modal-pie">
       <button class="btn-modal-aplicar" (click)="mostrarModalMusculo = false">Aplicar filtros</button>
     </div>
@@ -281,7 +298,7 @@
       <h3>Filtrar por Tipo</h3>
       <button class="btn-cerrar-modal" (click)="mostrarModalTipo = false">×</button>
     </div>
-    
+
     <div class="modal-cuerpo">
       <div class="lista-checkboxes-tipo">
         <label class="checkbox-label" *ngFor="let tipo of ['Poleas', 'Smith', 'Maquina libre', 'Peso Corporal']">
@@ -291,7 +308,7 @@
         </label>
       </div>
     </div>
-    
+
     <div class="modal-pie">
       <button class="btn-modal-aplicar" (click)="mostrarModalTipo = false">Aplicar filtros</button>
     </div>
@@ -305,7 +322,7 @@
       <h3>Configurar Ejercicio</h3>
       <button class="btn-cerrar-modal" (click)="mostrarModalEditar = false">×</button>
     </div>
-    
+
     <div class="modal-cuerpo">
       <!-- Selector de Series (1 a 6) -->
       <div class="grupo-campo">
@@ -333,7 +350,7 @@
         <input type="number" [(ngModel)]="edicionDescanso" placeholder="Ej: 60">
       </div>
     </div>
-    
+
     <div class="modal-pie">
       <button class="btn-modal-aplicar" (click)="guardarEdicion()">Guardar cambios</button>
     </div>
@@ -342,10 +359,7 @@
 
 <!-- TOAST DE VALIDACIÓN -->
 <div class="toast-error" [class.visible]="toastVisible">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="toast-icon">
-    <circle cx="12" cy="12" r="10"></circle>
-    <line x1="12" y1="8" x2="12" y2="12"></line>
-    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-  </svg>
+  <svg lucideCircleAlert class="toast-icon"></svg>
   <span>{{ toastMensaje }}</span>
 </div>
+
