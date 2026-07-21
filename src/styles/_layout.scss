@@ -356,24 +356,6 @@
   }
 }
 
-.encabezado-tabla-flex {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-
-  .titulo-seccion {
-    margin-bottom: 0;
-    font-family: var(--fuente-titulo), sans-serif;
-    font-size: 1.5rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-}
-
 .busqueda input {
   padding: 0.55rem 1rem;
   width: 250px;
@@ -506,7 +488,7 @@
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  
+
   &:focus, &:hover {
     outline: none;
     border-color: var(--acento);
@@ -551,7 +533,7 @@
   font-size: 0.9rem;
   outline: none;
   transition: border-color 0.2s;
-  
+
   &:focus {
     border-color: var(--acento);
   }
@@ -562,15 +544,15 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  
+
   &::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   &::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background: var(--borde);
     border-radius: 3px;
@@ -584,7 +566,7 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.15s, color 0.15s;
-  
+
   &:hover {
     background-color: rgba(249, 115, 22, 0.08);
     color: var(--acento);

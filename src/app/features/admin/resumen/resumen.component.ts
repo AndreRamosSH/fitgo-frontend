@@ -1,12 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
-import { LucideChevronLeft, LucideChevronRight } from '@lucide/angular';
+import { SharedLucideIconsModule } from '../../../shared/icons/lucide-icons.module';
 
 @Component({
   selector: 'app-admin-resumen',
   standalone: true,
-  imports: [CommonModule, LucideChevronLeft, LucideChevronRight],
+  imports: [CommonModule, SharedLucideIconsModule],
   templateUrl: './resumen.component.html',
   styleUrl: './resumen.component.scss'
 })

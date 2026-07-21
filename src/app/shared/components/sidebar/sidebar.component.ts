@@ -2,7 +2,7 @@ import { Component, inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
-import { LucideX } from '@lucide/angular';
+import { SharedLucideIconsModule } from '../../icons/lucide-icons.module';
 
 interface NavItem {
   label: string;
@@ -13,7 +13,7 @@ interface NavItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, LucideX],
+  imports: [CommonModule, RouterLink, RouterLinkActive, SharedLucideIconsModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })

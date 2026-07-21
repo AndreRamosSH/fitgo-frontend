@@ -2,12 +2,12 @@ import { Component, inject, OnInit, ChangeDetectionStrategy, ChangeDetectorRef }
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
 import { ConfirmService } from '../../../core/services/confirm.service';
-import { LucideChevronLeft, LucideChevronRight } from '@lucide/angular';
+import { SharedLucideIconsModule } from '../../../shared/icons/lucide-icons.module';
 
 @Component({
   selector: 'app-admin-miembros',
   standalone: true,
-  imports: [CommonModule, LucideChevronLeft, LucideChevronRight],
+  imports: [CommonModule, SharedLucideIconsModule],
   templateUrl: './miembros.component.html',
   styleUrl: './miembros.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

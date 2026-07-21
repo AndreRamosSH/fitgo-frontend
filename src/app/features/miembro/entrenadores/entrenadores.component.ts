@@ -1,12 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { MiembroService } from '../../../core/services/miembro.service';
 
 @Component({
   selector: 'app-miembro-entrenadores',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule],
   templateUrl: './entrenadores.component.html',
   styleUrl: './entrenadores.component.scss'
 })
@@ -15,7 +14,6 @@ export class EntrenadoresComponent implements OnInit {
 
   usuario: any = null;
   entrenadores: any[] = [];
-  filtro = '';
 
   ngOnInit(): void {
     this.cargarDatos();
@@ -38,15 +36,6 @@ export class EntrenadoresComponent implements OnInit {
       },
       error: (err: any) => console.error(err)
     });
-  }
-
-  get entrenadoresFiltrados(): any[] {
-    if (!this.filtro.trim()) return this.entrenadores;
-    const f = this.filtro.toLowerCase();
-    return this.entrenadores.filter(e => 
-      e.usuario.nombre.toLowerCase().includes(f) ||
-      e.usuario.apellido.toLowerCase().includes(f)
-    );
   }
 
   esCoachActual(entrenadorId: number): boolean {

@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { Usuario } from '../../../core/models/usuario.model';
-import { LucideMenu } from '@lucide/angular';
+import { SharedLucideIconsModule } from '../../icons/lucide-icons.module';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, LucideMenu],
+  imports: [CommonModule, SharedLucideIconsModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })

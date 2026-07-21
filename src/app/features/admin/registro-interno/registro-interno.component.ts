@@ -4,12 +4,12 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { AdminService } from '../../../core/services/admin.service';
 import { Usuario, Rol, Turno } from '../../../core/models/usuario.model';
-import { LucideShield, LucideUser, LucideDumbbell } from '@lucide/angular';
+import { SharedLucideIconsModule } from '../../../shared/icons/lucide-icons.module';
 
 @Component({
   selector: 'app-admin-registro-interno',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, LucideShield, LucideUser, LucideDumbbell],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, SharedLucideIconsModule],
   templateUrl: './registro-interno.component.html',
   styleUrl: './registro-interno.component.scss'
 })
