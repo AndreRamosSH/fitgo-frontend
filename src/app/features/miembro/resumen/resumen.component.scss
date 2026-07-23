@@ -1,5 +1,5 @@
-@import '../../../../styles/variables';
-@import '../../../../styles/mixins';
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
 
 .alerta-vencimiento-aviso {
   background-color: rgba(245, 158, 11, 0.1);
@@ -30,14 +30,13 @@
 .alerta-texto {
   font-size: 0.95rem;
   line-height: 1.4;
-  
-  strong {
-    font-weight: 600;
-  }
+
+  strong { font-weight: 600; }
 }
 
+// Sin !important — la clase solo se aplica en el HTML sin conflicto de especificidad
 .destacado {
-  color: var(--acento) !important;
+  color: var(--acento);
 }
 
 .dashboard-secundario {

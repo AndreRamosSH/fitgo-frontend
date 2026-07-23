@@ -1,26 +1,7 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
-.diseno-panel {
-  display: grid;
-  grid-template-columns: var(--lateral-ancho) 1fr;
-  grid-template-rows: var(--encabezado-alto) 1fr;
-  grid-template-areas:
-    "lateral encabezado"
-    "lateral principal";
-  min-height: 100vh;
-}
 
-@media (max-width: 992px) {
-  .diseno-panel {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto 1fr;
-    grid-template-areas:
-      "encabezado"
-      "lateral"
-      "principal";
-  }
-}
 
 .grupo-campo {
   display: flex;
@@ -247,12 +228,7 @@
   color: var(--texto-suave);
 }
 
-.celda-acciones {
-  text-align: right;
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
-}
+
 
 .seccion-bienvenida {
   display: flex;
@@ -408,34 +384,7 @@
   }
 }
 
-.badge-turno {
-  display: inline-block;
-  padding: 0.35rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border: 1px solid transparent;
 
-  &.badge-turno-manana {
-    background-color: rgba(96, 165, 250, 0.1);
-    color: #60a5fa;
-    border-color: #60a5fa;
-  }
-
-  &.badge-turno-tarde {
-    background-color: rgba(245, 158, 11, 0.1);
-    color: #fbbf24;
-    border-color: #fbbf24;
-  }
-
-  &.badge-turno-noche {
-    background-color: rgba(167, 139, 250, 0.1);
-    color: #a78bfa;
-    border-color: #a78bfa;
-  }
-}
 
 
 

@@ -1,5 +1,5 @@
 @mixin responds-to($media) {
-  @if $media == movil {
+  @if $media == movil or $media == phone {
     @media (max-width: 480px) { @content; }
   } @else if $media == tablet {
     @media (max-width: 768px) { @content; }
