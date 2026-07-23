@@ -18,4 +18,12 @@ export class MetricasService {
   registrarMetricas(metricas: Metricas): Observable<{ mensaje: string }> {
     return this.http.post<{ mensaje: string }>(`${this.apiUrl}/registrar`, metricas);
   }
+
+  getHistorialMetricas(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/historial`);
+  }
+
+  guardarMetas(pesoObjetivo: number, grasaObjetivo: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/metas`, { pesoObjetivo, grasaObjetivo });
+  }
 }

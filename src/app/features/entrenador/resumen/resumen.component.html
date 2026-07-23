@@ -1,38 +1,107 @@
-<section class="seccion-bienvenida">
-  <h1>Panel del Entrenador</h1>
-  <p>Supervisa el progreso y asistencia de tus alumnos asignados.</p>
-</section>
+<div class="contenedor-entrenador-dashboard">
+  <!-- Cabecera de la sección -->
+  <div class="seccion-bienvenida">
+    <div class="bienvenida-texto">
+      <h1>Inicio - Entrenador</h1>
+      <p>Panel de control de miembros y marcaje de asistencias de hoy</p>
+    </div>
+  </div>
 
-<section class="rejilla-tarjetas">
-  <article class="tarjeta">
-    <p class="tarjeta-titulo">Miembros Asignados</p>
-    <p class="tarjeta-valor tarjeta-valor--acento">{{ totalMiembros }}</p>
-    <p class="tarjeta-etiqueta">Alumnos activos en tu turno</p>
-  </article>
-</section>
+  <!-- Tarjetas KPI Superior (3 Tarjetas) -->
+  <section class="grid-metricas">
+    <article class="tarjeta-metrica">
+      <p class="metrica-titulo">Miembros a cargo</p>
+      <p class="metrica-valor">{{ totalMiembros }}</p>
+      <p class="metrica-cambio-suave">activos este mes</p>
+    </article>
 
-<section class="seccion">
-  <h2 class="titulo-seccion">Registros de Asistencia Recientes (General)</h2>
-  
-  <table class="tabla-usuarios">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Correo</th>
-        <th>Fecha y Hora de Ingreso</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let asis of asistencias">
-        <td class="columna-nombre">{{ asis.usuario.nombre }}</td>
-        <td>{{ asis.usuario.apellido }}</td>
-        <td>{{ asis.usuario.correo }}</td>
-        <td>{{ asis.fechaHora | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-      </tr>
-      <tr *ngIf="asistencias.length === 0">
-        <td colspan="4" class="texto-vacio">No hay registros de asistencia recientes.</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+    <article class="tarjeta-metrica">
+      <p class="metrica-titulo">Asistieron hoy</p>
+      <p class="metrica-valor">{{ asistieronHoyCount }}</p>
+      <p class="metrica-cambio-suave">de {{ totalMiembros }} miembros</p>
+    </article>
+
+    <article class="tarjeta-metrica">
+      <p class="metrica-titulo">Rutinas creadas</p>
+      <p class="metrica-valor">{{ totalRutinasCreadas }}</p>
+      <p class="metrica-cambio-suave">{{ rutinasAsignadasCount }} asignadas</p>
+    </article>
+  </section>
+
+  <!-- Contenedor Principal 2 Columnas -->
+  <div class="dashboard-secundario">
+    <!-- Panel Izquierdo: Marcar Asistencia -->
+    <article class="tarjeta card-detallada tarjeta-marcar-asistencia">
+      <div class="card-cabecera-destacada">
+        <div class="titulo-marcar">
+          <svg lucideCheck class="icono-check-destacado"></svg>
+          <span class="texto-marcar">Marcar asistencia</span>
+        </div>
+        <span class="subtexto-fecha">{{ fechaHoyTexto }}</span>
+      </div>
+
+      <div class="card-cuerpo">
+        <div class="grupo-campo">
+          <div class="dropdown-buscador">
+            <button type="button" class="dropdown-trigger" (click)="toggleDropdownMiembros()">
+              {{ miembroSeleccionadoTexto || '-- Selecciona un miembro --' }}
+            </button>
+            <div *ngIf="mostrarDropdownMiembros">
+              <div class="dropdown-backdrop" (click)="mostrarDropdownMiembros = false"></div>
+              <div class="dropdown-menu">
+                <input
+                  type="text"
+                  name="filtroMiembro"
+                  [(ngModel)]="filtroMiembro"
+                  (ngModelChange)="filtrarMiembrosDropdown()"
+                  placeholder="Buscar miembro..."
+                  class="dropdown-search-input"
+                  autocomplete="off"
+                />
+                <div class="dropdown-options">
+                  <div *ngFor="let u of miembrosFiltrados" class="dropdown-option" (click)="seleccionarMiembro(u)">
+                    {{ u.nombre }} {{ u.apellido }} - {{ u.correo }}
+                  </div>
+                  <div *ngIf="miembrosFiltrados.length === 0" class="dropdown-no-results">No se encontraron miembros</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary btn-modal-aplicar" (click)="registrarIngreso()" [disabled]="registrando">
+          {{ registrando ? 'Registrando...' : 'Registrar ingreso' }}
+        </button>
+
+        <p class="mensaje-alerta-exito" *ngIf="mensajeExito">{{ mensajeExito }}</p>
+        <p class="mensaje-alerta-error" *ngIf="mensajeError">{{ mensajeError }}</p>
+      </div>
+    </article>
+
+    <!-- Panel Derecho: Asistencia de Hoy -->
+    <article class="tarjeta-grafico tarjeta-asistencia-hoy">
+      <h3>Asistencia de hoy</h3>
+
+      <div class="card-cuerpo lista-asistencia-hoy">
+        <div *ngFor="let m of miembrosAsistencia" class="item-asistencia-miembro">
+          <div class="avatar-iniciales">
+            {{ m.initials }}
+          </div>
+          <div class="info-miembro-asistencia">
+            <span class="nombre-miembro">{{ m.nombre }} {{ m.apellido }}</span>
+            <span class="hora-asistencia" [class.asistio]="m.asistioHoy">
+              {{ m.asistioHoy ? 'Ingresó ' + m.horaIngreso : 'Sin asistir hoy' }}
+            </span>
+          </div>
+          <div class="badge-check-asistencia" [class.marcado]="m.asistioHoy">
+            <svg lucideCheck *ngIf="m.asistioHoy" class="icono-check-badge"></svg>
+          </div>
+        </div>
+
+        <div *ngIf="miembrosAsistencia.length === 0" class="texto-vacio-asistencia">
+          No tienes miembros asignados actualmente.
+        </div>
+      </div>
+    </article>
+  </div>
+</div>

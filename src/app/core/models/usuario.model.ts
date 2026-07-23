@@ -12,6 +12,10 @@ export interface Usuario {
   experienciaAnios?: number;
   password?: string;
   passwordActual?: string;
+  fechaNacimiento?: string;
+  sexo?: string;
+  pesoObjetivo?: number;
+  grasaObjetivo?: number;
 }
 
 export interface Entrenador {

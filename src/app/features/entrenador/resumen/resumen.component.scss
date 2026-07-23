@@ -1,1 +1,174 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
 
+.contenedor-entrenador-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+
+.dashboard-secundario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+
+  @include responds-to(tablet) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tarjeta-marcar-asistencia {
+  border: 1px solid rgba(249, 115, 22, 0.3) !important;
+  background: linear-gradient(145deg, rgba(249, 115, 22, 0.03) 0%, rgba(18, 18, 18, 0.95) 100%) !important;
+
+  .card-cabecera-destacada {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--borde);
+    padding-bottom: 1rem;
+
+    .titulo-marcar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .icono-check-destacado {
+        width: 22px;
+        height: 22px;
+        color: #fff;
+        background: #22C55E;
+        border-radius: 6px;
+        padding: 2px;
+      }
+
+      .texto-marcar {
+        font-family: var(--fuente-titulo);
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--acento);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    .subtexto-fecha {
+      font-size: 0.85rem;
+      color: var(--texto-suave);
+    }
+  }
+
+  .select-miembro {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .mensaje-alerta-exito {
+    margin-top: 1rem;
+    color: #22C55E;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .mensaje-alerta-error {
+    margin-top: 1rem;
+    color: #EF4444;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+  }
+}
+
+.tarjeta-asistencia-hoy {
+  .lista-asistencia-hoy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .item-asistencia-miembro {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .avatar-iniciales {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--gradiente);
+      color: #fff;
+      font-family: var(--fuente-titulo);
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .info-miembro-asistencia {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+
+      .nombre-miembro {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--texto);
+      }
+
+      .hora-asistencia {
+        font-size: 0.8rem;
+        color: var(--texto-suave);
+
+        &.asistio {
+          color: #22C55E;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .badge-check-asistencia {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      border: 2px solid var(--borde);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+
+      &.marcado {
+        border-color: #22C55E;
+        background: rgba(34, 197, 94, 0.15);
+
+        .icono-check-badge {
+          width: 16px;
+          height: 16px;
+          color: #22C55E;
+        }
+      }
+    }
+  }
+
+  .texto-vacio-asistencia {
+    text-align: center;
+    padding: 2rem;
+    color: var(--texto-suave);
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+}
