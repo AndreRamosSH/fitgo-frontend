@@ -1,3 +1,82 @@
-.tarjeta {
-  max-width: 300px;
+/* El diseño base de las grillas (grid-metricas), tarjetas y gráficos fue migrado a _layout.scss */
+
+/* Selector de Meses (Específico para esta vista) */
+.navegacion-mes {
+  display: flex;
+  align-items: center;
+  background: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: 9999px;
+  padding: 0.35rem;
+
+  .btn-nav-mes {
+    background: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--texto-suave);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    .icono-nav {
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover:not(:disabled) {
+      color: var(--acento);
+      background: rgba(249, 115, 22, 0.1);
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
+
+  .select-envoltorio {
+    select {
+      background: transparent;
+      border: none;
+      color: var(--texto);
+      font-family: var(--fuente-cuerpo), sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0 1rem;
+      cursor: pointer;
+      outline: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      text-align: center;
+    }
+  }
+}
+
+/* Spinner de carga */
+.cargando-contenedor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 0;
+  color: var(--texto-suave);
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--acento);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 1rem;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

@@ -1,3 +1,6 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
 // --- ESTILOS COMUNES DE RUTINAS (COMPARTIDOS MIEMBRO / ENTRENADOR) ---
 
 .item-ejercicio, .item-agregado, .item-resultado {

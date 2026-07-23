@@ -1,5 +1,5 @@
-@import './variables';
-@import './mixins';
+@use 'variables' as *;
+@use 'mixins' as *;
 
 .diseno-panel {
   display: grid;
@@ -255,22 +255,30 @@
 }
 
 .seccion-bienvenida {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 
-  h1 {
-    font-family: var(--fuente-titulo), sans-serif;
-    font-size: 2.2rem;
-    font-weight: 700;
+  .bienvenida-texto, & {
+    h1 {
+      font-family: var(--fuente-titulo), sans-serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      text-transform: uppercase;
 
-    span {
-      color: var(--acento);
+      span {
+        color: var(--acento);
+      }
     }
-  }
 
-  p {
-    color: var(--texto-suave);
-    font-size: 0.95rem;
-    margin-top: 0.25rem;
+    p {
+      color: var(--texto-suave);
+      font-size: 0.95rem;
+      margin-top: 0.25rem;
+    }
   }
 }
 
@@ -297,11 +305,9 @@
   border-radius: var(--radio);
   padding: 1.5rem;
   box-shadow: var(--sombra);
-  transition: all 0.3s ease;
 
   &:hover {
     border-color: var(--acento);
-    transform: translateY(-2px);
   }
 }
 
@@ -460,15 +466,6 @@
 
 .tarjeta-valor--acento {
   color: var(--acento);
-}
-
-.tarjeta--sin-hover {
-  transition: none;
-
-  &:hover {
-    transform: none;
-    border-color: var(--borde);
-  }
 }
 
 .dropdown-buscador {
@@ -632,5 +629,254 @@
     color: white;
     border-color: transparent;
     box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+  }
+}
+
+/* ========================================= */
+/* --- COMPONENTES PREMIUM (DASHBOARD) --- */
+/* ========================================= */
+
+/* Grid de KPIs */
+.grid-metricas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+
+  @include responds-to(desktop-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include responds-to(phone) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tarjeta-metrica {
+  background: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .metrica-titulo {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .metrica-valor {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--texto);
+    margin: 0 0 0.5rem 0;
+    line-height: 1;
+  }
+
+  .metrica-cambio {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0;
+
+    &.positivo { color: #10b981; }
+    &.negativo { color: #ef4444; }
+    .icono-tendencia { width: 14px; height: 14px; }
+  }
+
+  .metrica-cambio-suave {
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+    margin: 0;
+  }
+
+  .racha-contenedor {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    .icono-flama {
+      width: 32px;
+      height: 32px;
+      color: #f97316;
+      animation: bounce 2s infinite;
+    }
+  }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Grid de Gráficos (2 columnas) */
+.grid-graficos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+
+  @include responds-to(desktop-sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tarjeta-grafico {
+  background: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  padding: 1.75rem;
+
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--texto);
+    margin: 0 0 1.5rem 0;
+    font-family: var(--fuente-titulo), sans-serif;
+  }
+}
+
+/* Gráfico de Barras CSS */
+.grafico-barras {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 220px;
+  padding-top: 1.5rem;
+
+  .columna-barra-contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 45px;
+    height: 100%;
+
+    .barra-valor {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--texto-suave);
+      margin-bottom: 0.5rem;
+    }
+
+    .barra-columna-envoltorio {
+      flex: 1;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    .barra-columna-relleno {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &.tiene-valor {
+        background: linear-gradient(to top, #ea580c 0%, #f97316 100%);
+        box-shadow: 0 0 15px rgba(249, 115, 22, 0.35);
+      }
+    }
+
+    .barra-etiqueta {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--texto-suave);
+      margin-top: 0.5rem;
+    }
+
+    &:hover {
+      .barra-valor {
+        color: var(--texto);
+        transform: scale(1.1);
+      }
+      .barra-columna-relleno.tiene-valor {
+        filter: brightness(1.1);
+        box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+      }
+    }
+  }
+}
+
+/* Calendario de Contribución estilo GitHub */
+.calendario-contribucion-contenedor {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.calendario-contribucion-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.celda-dia {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &.entrenado {
+    background: #f97316;
+    border-color: #ea580c;
+    box-shadow: 0 0 8px rgba(249, 115, 22, 0.25);
+  }
+
+  &.hoy {
+    border: 2px solid #f97316;
+    box-shadow: 0 0 12px rgba(249, 115, 22, 0.5);
+    transform: scale(1.05);
+  }
+
+  &:hover {
+    filter: brightness(1.2);
+  }
+}
+
+/* Leyenda */
+.leyenda-calendario {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  border-top: 1px solid var(--borde);
+  padding-top: 1rem;
+
+  .leyenda-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: var(--texto-suave);
+
+    .leyenda-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+
+      &.entreno {
+        background: #f97316;
+        border: 1px solid #ea580c;
+      }
+      &.hoy {
+        border: 2px solid #f97316;
+        background: transparent;
+      }
+      &.descanso {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.02);
+      }
+    }
   }
 }

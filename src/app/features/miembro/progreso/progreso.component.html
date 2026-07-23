@@ -1,12 +1,116 @@
-<section class="seccion-bienvenida">
-  <h1>Tu Evolución Física</h1>
-  <p>Registra y visualiza tus cambios.</p>
-</section>
-
-<section class="seccion">
-  <h2 class="titulo-seccion">Historial de Peso</h2>
-  <div class="tarjeta">
-    <p class="tarjeta-titulo">Tu peso actual es:</p>
-    <p class="tarjeta-valor tarjeta-valor--acento">{{ pesoActual > 0 ? pesoActual + ' kg' : '-- kg' }}</p>
+<div class="seccion-bienvenida">
+  <div class="bienvenida-texto">
+    <h1>Mi Progreso</h1>
+    <p>Resumen de toda tu actividad en FitGO</p>
   </div>
-</section>
+
+  <!-- Selector de Mes y Año con Controles de Navegación -->
+  <div class="navegacion-mes">
+    <button class="btn-nav-mes" (click)="navegarMes(-1)" [disabled]="cargando" aria-label="Mes anterior">
+      <svg lucideChevronLeft class="icono-nav"></svg>
+    </button>
+    <div class="select-envoltorio">
+      <select [ngModel]="mesSeleccionado" (ngModelChange)="cambiarMes($event)" [disabled]="cargando">
+        <option *ngFor="let opt of mesesDisponibles" [value]="opt.key">
+          {{ opt.label }}
+        </option>
+      </select>
+    </div>
+    <button class="btn-nav-mes" (click)="navegarMes(1)" [disabled]="cargando" aria-label="Mes siguiente">
+      <svg lucideChevronRight class="icono-nav"></svg>
+    </button>
+  </div>
+</div>
+
+<div *ngIf="cargando" class="cargando-contenedor">
+  <div class="spinner"></div>
+  <p>Cargando tus progresos...</p>
+</div>
+
+<ng-container *ngIf="!cargando && data">
+  <!-- Grid de Métricas Principales (KPIs) -->
+  <div class="grid-metricas">
+    <article class="tarjeta-metrica">
+      <p class="metrica-titulo">Entrenos totales</p>
+      <h2 class="metrica-valor">{{ data.entrenosTotales }}</h2>
+      <p class="metrica-cambio positivo">
+        <svg lucideTrendingUp class="icono-tendencia"></svg>
+        <span>↑ {{ data.entrenosEsteMes }} este mes</span>
+      </p>
+    </article>
+
+    <article class="tarjeta-metrica">
+      <p class="metrica-titulo">Tiempo total</p>
+      <h2 class="metrica-valor">{{ data.tiempoTotalHoras }}h</h2>
+      <p class="metrica-cambio-suave">{{ data.tiempoPromedioMinutos }} min prom.</p>
+    </article>
+
+    <article class="tarjeta-metrica">
+      <p class="metrica-titulo">Series totales</p>
+      <h2 class="metrica-valor">{{ data.seriesTotales }}</h2>
+      <p class="metrica-cambio" [class.positivo]="data.seriesPorcentajeVariacion >= 0" [class.negativo]="data.seriesPorcentajeVariacion < 0">
+        <span *ngIf="data.seriesPorcentajeVariacion >= 0">↑ {{ data.seriesPorcentajeVariacion | number:'1.0-0' }}% vs mes ant.</span>
+        <span *ngIf="data.seriesPorcentajeVariacion < 0">↓ {{ -data.seriesPorcentajeVariacion | number:'1.0-0' }}% vs mes ant.</span>
+      </p>
+    </article>
+
+    <article class="tarjeta-metrica">
+      <p class="metrica-titulo">Racha actual</p>
+      <div class="racha-contenedor">
+        <h2 class="metrica-valor">{{ data.rachaActual }}</h2>
+        <svg lucidePartyPopper class="icono-flama" *ngIf="data.rachaActual > 0"></svg>
+      </div>
+      <p class="metrica-cambio-suave">días seguidos</p>
+    </article>
+  </div>
+
+  <!-- Grid Gráficos y Asistencia -->
+  <div class="grid-graficos">
+    <!-- Panel Izquierdo: Entrenos por semana -->
+    <section class="tarjeta-grafico">
+      <h3>Entrenos por semana – {{ obtenerNombreMesSeleccionado() }}</h3>
+      
+      <div class="grafico-barras">
+        <div *ngFor="let cant of data.semanas; let i = index" class="columna-barra-contenedor">
+          <div class="barra-valor">{{ cant }}</div>
+          <div class="barra-columna-envoltorio">
+            <div class="barra-columna-relleno" [style.height]="obtenerAlturaBarra(cant)" [class.tiene-valor]="cant > 0"></div>
+          </div>
+          <div class="barra-etiqueta">S{{ i + 1 }}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel Derecho: Racha de asistencia (Github contributions style) -->
+    <section class="tarjeta-grafico">
+      <h3>Racha de asistencia – {{ obtenerNombreMesSeleccionado() }}</h3>
+
+      <div class="calendario-contribucion-contenedor">
+        <div class="calendario-contribucion-grid">
+          <div *ngFor="let dia of data.calendario" 
+               class="celda-dia" 
+               [class.entrenado]="dia.entreno" 
+               [class.hoy]="dia.esHoy" 
+               [title]="'Día ' + dia.dia + ': ' + (dia.entreno ? 'Entrenado' : 'Descanso')">
+          </div>
+        </div>
+      </div>
+
+      <!-- Leyenda de colores -->
+      <footer class="leyenda-calendario">
+        <div class="leyenda-item">
+          <span class="leyenda-color entreno"></span>
+          <span>Entrené</span>
+        </div>
+        <div class="leyenda-item">
+          <span class="leyenda-color hoy"></span>
+          <span>Hoy</span>
+        </div>
+        <div class="leyenda-item">
+          <span class="leyenda-color descanso"></span>
+          <span>Descanso</span>
+        </div>
+      </footer>
+    </section>
+  </div>
+</ng-container>
