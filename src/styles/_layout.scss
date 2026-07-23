@@ -566,9 +566,6 @@
   @include responds-to(desktop-sm) {
     grid-template-columns: repeat(2, 1fr);
   }
-  @include responds-to(movil) {
-    grid-template-columns: 1fr;
-  }
 }
 
 .tarjeta-metrica {
@@ -589,7 +586,7 @@
   }
 
   .metrica-valor {
-    font-size: 2.8rem;
+    font-size: 2.4rem;
     font-weight: 700;
     color: var(--texto);
     margin: 0 0 0.5rem 0;

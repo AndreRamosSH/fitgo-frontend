@@ -1,57 +1,159 @@
 <div class="container-metricas">
-    <div class="seccion-bienvenida">
-        <h1>Calculadora de IMC y Control de Métricas</h1>
-        <p>Mantén el registro de tus medidas corporales para evaluar tu evolución física.</p>
+  <!-- Cabecera de la sección -->
+  <header class="cabecera-seccion-metricas">
+    <div class="titulos-cabecera">
+      <h1 class="titulo-pagina">Métricas físicas</h1>
+      <p class="subtitulo-pagina">Evolución de tu cuerpo desde que empezaste</p>
     </div>
-    <div *ngIf="mensaje" class="alerta-exito">
-        {{ mensaje }}
-    </div>
+    <button class="btn-registrar-hoy" (click)="abrirModalRegistro()">
+      <span class="plus-icon">+</span> Registrar hoy
+    </button>
+  </header>
 
-    <div class="grid-layout">
-        <div class="tarjeta-formulario">
-            <h3>Actualizar Medidas</h3>
+  <div *ngIf="mensaje" class="alerta-exito">
+    {{ mensaje }}
+  </div>
 
-            <div class="grupo-campo">
-                <label for="peso">Peso Actual (kg):</label>
-                <input type="number" id="peso" [(ngModel)]="peso" (input)="calcularIMC()" placeholder="Ej: 74.5"
-                    step="0.1">
-            </div>
+  <!-- Grilla de KPIs principales (Usa estilos globales de _layout.scss) -->
+  <section class="grid-metricas">
+    <article class="tarjeta-metrica">
+      <p class="metrica-titulo">Peso actual</p>
+      <p class="metrica-valor">{{ peso | number:'1.1-1' }} kg</p>
+      <p class="metrica-cambio" [ngClass]="pesoCambioClase">
+        <span class="flecha" *ngIf="pesoCambioClase === 'positivo'">▼</span>
+        <span class="flecha" *ngIf="pesoCambioClase === 'negativo'">▲</span>
+        {{ pesoCambioStr }}
+      </p>
+    </article>
 
-            <div class="grupo-campo">
-                <label for="altura">Altura (cm):</label>
-                <input type="number" id="altura" [(ngModel)]="altura" (input)="calcularIMC()" placeholder="Ej: 175">
-            </div>
+    <article class="tarjeta-metrica">
+      <p class="metrica-titulo">IMC</p>
+      <p class="metrica-valor">{{ imc | number:'1.1-1' }}</p>
+      <p class="metrica-cambio neutral">
+        {{ estadoImc }} <span class="check-icon">✓</span>
+      </p>
+    </article>
 
-            <button class="btn-primary" (click)="guardarMetricas()" [disabled]="peso <= 0 || altura <= 0">
-                Registrar Progreso
-            </button>
+    <article class="tarjeta-metrica">
+      <p class="metrica-titulo">Masa muscular</p>
+      <p class="metrica-valor">{{ masaMuscular | number:'1.1-1' }}%</p>
+      <p class="metrica-cambio positivo">
+        ▲ {{ masaCambioStr }}
+      </p>
+    </article>
+
+    <article class="tarjeta-metrica">
+      <p class="metrica-titulo">Grasa corporal</p>
+      <p class="metrica-valor">{{ grasaCorporal | number:'1.1-1' }}%</p>
+      <p class="metrica-cambio" [ngClass]="grasaCambioClase">
+        <span class="flecha" *ngIf="grasaCambioClase === 'positivo'">▼</span>
+        <span class="flecha" *ngIf="grasaCambioClase === 'negativo'">▲</span>
+        {{ grasaCambioStr }}
+      </p>
+    </article>
+  </section>
+
+  <!-- Panel secundario de Evolución y Metas (Usa grid-graficos y tarjeta-grafico globales) -->
+  <div class="grid-graficos">
+    <!-- Columna 1: Evolución de Peso -->
+    <article class="tarjeta-grafico">
+      <h3>Evolución de peso (kg)</h3>
+      <div class="grafico-barras" *ngIf="historialPesos.length > 0">
+        <div class="columna-barra-contenedor" *ngFor="let reg of historialPesos">
+          <span class="barra-valor">{{ reg.peso | number:'1.1-1' }}</span>
+          <div class="barra-columna-envoltorio">
+            <div class="barra-columna-relleno tiene-valor" [style.height.%]="(reg.peso / pesoMaximo) * 100"></div>
+          </div>
+          <span class="barra-etiqueta">{{ reg.mes }}</span>
+        </div>
+      </div>
+      <div class="texto-vacio-grafico" *ngIf="historialPesos.length === 0">
+        No hay suficientes registros para mostrar el gráfico.
+      </div>
+    </article>
+
+    <!-- Columna 2: Metas Personales -->
+    <article class="tarjeta-grafico card-metas-personales">
+      <div class="cabecera-metas">
+        <h3>Metas Personales</h3>
+        <button class="btn-editar-metas" (click)="editandoMetas = !editandoMetas">
+          {{ editandoMetas ? 'Cancelar' : 'Editar' }}
+        </button>
+      </div>
+
+      <!-- Vista de lectura -->
+      <div class="contenedor-metas-progreso" *ngIf="!editandoMetas">
+        <div class="meta-item">
+          <div class="meta-info">
+            <span class="meta-label">Peso Objetivo</span>
+            <span class="meta-valores">
+              <strong>{{ peso | number:'1.1-1' }} kg</strong> / Meta: {{ pesoObjetivo | number:'1.1-1' }} kg
+            </span>
+          </div>
+          <div class="barra-meta-contenedor">
+            <div class="barra-meta-llenado peso-color" [style.width.%]="progresoPesoMeta"></div>
+          </div>
+          <span class="meta-porcentaje">{{ progresoPesoMeta }}% completado</span>
         </div>
 
-        <div class="tarjeta-resultado" [ngClass]="{
-      'bajo': estadoImc === 'Bajo peso',
-      'normal': estadoImc === 'Normal / Saludable',
-      'sobrepeso': estadoImc === 'Sobrepeso',
-      'obesidad': estadoImc === 'Obesidad'
-    }">
-            <h3>Tu Estado Actual</h3>
-
-            <div class="visualizador-imc">
-                <span class="numero-imc">{{ imc | number:'1.1-1' }}</span>
-                <span class="etiqueta-imc">Puntaje IMC</span>
-            </div>
-
-            <div class="clasificacion">
-                <p>Condición: <strong>{{ estadoImc }}</strong></p>
-            </div>
-
-            <div class="guia-escala">
-                <div class="rango">
-                    < 18.5 <span>Bajo</span>
-                </div>
-                <div class="rango">18.5 - 24.9 <span>Normal</span></div>
-                <div class="rango">25 - 29.9 <span>Sobre</span></div>
-                <div class="rango">30+ <span>Obesidad</span></div>
-            </div>
+        <div class="meta-item">
+          <div class="meta-info">
+            <span class="meta-label">Grasa Corporal Objetivo</span>
+            <span class="meta-valores">
+              <strong>{{ grasaCorporal | number:'1.1-1' }}%</strong> / Meta: {{ grasaObjetivo | number:'1.1-1' }}%
+            </span>
+          </div>
+          <div class="barra-meta-contenedor">
+            <div class="barra-meta-llenado grasa-color" [style.width.%]="progresoGrasaMeta"></div>
+          </div>
+          <span class="meta-porcentaje">{{ progresoGrasaMeta }}% completado</span>
         </div>
+
+        <p class="fecha-actualizacion" *ngIf="fechaRegistro">
+          Último registro: {{ fechaRegistro | date:'dd \'de\' MMMM \'de\' yyyy':'UTC' }}
+        </p>
+      </div>
+
+      <!-- Vista de edición -->
+      <div class="formulario-metas" *ngIf="editandoMetas">
+        <div class="grupo-campo">
+          <label for="pesoObjetivo">Peso Objetivo (kg)</label>
+          <input type="number" id="pesoObjetivo" [(ngModel)]="formPesoObjetivo" step="0.1">
+        </div>
+
+        <div class="grupo-campo">
+          <label for="grasaObjetivo">Grasa Corporal Objetivo (%)</label>
+          <input type="number" id="grasaObjetivo" [(ngModel)]="formGrasaObjetivo" step="0.1">
+        </div>
+
+        <button class="btn-primary" (click)="guardarMetas()">
+          Guardar metas
+        </button>
+      </div>
+    </article>
+  </div>
+</div>
+
+<!-- Modal emergente para registrar hoy -->
+<div class="modal-overlay" *ngIf="mostrarModalRegistro">
+  <div class="modal-tarjeta modal-registro-rapido">
+    <div class="modal-cabecera">
+      <h3>Registrar Medidas</h3>
+      <button class="btn-cerrar-modal" (click)="mostrarModalRegistro = false">×</button>
     </div>
+    <div class="modal-cuerpo">
+      <div class="grupo-campo">
+        <label for="regPeso">Peso (kg)</label>
+        <input type="number" id="regPeso" [(ngModel)]="formPeso" placeholder="Ej: 72.5" min="10" max="500" step="0.1">
+      </div>
+
+      <div class="grupo-campo">
+        <label for="regAltura">Talla (cm)</label>
+        <input type="number" id="regAltura" [(ngModel)]="formAltura" placeholder="Ej: 176" min="50" max="300">
+      </div>
+    </div>
+    <div class="modal-pie">
+      <button class="btn-modal-aplicar" (click)="guardarMetricas()">Registrar Progreso</button>
+    </div>
+  </div>
 </div>
