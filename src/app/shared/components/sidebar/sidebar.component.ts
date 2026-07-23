@@ -64,9 +64,7 @@ export class SidebarComponent implements OnInit {
           items: [
             { label: 'Inicio', route: '/entrenador/resumen' },
             { label: 'Mis Miembros', route: '/entrenador/miembros' },
-            { label: 'Gestión Rutinas', route: '/entrenador/rutinas' },
-            { label: 'Asistencia', route: '/entrenador/asistencia' },
-            { label: 'Horario', route: '/entrenador/horario' }
+            { label: 'Gestión Rutinas', route: '/entrenador/rutinas' }
           ]
         },
         {
@@ -85,7 +83,7 @@ export class SidebarComponent implements OnInit {
             { label: 'Mis Rutinas', route: '/miembro/rutinas'},
             { label: 'Mis Metricas', route: '/miembro/metricas'},
             { label: 'Progreso', route: '/miembro/progreso' },
-            { label: 'Mi Membresía', route: '/miembro/membresia' },
+            { label: 'Historial', route: '/miembro/historial' },
             { label: 'Coaches', route: '/miembro/entrenadores' }
           ]
         },

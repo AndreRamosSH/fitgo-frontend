@@ -43,6 +43,16 @@
   color: var(--texto);
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(0.85);
+  transition: filter 0.2s ease;
+
+  &:hover {
+    filter: invert(1);
+  }
+}
+
 .grupo-campo input:focus,
 .grupo-campo select:focus,
 .grupo-campo textarea:focus,
