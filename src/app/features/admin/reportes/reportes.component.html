@@ -57,28 +57,28 @@
       </div>
     </div>
 
-    <div class="rejilla-tarjetas" *ngIf="asistenciaReport">
-      <div class="tarjeta tarjeta--sin-hover">
-        <p class="tarjeta-titulo">Total ingresos</p>
-        <p class="tarjeta-valor tarjeta-valor--acento">{{ asistenciaReport.totalIngresos }}</p>
-        <p class="tarjeta-etiqueta">Este mes</p>
-      </div>
-      <div class="tarjeta tarjeta--sin-hover">
-        <p class="tarjeta-titulo">Promedio diario</p>
-        <p class="tarjeta-valor">{{ asistenciaReport.promedioDiario }}</p>
-        <p class="tarjeta-etiqueta">Personas por día</p>
-      </div>
-      <div class="tarjeta tarjeta--sin-hover">
-        <p class="tarjeta-titulo">Día más concurrido</p>
-        <p class="tarjeta-valor">{{ asistenciaReport.diaMasConcurrido }}</p>
-        <p class="tarjeta-etiqueta">Pico de asistencia</p>
-      </div>
-      <div class="tarjeta tarjeta--sin-hover">
-        <p class="tarjeta-titulo">Miembros ausentes</p>
-        <p class="tarjeta-valor tarjeta-valor--acento">{{ asistenciaReport.miembrosAusentes }}</p>
-        <p class="tarjeta-etiqueta">Sin asistir este mes</p>
-      </div>
-    </div>
+    <section class="grid-metricas" *ngIf="asistenciaReport">
+      <article class="tarjeta-metrica">
+        <p class="metrica-titulo">Total ingresos</p>
+        <p class="metrica-valor">{{ asistenciaReport.totalIngresos }}</p>
+        <p class="metrica-cambio-suave">Este mes</p>
+      </article>
+      <article class="tarjeta-metrica">
+        <p class="metrica-titulo">Promedio diario</p>
+        <p class="metrica-valor">{{ asistenciaReport.promedioDiario }}</p>
+        <p class="metrica-cambio-suave">Personas por día</p>
+      </article>
+      <article class="tarjeta-metrica">
+        <p class="metrica-titulo">Día más concurrido</p>
+        <p class="metrica-valor">{{ asistenciaReport.diaMasConcurrido }}</p>
+        <p class="metrica-cambio-suave">Pico de asistencia</p>
+      </article>
+      <article class="tarjeta-metrica">
+        <p class="metrica-titulo">Miembros ausentes</p>
+        <p class="metrica-valor naranja">{{ asistenciaReport.miembrosAusentes }}</p>
+        <p class="metrica-cambio-suave">Sin asistir este mes</p>
+      </article>
+    </section>
 
     <div class="rejilla-graficos" *ngIf="asistenciaReport">
       <div class="grafico-card">
@@ -113,28 +113,28 @@
 
 
   <div class="tab-content" *ngIf="activeTab === 'membresias'">
-    <div class="rejilla-tarjetas" *ngIf="membresiaReport">
-      <div class="tarjeta tarjeta--sin-hover">
-        <p class="tarjeta-titulo">Activas</p>
-        <p class="tarjeta-valor tarjeta-valor--acento">{{ membresiaReport.activas }}</p>
-        <p class="tarjeta-etiqueta">Con membresía vigente</p>
-      </div>
-      <div class="tarjeta tarjeta--sin-hover">
-        <p class="tarjeta-titulo">Por vencer (7 días)</p>
-        <p class="tarjeta-valor">{{ membresiaReport.porVencer }}</p>
-        <p class="tarjeta-etiqueta">Requieren renovación</p>
-      </div>
-      <div class="tarjeta tarjeta--sin-hover">
-        <p class="tarjeta-titulo">Vencidas</p>
-        <p class="tarjeta-valor">{{ membresiaReport.vencidas }}</p>
-        <p class="tarjeta-etiqueta">Sin renovar</p>
-      </div>
-      <div class="tarjeta tarjeta--sin-hover">
-        <p class="tarjeta-titulo">Plan más popular</p>
-        <p class="tarjeta-valor">{{ membresiaReport.planMasPopular }}</p>
-        <p class="tarjeta-etiqueta">Plan popular</p>
-      </div>
-    </div>
+    <section class="grid-metricas" *ngIf="membresiaReport">
+      <article class="tarjeta-metrica">
+        <p class="metrica-titulo">Activas</p>
+        <p class="metrica-valor verde">{{ membresiaReport.activas }}</p>
+        <p class="metrica-cambio-suave">Con membresía vigente</p>
+      </article>
+      <article class="tarjeta-metrica">
+        <p class="metrica-titulo">Por vencer (7 días)</p>
+        <p class="metrica-valor naranja">{{ membresiaReport.porVencer }}</p>
+        <p class="metrica-cambio-suave">Requieren renovación</p>
+      </article>
+      <article class="tarjeta-metrica">
+        <p class="metrica-titulo">Vencidas</p>
+        <p class="metrica-valor rojo">{{ membresiaReport.vencidas }}</p>
+        <p class="metrica-cambio-suave">Sin renovar</p>
+      </article>
+      <article class="tarjeta-metrica">
+        <p class="metrica-titulo">Plan más popular</p>
+        <p class="metrica-valor">{{ membresiaReport.planMasPopular }}</p>
+        <p class="metrica-cambio-suave">Plan popular</p>
+      </article>
+    </section>
 
     <div class="rejilla-graficos" *ngIf="membresiaReport">
       <div class="grafico-card">
@@ -180,28 +180,28 @@
 
 
   <div class="tab-content" *ngIf="activeTab === 'entrenadores'">
-    <div class="rejilla-tarjetas" *ngIf="entrenadorReport">
-      <div class="tarjeta tarjeta--sin-hover">
-        <p class="tarjeta-titulo">Total entrenadores</p>
-        <p class="tarjeta-valor tarjeta-valor--acento">{{ entrenadorReport.totalEntrenadores }}</p>
-        <p class="tarjeta-etiqueta">Activos</p>
-      </div>
-      <div class="tarjeta tarjeta--sin-hover">
-        <p class="tarjeta-titulo">Total rutinas creadas</p>
-        <p class="tarjeta-valor">{{ entrenadorReport.totalRutinasCreadas }}</p>
-        <p class="tarjeta-etiqueta">Entre todos</p>
-      </div>
-      <div class="tarjeta tarjeta--sin-hover">
-        <p class="tarjeta-titulo">Más miembros</p>
-        <p class="tarjeta-valor">{{ entrenadorReport.masMiembros }}</p>
-        <p class="tarjeta-etiqueta">Con mayor carga</p>
-      </div>
-      <div class="tarjeta tarjeta--sin-hover">
-        <p class="tarjeta-titulo">Promedio alumnos</p>
-        <p class="tarjeta-valor">{{ entrenadorReport.promedioAlumnos }}</p>
-        <p class="tarjeta-etiqueta">Por entrenador</p>
-      </div>
-    </div>
+    <section class="grid-metricas" *ngIf="entrenadorReport">
+      <article class="tarjeta-metrica">
+        <p class="metrica-titulo">Total entrenadores</p>
+        <p class="metrica-valor">{{ entrenadorReport.totalEntrenadores }}</p>
+        <p class="metrica-cambio-suave">Activos</p>
+      </article>
+      <article class="tarjeta-metrica">
+        <p class="metrica-titulo">Total rutinas creadas</p>
+        <p class="metrica-valor">{{ entrenadorReport.totalRutinasCreadas }}</p>
+        <p class="metrica-cambio-suave">Entre todos</p>
+      </article>
+      <article class="tarjeta-metrica">
+        <p class="metrica-titulo">Más miembros</p>
+        <p class="metrica-valor">{{ entrenadorReport.masMiembros }}</p>
+        <p class="metrica-cambio-suave">Con mayor carga</p>
+      </article>
+      <article class="tarjeta-metrica">
+        <p class="metrica-titulo">Promedio alumnos</p>
+        <p class="metrica-valor">{{ entrenadorReport.promedioAlumnos }}</p>
+        <p class="metrica-cambio-suave">Por entrenador</p>
+      </article>
+    </section>
 
     <div class="grafico-card full-width" *ngIf="entrenadorReport">
       <h4 class="grafico-titulo">Comparativa de entrenadores</h4>

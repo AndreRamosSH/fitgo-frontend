@@ -5,14 +5,16 @@
 
 <section class="seccion">
   <h2 class="titulo-seccion">Detalles de la Membresía</h2>
-  <div class="tarjeta">
-    <p class="tarjeta-titulo">Plan Actual</p>
-    <p class="tarjeta-valor tarjeta-valor--acento">
-      {{ nombrePlan }}
-    </p>
-    <p class="tarjeta-etiqueta">
-      <span *ngIf="tieneFechaFin">{{ detalleSuscripcion }}{{ fechaFin | date:'dd MMM yyyy' }}</span>
-      <span *ngIf="!tieneFechaFin">{{ detalleSuscripcion }}</span>
-    </p>
+  <div class="grid-metricas">
+    <article class="tarjeta-metrica">
+      <p class="metrica-titulo">Plan Actual</p>
+      <p class="metrica-valor">
+        {{ nombrePlan }}
+      </p>
+      <p class="metrica-cambio-suave">
+        <span *ngIf="tieneFechaFin">{{ detalleSuscripcion }}{{ fechaFin | date:'dd MMM yyyy' }}</span>
+        <span *ngIf="!tieneFechaFin">{{ detalleSuscripcion }}</span>
+      </p>
+    </article>
   </div>
 </section>

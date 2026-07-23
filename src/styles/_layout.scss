@@ -292,12 +292,7 @@
   margin-bottom: 1.5rem;
 }
 
-.rejilla-tarjetas {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-}
+
 
 .tarjeta {
   background-color: var(--fondo-tarjeta);
@@ -305,31 +300,9 @@
   border-radius: var(--radio);
   padding: 1.5rem;
   box-shadow: var(--sombra);
-
-  &:hover {
-    border-color: var(--acento);
-  }
 }
 
-.tarjeta-titulo {
-  color: var(--texto-suave);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.5rem;
-}
 
-.tarjeta-valor {
-  font-family: var(--fuente-titulo), sans-serif;
-  font-size: 2.2rem;
-  font-weight: 700;
-}
-
-.tarjeta-etiqueta {
-  color: var(--texto-suave);
-  font-size: 0.8rem;
-  margin-top: 0.5rem;
-}
 
 .tarjeta-formulario {
   background-color: var(--fondo-tarjeta);
@@ -464,9 +437,7 @@
   }
 }
 
-.tarjeta-valor--acento {
-  color: var(--acento);
-}
+
 
 .dropdown-buscador {
   position: relative;

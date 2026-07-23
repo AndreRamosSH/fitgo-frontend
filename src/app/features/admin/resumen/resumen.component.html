@@ -3,29 +3,29 @@
   <p>Monitoreo general de la comunidad, planes, asistencia y entrenadores.</p>
 </section>
 
-<section class="rejilla-tarjetas">
-  <article class="tarjeta">
-    <p class="tarjeta-titulo">Miembros Activos</p>
-    <p class="tarjeta-valor">{{ miembrosActivos }}</p>
-    <p class="tarjeta-etiqueta">Con plan vigente</p>
+<section class="grid-metricas">
+  <article class="tarjeta-metrica">
+    <p class="metrica-titulo">Miembros Activos</p>
+    <p class="metrica-valor">{{ miembrosActivos }}</p>
+    <p class="metrica-cambio-suave">Con plan vigente</p>
   </article>
 
-  <article class="tarjeta">
-    <p class="tarjeta-titulo">Entrenadores</p>
-    <p class="tarjeta-valor">{{ totalEntrenadores }}</p>
-    <p class="tarjeta-etiqueta">Staff registrado</p>
+  <article class="tarjeta-metrica">
+    <p class="metrica-titulo">Entrenadores</p>
+    <p class="metrica-valor">{{ totalEntrenadores }}</p>
+    <p class="metrica-cambio-suave">Staff registrado</p>
   </article>
 
-  <article class="tarjeta">
-    <p class="tarjeta-titulo">Próximos a Vencer</p>
-    <p class="tarjeta-valor">{{ membresiasPorVencer }}</p>
-    <p class="tarjeta-etiqueta">Membresías expiran en 3 días o menos</p>
+  <article class="tarjeta-metrica">
+    <p class="metrica-titulo">Próximos a Vencer</p>
+    <p class="metrica-valor naranja">{{ membresiasPorVencer }}</p>
+    <p class="metrica-cambio-suave">Membresías expiran en 3 días o menos</p>
   </article>
 
-  <article class="tarjeta">
-    <p class="tarjeta-titulo">Asistencias Hoy</p>
-    <p class="tarjeta-valor">{{ asistenciasHoy }}</p>
-    <p class="tarjeta-etiqueta">Ingresos hoy</p>
+  <article class="tarjeta-metrica">
+    <p class="metrica-titulo">Asistencias Hoy</p>
+    <p class="metrica-valor">{{ asistenciasHoy }}</p>
+    <p class="metrica-cambio-suave">Ingresos hoy</p>
   </article>
 </section>
 
