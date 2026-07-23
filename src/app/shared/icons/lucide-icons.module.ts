@@ -18,7 +18,10 @@ import {
   LucideTrendingUp,
   LucidePartyPopper,
   LucideCheck,
-  LucideUndo2
+  LucideUndo2,
+  LucideEye,
+  LucideEyeOff,
+  LucideTimer
 } from '@lucide/angular';
 
 const ICONS = [
@@ -40,7 +43,10 @@ const ICONS = [
   LucideTrendingUp,
   LucidePartyPopper,
   LucideCheck,
-  LucideUndo2
+  LucideUndo2,
+  LucideEye,
+  LucideEyeOff,
+  LucideTimer
 ];
 
 @NgModule({

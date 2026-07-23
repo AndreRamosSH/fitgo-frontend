@@ -6,6 +6,7 @@ export interface ConfirmConfig {
   mensaje: string;
   textoConfirmar?: string;
   textoCancelar?: string;
+  ocultarCancelar?: boolean;
 }
 
 @Injectable({

@@ -1,29 +1,208 @@
-<section class="seccion-bienvenida">
-  <h1>Mis Miembros Asignados</h1>
-  <p>Lista de miembros a tu cargo. Total: {{ totalMiembros }}</p>
-</section>
+<div class="contenedor-entrenador-miembros">
 
-<section class="seccion">
-  <table class="tabla-usuarios">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Correo</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (m of miembros; track m.id) {
-        <tr>
-          <td class="columna-nombre">{{ m.nombre }}</td>
-          <td>{{ m.apellido }}</td>
-          <td>{{ m.correo }}</td>
-        </tr>
-      } @empty {
-        <tr>
-          <td colspan="3" class="texto-vacio">No tienes miembros asignados todavía.</td>
-        </tr>
-      }
-    </tbody>
-  </table>
-</section>
+  <!-- VISTA 1: LISTA DE MIEMBROS -->
+  <ng-container *ngIf="vista === 'LISTA'">
+    <!-- Cabecera de la sección -->
+    <div class="seccion-bienvenida">
+      <div class="bienvenida-texto">
+        <h1>Mis Miembros</h1>
+        <p>Lista de miembros asignados bajo tu supervisión</p>
+      </div>
+
+      <div class="busqueda-flotante">
+        <input type="text" [(ngModel)]="busqueda" (input)="filtrarMiembros()" placeholder="Buscar por nombre o correo...">
+      </div>
+    </div>
+
+    <!-- Grid de Tarjetas de Miembros -->
+    <section class="grid-tarjetas-miembros">
+      <article *ngFor="let m of miembrosFiltrados" class="tarjeta card-miembro-item" (click)="verDetalleMiembro(m.id)">
+        <div class="card-miembro-header">
+          <div class="avatar-iniciales">{{ m.initials }}</div>
+          <div class="info-nombre-correo">
+            <h3 class="nombre-miembro">{{ m.nombre }} {{ m.apellido }}</h3>
+            <span class="correo-miembro">{{ m.correo }}</span>
+          </div>
+          <span class="tag-status" [ngClass]="m.estadoMembresia.toLowerCase()">
+            {{ m.estadoMembresia === 'POR_VENCER' ? 'Por vencer' : (m.estadoMembresia === 'VENCIDA' ? 'Vencida' : 'Activo') }}
+          </span>
+        </div>
+
+        <div class="linea-divisora"></div>
+
+        <div class="grilla-detalles-miembro">
+          <div class="campo-detalle">
+            <span class="label-detalle">Membresía</span>
+            <span class="valor-detalle" [class.por-vencer]="m.estadoMembresia === 'POR_VENCER'">{{ m.membresiaTexto }}</span>
+          </div>
+
+          <div class="campo-detalle">
+            <span class="label-detalle">Rutina asignada</span>
+            <span class="valor-detalle" [class.destacado-naranja]="m.rutinaAsignada !== 'Sin asignar'">{{ m.rutinaAsignada }}</span>
+          </div>
+
+          <div class="campo-detalle">
+            <span class="label-detalle">Asist. este mes</span>
+            <span class="valor-detalle valor-grande">{{ m.asistenciasEsteMes }} días</span>
+          </div>
+
+          <div class="campo-detalle">
+            <span class="label-detalle">Último peso</span>
+            <span class="valor-detalle valor-grande">{{ m.ultimoPeso }} kg</span>
+          </div>
+        </div>
+      </article>
+
+      <div *ngIf="miembrosFiltrados.length === 0" class="contenedor-vacio-tarjetas">
+        <p>No se encontraron miembros asignados que coincidan con la búsqueda.</p>
+      </div>
+    </section>
+  </ng-container>
+
+  <!-- VISTA 2: DETALLE DE MIEMBRO -->
+  <ng-container *ngIf="vista === 'DETALLE'">
+    <!-- Cabecera de la sección de detalle -->
+    <header class="cabecera-seccion-rutinas">
+      <div class="titulos-cabecera">
+        <h1 class="titulo-pagina">Detalle del Miembro</h1>
+        <p class="subtitulo-pagina">Consulta su actividad, métricas físicas y registro de asistencia</p>
+      </div>
+      <button type="button" class="btn-volver" (click)="volverALista()">
+        <svg lucideChevronLeft class="icono-volver"></svg> Volver
+      </button>
+    </header>
+
+    <div *ngIf="cargandoDetalle" class="cargando-contenedor">
+      <p>Cargando información del miembro...</p>
+    </div>
+
+    <div *ngIf="!cargandoDetalle && detalleMiembro" class="contenido-detalle-miembro">
+      <!-- Encabezado Perfil del Miembro -->
+      <header class="perfil-miembro-header">
+        <div class="avatar-gran-circulo">{{ detalleMiembro.initials }}</div>
+        <div class="info-principal-perfil">
+          <h1 class="nombre-completo">{{ detalleMiembro.nombre }} {{ detalleMiembro.apellido }}</h1>
+          <p class="correo-subtexto">{{ detalleMiembro.correo }}</p>
+          <div class="tags-perfil">
+            <span class="tag-status" [ngClass]="detalleMiembro.estadoMembresia.toLowerCase()">
+              {{ detalleMiembro.estadoMembresia === 'POR_VENCER' ? 'Por vencer' : (detalleMiembro.estadoMembresia === 'VENCIDA' ? 'Vencida' : 'Activo') }}
+            </span>
+            <span class="tag-plan-subtle">{{ detalleMiembro.planNombre }} · {{ detalleMiembro.venceTexto }}</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Tarjetas KPI Superior (3 Tarjetas) -->
+      <section class="grid-metricas">
+        <article class="tarjeta-metrica">
+          <p class="metrica-titulo">Asist. este mes</p>
+          <p class="metrica-valor">{{ detalleMiembro.asistenciasEsteMes }}</p>
+          <p class="metrica-cambio-suave">días asistidos</p>
+        </article>
+
+        <article class="tarjeta-metrica">
+          <p class="metrica-titulo">Peso actual</p>
+          <p class="metrica-valor">{{ detalleMiembro.pesoActual }} kg</p>
+          <p class="metrica-cambio-suave" [class.mejora]="detalleMiembro.cambioPeso <= 0">
+            {{ detalleMiembro.cambioPeso <= 0 ? '↓ ' + (-detalleMiembro.cambioPeso) + ' kg perdidos' : '↑ ' + detalleMiembro.cambioPeso + ' kg ganados' }}
+          </p>
+        </article>
+
+        <article class="tarjeta-metrica">
+          <p class="metrica-titulo">IMC</p>
+          <p class="metrica-valor">{{ detalleMiembro.imcActual }}</p>
+          <p class="metrica-cambio-suave">Peso {{ detalleMiembro.imcClasificacion.toLowerCase() }}</p>
+        </article>
+      </section>
+
+      <!-- Grilla Principal 2 Columnas -->
+      <div class="grid-detalle-dos-columnas">
+        <!-- Columna Izquierda: Asistencia y Métricas Físicas -->
+        <div class="columna-izquierda-asistencia">
+          <!-- Asistencia del Mes -->
+          <article class="tarjeta-grafico">
+            <h3>Asistencia — Mes Actual</h3>
+            <div class="calendario-contribucion-contenedor">
+              <div class="calendario-contribucion-grid">
+                <div *ngFor="let d of detalleMiembro.calendarioAsistencia"
+                     class="celda-dia"
+                     [class.entrenado]="d.asistio"
+                     [title]="'Día ' + d.dia + ': ' + (d.asistio ? 'Asistió' : 'Sin asistir')">
+                </div>
+              </div>
+            </div>
+            <!-- Leyenda de colores -->
+            <footer class="leyenda-calendario">
+              <div class="leyenda-item">
+                <span class="leyenda-color entreno"></span>
+                <span>Asistió</span>
+              </div>
+              <div class="leyenda-item">
+                <span class="leyenda-color descanso"></span>
+                <span>Sin asistir</span>
+              </div>
+            </footer>
+          </article>
+
+          <!-- Métricas físicas -->
+          <article class="tarjeta-grafico">
+            <h3>Métricas físicas</h3>
+            <div class="card-cuerpo">
+              <div class="fila-metrica-detalle">
+                <span class="metrica-label">Peso</span>
+                <div class="metrica-valor-grupo">
+                  <span class="valor-grande">{{ detalleMiembro.metricasFisicas.peso }} kg</span>
+                  <span class="cambio-tag" [class.mejora]="detalleMiembro.metricasFisicas.cambioPeso <= 0">
+                    {{ detalleMiembro.metricasFisicas.cambioPeso <= 0 ? '↓ ' + (-detalleMiembro.metricasFisicas.cambioPeso) + ' kg' : '↑ ' + detalleMiembro.metricasFisicas.cambioPeso + ' kg' }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="fila-metrica-detalle">
+                <span class="metrica-label">Masa muscular</span>
+                <div class="metrica-valor-grupo">
+                  <span class="valor-grande">{{ detalleMiembro.metricasFisicas.masaMuscular }}%</span>
+                  <span class="cambio-tag mejora">↑ {{ detalleMiembro.metricasFisicas.cambioMasaMuscular }}%</span>
+                </div>
+              </div>
+
+              <div class="fila-metrica-detalle">
+                <span class="metrica-label">Grasa corporal</span>
+                <div class="metrica-valor-grupo">
+                  <span class="valor-grande">{{ detalleMiembro.metricasFisicas.grasaCorporal }}%</span>
+                  <span class="cambio-tag mejora">↓ {{ -detalleMiembro.metricasFisicas.cambioGrasaCorporal }}%</span>
+                </div>
+              </div>
+
+              <div class="fila-metrica-detalle">
+                <span class="metrica-label">IMC</span>
+                <div class="metrica-valor-grupo">
+                  <span class="valor-grande">{{ detalleMiembro.metricasFisicas.imc }}</span>
+                  <span class="subtexto-normal">{{ detalleMiembro.metricasFisicas.imcClasificacion }}</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Columna Derecha: Entrenos por semana -->
+        <div class="columna-derecha-metricas">
+          <!-- Entrenos por semana -->
+          <article class="tarjeta-grafico">
+            <h3>Entrenos por semana</h3>
+            <div class="grafico-barras">
+              <div *ngFor="let cant of detalleMiembro.entrenosPorSemana; let idx = index" class="columna-barra-contenedor">
+                <div class="barra-valor">{{ cant }}</div>
+                <div class="barra-columna-envoltorio">
+                  <div class="barra-columna-relleno" [style.height.%]="cant > 0 ? (cant * 20) : 5" [class.tiene-valor]="cant > 0"></div>
+                </div>
+                <div class="barra-etiqueta">S{{ idx + 1 }}</div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+</div>

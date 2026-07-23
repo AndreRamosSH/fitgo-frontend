@@ -3,7 +3,7 @@
     <h2 class="titulo-modal">{{ config.titulo }}</h2>
     <p class="mensaje-modal">{{ config.mensaje }}</p>
     <div class="acciones-modal">
-      <button class="btn-cancelar-modal" (click)="cancelar()">{{ config.textoCancelar }}</button>
+      <button class="btn-cancelar-modal" *ngIf="!config.ocultarCancelar" (click)="cancelar()">{{ config.textoCancelar }}</button>
       <button class="btn-confirmar-modal" (click)="aceptar()">{{ config.textoConfirmar }}</button>
     </div>
   </div>

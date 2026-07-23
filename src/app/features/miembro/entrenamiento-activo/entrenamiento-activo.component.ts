@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { EJERCICIOS_BASE, obtenerImagenEjercicio } from '../../../shared/data/ejercicios-base';
 import { SharedLucideIconsModule } from '../../../shared/icons/lucide-icons.module';
+import { RutinaService } from '../../../core/services/rutina.service';
 
 interface SerieEntreno {
   numero: number;
@@ -31,6 +32,7 @@ interface EjercicioEntreno {
 export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private confirmService = inject(ConfirmService);
+  private rutinaService = inject(RutinaService);
 
   rutinaActiva: any = null;
   get rutinaNombre(): string {
@@ -43,7 +45,30 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
   entrenoCompletado = false;
   datosEntreno: EjercicioEntreno[] = [];
 
+  // Propiedades para el control de descanso
+  mostrarDescanso = false;
+  tiempoDescansoRestante = 0;
+  descansoInterval: any = null;
+
   ngOnInit(): void {
+    const localSession = localStorage.getItem('active_workout_session');
+    if (localSession) {
+      try {
+        const parsed = JSON.parse(localSession);
+        this.rutinaActiva = parsed.rutinaActiva;
+        this.ejercicioActivoIndex = parsed.ejercicioActivoIndex;
+        this.serieActivaIndex = parsed.serieActivaIndex;
+        this.tiempoSegundos = parsed.tiempoSegundos;
+        this.datosEntreno = parsed.datosEntreno;
+
+        this.iniciarCronometro();
+        return;
+      } catch (e) {
+        console.error('Error al restaurar sesión activa:', e);
+        localStorage.removeItem('active_workout_session');
+      }
+    }
+
     const state = history.state;
     if (state && state.rutina) {
       this.rutinaActiva = state.rutina;
@@ -65,10 +90,12 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
     }
 
     this.iniciarCronometro();
+    this.guardarSesionLocal();
   }
 
   ngOnDestroy(): void {
     this.detenerCronometro();
+    this.detenerDescanso();
   }
 
   cargarDatosEntreno(rutina: any): void {
@@ -110,7 +137,21 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
     this.detenerCronometro();
     this.cronometroInterval = setInterval(() => {
       this.tiempoSegundos++;
+      if (this.tiempoSegundos % 5 === 0) {
+        this.guardarSesionLocal();
+      }
     }, 1000);
+  }
+
+  guardarSesionLocal(): void {
+    const sessionData = {
+      rutinaActiva: this.rutinaActiva,
+      ejercicioActivoIndex: this.ejercicioActivoIndex,
+      serieActivaIndex: this.serieActivaIndex,
+      tiempoSegundos: this.tiempoSegundos,
+      datosEntreno: this.datosEntreno
+    };
+    localStorage.setItem('active_workout_session', JSON.stringify(sessionData));
   }
 
   detenerCronometro(): void {
@@ -141,6 +182,9 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
     // Marcar la serie actual como completada
     series[this.serieActivaIndex].completada = true;
 
+    let finRutina = false;
+    const descansoSegundos = ejercicioActual.descanso || 60;
+
     // Verificar si quedan más series en este ejercicio
     if (this.serieActivaIndex < series.length - 1) {
       this.serieActivaIndex++;
@@ -154,10 +198,56 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
         this.serieActivaIndex = 0;
       } else {
         // Rutina completada
+        finRutina = true;
         this.detenerCronometro();
         this.entrenoCompletado = true;
+        this.registrarEntrenamientoFinal();
       }
     }
+
+    this.guardarSesionLocal();
+
+    if (!finRutina) {
+      this.iniciarDescanso(descansoSegundos);
+    }
+  }
+
+  // Métodos de control del descanso
+  iniciarDescanso(segundos: number): void {
+    this.detenerDescanso();
+    this.tiempoDescansoRestante = segundos;
+    this.mostrarDescanso = true;
+
+    this.descansoInterval = setInterval(() => {
+      if (this.tiempoDescansoRestante > 0) {
+        this.tiempoDescansoRestante--;
+      } else {
+        this.detenerDescanso();
+      }
+    }, 1000);
+  }
+
+  agregar15Segundos(): void {
+    this.tiempoDescansoRestante += 15;
+  }
+
+  omitirDescanso(): void {
+    this.detenerDescanso();
+  }
+
+  detenerDescanso(): void {
+    if (this.descansoInterval) {
+      clearInterval(this.descansoInterval);
+      this.descansoInterval = null;
+    }
+    this.mostrarDescanso = false;
+    this.tiempoDescansoRestante = 0;
+  }
+
+  getTiempoDescansoFormateado(): string {
+    const minutos = Math.floor(this.tiempoDescansoRestante / 60);
+    const segundos = this.tiempoDescansoRestante % 60;
+    return `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
   }
 
   retrocederSerie(): void {
@@ -179,6 +269,7 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
       this.serieActivaIndex = ejercicioAnterior.series.length - 1;
       ejercicioAnterior.series[this.serieActivaIndex].completada = false;
     }
+    this.guardarSesionLocal();
   }
 
   pararEntreno(): void {
@@ -190,7 +281,52 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
     }).subscribe(confirmado => {
       if (confirmado) {
         this.detenerCronometro();
+        localStorage.removeItem('active_workout_session');
         this.router.navigate(['/miembro/rutinas']);
+      }
+    });
+  }
+
+  registrarEntrenamientoFinal(): void {
+    const totalSeries = this.getSeriesTotales();
+    const ejerciciosCount = this.datosEntreno.length;
+    let volumenTotal = 0;
+
+    const detallesPayload: any[] = [];
+    this.datosEntreno.forEach(ej => {
+      const ejBase = EJERCICIOS_BASE.find(eb => eb.nombre === ej.nombre);
+      const ejercicioId = ejBase ? ejBase.id : 'custom';
+
+      ej.series.forEach(s => {
+        volumenTotal += s.reps * s.peso;
+        detallesPayload.push({
+          ejercicioId: ejercicioId,
+          ejercicioNombre: ej.nombre,
+          serieNumero: s.numero,
+          reps: s.reps,
+          peso: s.peso
+        });
+      });
+    });
+
+    const payload = {
+      rutinaId: this.rutinaActiva?.id || null,
+      rutinaNombre: this.rutinaNombre,
+      duracionSegundos: this.tiempoSegundos,
+      ejerciciosCompletados: ejerciciosCount,
+      totalSeriesCompletadas: totalSeries,
+      volumenTotalKg: volumenTotal,
+      detalles: detallesPayload
+    };
+
+    this.rutinaService.registrarEntrenamiento(payload).subscribe({
+      next: (res) => {
+        console.log('Entrenamiento registrado exitosamente:', res);
+        localStorage.removeItem('active_workout_session');
+      },
+      error: (err) => {
+        console.error('Error al registrar entrenamiento:', err);
+        localStorage.removeItem('active_workout_session');
       }
     });
   }

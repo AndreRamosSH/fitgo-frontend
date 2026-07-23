@@ -30,8 +30,9 @@ export class MiembroService {
     return this.http.get<ResumenMiembro>(`${this.apiUrl}/resumen`);
   }
 
-  getProgreso(): Observable<{ pesoActual: number | null }> {
-    return this.http.get<{ pesoActual: number | null }>(`${this.apiUrl}/progreso`);
+  getProgreso(mes?: string): Observable<any> {
+    const url = mes ? `${this.apiUrl}/progreso?mes=${mes}` : `${this.apiUrl}/progreso`;
+    return this.http.get<any>(url);
   }
 
   getMembresia(): Observable<{ membresia: Membresia | string }> {

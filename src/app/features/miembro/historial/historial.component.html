@@ -1,0 +1,125 @@
+<div class="seccion-bienvenida">
+  <div class="bienvenida-texto">
+    <h1>Historial de Entrenamientos</h1>
+    <p>Revisa tus rutinas completadas y el progreso de tus levantamientos</p>
+  </div>
+
+  <!-- Selector de Mes y Año con Controles de Navegación -->
+  <div class="navegacion-mes">
+    <button class="btn-nav-mes" (click)="navegarMes(-1)" [disabled]="cargando" aria-label="Mes anterior">
+      <svg lucideChevronLeft class="icono-nav"></svg>
+    </button>
+    <div class="select-envoltorio">
+      <select [ngModel]="mesSeleccionado" (ngModelChange)="cambiarMes($event)" [disabled]="cargando">
+        <option *ngFor="let opt of mesesDisponibles" [value]="opt.key">
+          {{ opt.label }}
+        </option>
+      </select>
+    </div>
+    <button class="btn-nav-mes" (click)="navegarMes(1)" [disabled]="cargando" aria-label="Mes siguiente">
+      <svg lucideChevronRight class="icono-nav"></svg>
+    </button>
+  </div>
+</div>
+
+<div *ngIf="cargando" class="cargando-contenedor">
+  <div class="spinner"></div>
+  <p>Cargando tu historial de entrenamientos...</p>
+</div>
+
+<div *ngIf="!cargando && mensajeError" class="alerta-error">
+  {{ mensajeError }}
+</div>
+
+<ng-container *ngIf="!cargando && !mensajeError">
+  <!-- Estado Vacío -->
+  <div class="tarjeta estado-vacio-panel" *ngIf="historialFiltrado.length === 0">
+    <div class="icono-vacio-contenedor">
+      <svg lucideDumbbell class="icono-vacio"></svg>
+    </div>
+    <h3>No hay entrenamientos en este mes</h3>
+    <p>Aún no has registrado sesiones de entrenamiento en el mes seleccionado.</p>
+  </div>
+
+  <!-- Tabla del Historial -->
+  <div class="tabla-responsive" *ngIf="historialFiltrado.length > 0">
+    <table class="tabla-usuarios tabla-historial">
+      <thead>
+        <tr>
+          <th>Rutina</th>
+          <th>Fecha</th>
+          <th>Duración</th>
+          <th>Volumen Total</th>
+          <th class="texto-derecha">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of historialPaginado">
+          <!-- Fila Principal -->
+          <tr class="fila-entrenamiento" [class.abierta]="item.expanded" (click)="toggleEntrenamiento(item)">
+            <td class="columna-nombre">
+              <div class="info-nombre-rutina">
+                <svg lucideClipboardList class="icono-rutina-tabla"></svg>
+                <span>{{ item.rutinaNombre }}</span>
+              </div>
+            </td>
+            <td>{{ item.fecha | date:'dd/MM/yyyy HH:mm':'UTC' }}</td>
+            <td>{{ formatearDuracion(item.duracionSegundos) }}</td>
+            <td>
+              <span class="volumen-destacado">{{ item.volumenTotalKg | number:'1.1-1' }} kg</span>
+            </td>
+            <td class="texto-derecha columna-acciones">
+              <button class="btn-toggle-detalles" [class.activo]="item.expanded" aria-label="Ver detalles">
+                <span class="texto-btn-accion">{{ item.expanded ? 'Ocultar' : 'Detalles' }}</span>
+                <svg lucideChevronDown class="icono-chevron-accion"></svg>
+              </button>
+            </td>
+          </tr>
+
+          <!-- Fila de Detalles Expandidos -->
+          <tr *ngIf="item.expanded" class="fila-detalles-desplegable">
+            <td colspan="5" class="celda-detalles-desplegable">
+              <div class="detalles-entrenamiento-contenedor">
+                <h4 class="titulo-desglose-ejercicios">Desglose del entrenamiento</h4>
+                
+                <div class="lista-ejercicios-desglose">
+                  <div class="tarjeta-ejercicio-desglose" *ngFor="let ej of item.ejerciciosGrouped">
+                    <div class="cabecera-ejercicio-desglose">
+                      <svg lucidePlayCircle class="icono-mini-ejercicio"></svg>
+                      <strong>{{ ej.nombre }}</strong>
+                    </div>
+                    
+                    <div class="contenedor-badges-series">
+                      <div class="badge-serie-item" *ngFor="let set of ej.series">
+                        <span class="num-serie">S{{ set.numero }}</span>
+                        <span class="valores-serie">{{ set.reps }} reps x {{ set.peso }} kg</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación Completa -->
+  <div class="paginacion-completa" *ngIf="historialFiltrado.length > itemsPorPagina">
+    <button class="btn-paginacion-nav" [disabled]="paginaActual === 1" (click)="paginaAnterior()">
+      Anterior
+    </button>
+    <div class="paginacion-numeros">
+      <button *ngFor="let p of paginas" 
+              class="btn-paginacion-num" 
+              [class.activo]="paginaActual === p" 
+              (click)="irAPagina(p)">
+        {{ p }}
+      </button>
+    </div>
+    <button class="btn-paginacion-nav" [disabled]="paginaActual === totalPaginas" (click)="paginaSiguiente()" aria-label="Página siguiente">
+      Siguiente
+    </button>
+  </div>
+</ng-container>

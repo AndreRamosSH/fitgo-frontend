@@ -1,98 +1,67 @@
-// Estilos propios del componente de Rutinas (Miembro)
-// Migrado desde _rutinas-compartidas.scss — ya NO va en el bundle global
-@use '../../../../styles/variables' as *;
-@use '../../../../styles/mixins' as *;
+@use 'variables' as *;
+@use 'mixins' as *;
 
-// Cabecera Premium
-.cabecera-seccion-rutinas {
+// --- ESTILOS COMUNES DE RUTINAS (COMPARTIDOS MIEMBRO / ENTRENADOR) ---
+
+.item-ejercicio, .item-agregado, .item-resultado {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 0.85rem;
+}
+
+.btn-go, .btn-asignar, .btn-guardar-rutina, .btn-modal-aplicar {
+  border: none;
+  border-radius: var(--radio);
+  cursor: pointer;
+}
+
+.ejercicio-imagen-contenedor, .resultado-imagen-contenedor {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  border: 1px solid var(--borde);
+  background: #000;
+  overflow: hidden;
+
+  .ejercicio-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.encabezado-tabla-apilado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
   margin-bottom: 2.5rem;
+}
 
-  @include responds-to(tablet) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.25rem;
+.btn-crear-rutina {
+  background: transparent;
+  color: var(--texto);
+  border: 1px solid var(--texto-suave);
+  padding: 0.5rem 1.25rem;
+  font-weight: 600;
+  border-radius: var(--radio);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  .btn-icon {
+    width: 16px;
+    height: 16px;
   }
 
-  .titulos-cabecera {
-    h1 {
-      font-family: var(--fuente-titulo), sans-serif;
-      font-size: 2.2rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--texto);
-      margin: 0 0 0.25rem 0;
-    }
-
-    p {
-      color: var(--texto-suave);
-      font-size: 0.95rem;
-      margin: 0;
-    }
-  }
-
-  .btn-crear-rutina-naranja {
-    background: var(--gradiente);
-    color: #fff;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    border-radius: var(--radio);
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-
-    .plus-icon {
-      font-size: 1.2rem;
-      line-height: 1;
-      font-weight: 600;
-    }
-
-    &:hover {
-      filter: brightness(1.1);
-      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
-      transform: translateY(-1px);
-    }
-  }
-
-  .btn-volver {
-    background: transparent;
-    color: var(--texto-suave);
-    border: 1px solid var(--borde);
-    padding: 0.75rem 1.5rem;
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    border-radius: var(--radio);
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-
-    .icono-volver {
-      width: 16px;
-      height: 16px;
-      stroke-width: 2.5;
-      transition: transform 0.2s ease;
-    }
-
-    &:hover {
-      border-color: var(--texto);
-      color: var(--texto);
-      background-color: rgba(255, 255, 255, 0.03);
-      
-      .icono-volver {
-        transform: translateX(-2px);
-      }
-    }
+  &:hover {
+    border-color: var(--acento);
+    color: var(--acento);
+    background: rgba(249, 115, 22, 0.05);
   }
 }
 
@@ -114,8 +83,6 @@
   flex-direction: column;
   gap: 1.25rem;
 }
-
-// --- TARJETA DE RUTINA ---
 
 .tarjeta-rutina {
   background: var(--fondo-tarjeta);
@@ -166,6 +133,7 @@
       color: #34d399;
       border: 1px solid rgba(16, 185, 129, 0.2);
     }
+
     &.sin-asignar {
       background: rgba(148, 163, 184, 0.1);
       color: #94a3b8;
@@ -183,8 +151,6 @@
   padding-top: 1.25rem;
 }
 
-// --- LISTA DE EJERCICIOS ---
-
 .lista-ejercicios {
   display: flex;
   flex-direction: column;
@@ -192,11 +158,7 @@
 }
 
 .item-ejercicio {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
   padding: 0.4rem 0;
-
   .numero-ejercicio {
     background: rgba(255, 255, 255, 0.02);
     color: var(--texto-suave);
@@ -211,24 +173,6 @@
     font-weight: 600;
     border: 1px solid var(--borde);
   }
-
-  .ejercicio-imagen-contenedor {
-    width: 44px;
-    height: 44px;
-    border-radius: 6px;
-    flex-shrink: 0;
-    border: 1px solid var(--borde);
-    background: #000;
-    overflow: hidden;
-
-    .ejercicio-thumb {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-  }
-
   .info-ejercicio {
     h4 { font-size: 1rem; font-weight: 500; color: var(--texto); margin: 0; }
     p { font-size: 0.8rem; color: var(--texto-suave); margin-top: 0.1rem; }
@@ -249,9 +193,6 @@
   gap: 8px;
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
   width: 100%;
-  border: none;
-  border-radius: var(--radio);
-  cursor: pointer;
   .play-svg { width: 14px; height: 14px; }
   &:hover {
     filter: brightness(1.1);
@@ -259,54 +200,28 @@
   }
 }
 
-// --- FOOTER DE ACCIONES DE RUTINA ---
-.rutina-acciones-footer {
+// --- BOTÓN PRINCIPAL ENTRENADOR (ASIGNAR) ---
+.btn-asignar {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
   display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-  width: 100%;
-}
-
-.botones-gestion-rutina {
-  display: flex;
-  gap: 0.75rem;
-  width: 100%;
-
-  .btn-gestion {
-    flex: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 0.65rem 1.25rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    border-radius: var(--radio);
-    cursor: pointer;
-    background: transparent;
-    transition: all 0.2s ease;
-
-    .btn-icon { width: 14px; height: 14px; }
-
-    &.btn-editar-rut {
-      border: 1px solid var(--texto-suave);
-      color: var(--texto);
-      &:hover {
-        border-color: var(--acento);
-        color: var(--acento);
-        background: rgba(249, 115, 22, 0.05);
-      }
-    }
-
-    &.btn-eliminar-rut {
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      color: #f87171;
-      &:hover {
-        border-color: #ef4444;
-        color: #ef4444;
-        background: rgba(239, 68, 68, 0.05);
-      }
-    }
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  width: auto;
+  .btn-icon {
+    width: 16px;
+    height: 16px;
+    stroke-width: 3px;
+  }
+  &:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.35);
   }
 }
 
@@ -317,7 +232,6 @@
   gap: 1.5rem;
   align-items: start;
   margin-top: 1rem;
-
   @include responds-to(desktop-sm) {
     grid-template-columns: 1fr;
     gap: 1.25rem;
@@ -339,6 +253,33 @@
     padding-bottom: 0.4rem;
     margin-bottom: 1.25rem;
     color: var(--texto);
+  }
+}
+
+.grupo-campo {
+  margin-bottom: 1.25rem;
+  label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+    margin-bottom: 0.4rem;
+  }
+  input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--fondo-lateral);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    color: var(--texto);
+    font-size: 0.95rem;
+    outline: none;
+    font-family: var(--fuente-cuerpo), sans-serif;
+    transition: all 0.3s ease;
+
+    &:focus {
+      border-color: var(--acento);
+      background: #1a1a1a;
+    }
   }
 }
 
@@ -384,19 +325,22 @@
   overflow-y: auto;
   padding-right: 4px;
 
-  &::-webkit-scrollbar { width: 6px; }
-  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
   &::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 3px;
   }
-  &::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.25); }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
 }
 
 .item-agregado, .item-resultado {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
   padding: 0.6rem;
   background: var(--fondo-lateral);
   border: 1px solid var(--borde);
@@ -438,58 +382,6 @@
   }
 }
 
-.resultado-imagen-contenedor {
-  width: 44px;
-  height: 44px;
-  border-radius: 6px;
-  flex-shrink: 0;
-  border: 1px solid var(--borde);
-  background: #000;
-  overflow: hidden;
-
-  .ejercicio-thumb {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-}
-
-.item-resultado {
-  .resultado-info {
-    flex-grow: 1;
-    .tags-resultado {
-      display: flex;
-      gap: 0.3rem;
-      margin-top: 0.2rem;
-      span { padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; }
-      .tag-resultado-musculo { background: rgba(255, 255, 255, 0.03); color: var(--texto-suave); }
-      .tag-resultado-tipo {
-        background: rgba(249, 115, 22, 0.03);
-        color: var(--acento);
-        border: 1px solid rgba(249, 115, 22, 0.1);
-      }
-    }
-  }
-
-  .btn-agregar-plus {
-    background: var(--acento);
-    color: #fff;
-    border: none;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
-    flex-shrink: 0;
-    cursor: pointer;
-    span { line-height: 1; display: block; margin-top: -2px; }
-    &:hover { background: #ea580c; }
-  }
-}
-
 .texto-vacio-agregados, .texto-vacio-resultados {
   text-align: center;
   padding: 1.5rem;
@@ -506,9 +398,6 @@
   font-size: 0.95rem;
   font-weight: 700;
   width: 100%;
-  border: none;
-  border-radius: var(--radio);
-  cursor: pointer;
   box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25);
   &:hover { filter: brightness(1.1); }
 }
@@ -568,11 +457,102 @@
   }
 }
 
-// --- CHECKBOXES DE FILTRO ---
-.lista-checkboxes-tipo, .lista-checkboxes {
+.item-resultado {
+  .resultado-info {
+    flex-grow: 1;
+    .tags-resultado {
+      display: flex;
+      gap: 0.3rem;
+      margin-top: 0.2rem;
+      span { padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; }
+      .tag-resultado-musculo { background: rgba(255, 255, 255, 0.03); color: var(--texto-suave); }
+      .tag-resultado-tipo {
+        background: rgba(249, 115, 22, 0.03);
+        color: var(--acento);
+        border: 1px solid rgba(249, 115, 22, 0.1);
+      }
+    }
+  }
+
+  .btn-agregar-plus {
+    background: var(--acento);
+    color: #fff;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    cursor: pointer;
+    span { line-height: 1; display: block; margin-top: -2px; }
+    &:hover { background: #ea580c; }
+  }
+}
+
+// --- MODALES FLOTANTES ---
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
   display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 1rem;
+}
+
+.modal-tarjeta {
+  background: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+
+  &.modal-miembros-width {
+    max-width: 480px;
+  }
+}
+
+.modal-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--borde);
+  h3 { font-family: var(--fuente-titulo), sans-serif; font-size: 1.2rem; color: var(--texto); margin: 0; }
+  .btn-cerrar-modal { background: transparent; border: none; color: var(--texto-suave); font-size: 1.5rem; line-height: 1; cursor: pointer; &:hover { color: #ef4444; } }
+}
+
+.modal-cuerpo {
+  padding: 1rem;
+  max-height: 320px;
+  overflow-y: auto;
+
+  .modal-subtitulo {
+    font-size: 0.9rem;
+    color: var(--texto-suave);
+    margin-bottom: 1rem;
+    strong { color: var(--texto); }
+  }
+}
+
+.modal-pie {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--borde);
+  text-align: right;
+
+  .btn-modal-aplicar {
+    background: var(--gradiente);
+    color: #fff;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.85rem;
+    &:hover { filter: brightness(1.1); }
+  }
 }
 
 .sub-opciones-checkbox {
@@ -583,6 +563,12 @@
   border-left: 1px solid var(--borde);
   margin: 0.4rem 0 0 0.5rem;
   label { flex: 1 1 40%; }
+}
+
+.lista-checkboxes-tipo, .lista-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
 .checkbox-label {
@@ -628,71 +614,7 @@
   &:hover input ~ .checkbox-custom { border-color: var(--acento); }
 }
 
-// --- MODALES ---
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1100;
-  padding: 1rem;
-}
-
-.modal-tarjeta {
-  background: var(--fondo-tarjeta);
-  border: 1px solid var(--borde);
-  border-radius: var(--radio);
-  width: 100%;
-  max-width: 360px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
-
-  &.modal-miembros-width { max-width: 480px; }
-}
-
-.modal-cabecera {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--borde);
-  h3 { font-family: var(--fuente-titulo), sans-serif; font-size: 1.2rem; color: var(--texto); margin: 0; }
-  .btn-cerrar-modal { background: transparent; border: none; color: var(--texto-suave); font-size: 1.5rem; line-height: 1; cursor: pointer; &:hover { color: #ef4444; } }
-}
-
-.modal-cuerpo {
-  padding: 1rem;
-  max-height: 320px;
-  overflow-y: auto;
-
-  .modal-subtitulo {
-    font-size: 0.9rem;
-    color: var(--texto-suave);
-    margin-bottom: 1rem;
-    strong { color: var(--texto); }
-  }
-}
-
-.modal-pie {
-  padding: 0.75rem 1rem;
-  border-top: 1px solid var(--borde);
-  text-align: right;
-
-  .btn-modal-aplicar {
-    background: var(--gradiente);
-    color: #fff;
-    padding: 0.65rem 1.25rem;
-    font-size: 0.85rem;
-    border: none;
-    border-radius: var(--radio);
-    cursor: pointer;
-    &:hover { filter: brightness(1.1); }
-  }
-}
-
-// --- TOAST ---
+// --- TOAST DE NOTIFICACIÓN/ERROR ---
 .toast-error, .toast-notificacion {
   position: fixed;
   bottom: 2rem;
@@ -708,7 +630,7 @@
   gap: 0.75rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   z-index: 2000;
-  max-width: 20rem;
+  max-width: 320px;
   font-size: 0.9rem;
   opacity: 0;
   transform: translateY(12px);
@@ -721,11 +643,161 @@
     pointer-events: auto;
   }
 
-  .toast-icon { width: 20px; height: 20px; color: #ef4444; flex-shrink: 0; }
-  span { line-height: 1.4; font-weight: 500; }
+  .toast-icon {
+    width: 20px;
+    height: 20px;
+    color: #ef4444;
+    flex-shrink: 0;
+  }
+
+  span {
+    line-height: 1.4;
+    font-weight: 500;
+  }
 }
 
 .toast-notificacion {
   border-color: var(--acento);
   border-left-color: var(--acento);
+}
+
+// --- BOTONES DE ACCIÓN DE TARJETA DE RUTINAS ---
+.rutina-acciones-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+}
+
+.botones-gestion-rutina {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+
+  .btn-gestion {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: var(--radio);
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.2s ease;
+
+    .btn-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    &.btn-editar-rut {
+      border: 1px solid var(--texto-suave);
+      color: var(--texto);
+      &:hover {
+        border-color: var(--acento);
+        color: var(--acento);
+        background: rgba(249, 115, 22, 0.05);
+      }
+    }
+
+    &.btn-eliminar-rut {
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #f87171;
+      &:hover {
+        border-color: #ef4444;
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.05);
+      }
+    }
+  }
+}
+
+// --- MODAL ASIGNAR A MIEMBROS (ENTRENADOR) ---
+.lista-miembros-asignacion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.item-miembro-asignar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+  background: var(--fondo-lateral);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+
+  .info-miembro {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    .avatar-miembro {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(249, 115, 22, 0.15);
+      color: var(--acento);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .icono-user {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .datos-miembro {
+      h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--texto);
+      }
+      p {
+        margin: 0.15rem 0 0 0;
+        font-size: 0.8rem;
+        color: var(--texto-suave);
+      }
+    }
+  }
+}
+
+.btn-check-miembro {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--borde);
+  background: transparent;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  .check-icon {
+    width: 18px;
+    height: 18px;
+    stroke-width: 3px;
+  }
+
+  &.seleccionado {
+    background: #10b981;
+    border-color: #10b981;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+  }
+
+  &:hover {
+    border-color: #10b981;
+  }
 }

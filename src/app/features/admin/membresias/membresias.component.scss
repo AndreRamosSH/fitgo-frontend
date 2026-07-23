@@ -4,13 +4,19 @@
   gap: 2rem;
   align-items: start;
 
-  & > * {
-    min-width: 0;
-  }
+  & > * { min-width: 0; }
 }
 
 @media (max-width: 992px) {
   .layout-dos-columnas {
     grid-template-columns: 1fr;
   }
+}
+
+// Movido desde _layout.scss — solo se usa en este componente
+.celda-acciones {
+  text-align: right;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
 }

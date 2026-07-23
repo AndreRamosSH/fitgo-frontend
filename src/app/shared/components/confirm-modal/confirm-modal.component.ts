@@ -27,7 +27,8 @@ export class ConfirmModalComponent implements OnInit, OnDestroy {
       this.config = {
         ...config,
         textoConfirmar: config.textoConfirmar || 'Confirmar',
-        textoCancelar: config.textoCancelar || 'Cancelar'
+        textoCancelar: config.textoCancelar || 'Cancelar',
+        ocultarCancelar: config.ocultarCancelar || false
       };
       this.visible = true;
     });

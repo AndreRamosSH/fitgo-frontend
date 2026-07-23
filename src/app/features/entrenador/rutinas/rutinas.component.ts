@@ -1,6 +1,5 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { LayoutComponent } from '../../../shared/components/layout/layout.component';
@@ -21,7 +20,7 @@ interface Rutina {
   nombre: string;
   dias: string;
   autor: string;
-  tipo: 'ASIGNADA' | 'PROPIA';
+  tipo: string;
   ejerciciosCount: number;
   ejercicios: {
     id?: string;
@@ -32,7 +31,8 @@ interface Rutina {
     peso: string;
     descanso: number;
   }[];
-  expanded: boolean;
+  asignados?: string[];
+  expanded?: boolean;
 }
 
 function quitarAcentos(str: string): string {
@@ -40,11 +40,10 @@ function quitarAcentos(str: string): string {
 }
 
 @Component({
-  selector: 'app-miembro-rutinas',
+  selector: 'app-entrenador-rutinas',
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     FormsModule,
     NgOptimizedImage,
     SharedLucideIconsModule
@@ -52,29 +51,26 @@ function quitarAcentos(str: string): string {
   templateUrl: './rutinas.component.html',
   styleUrl: './rutinas.component.scss'
 })
-export class RutinasComponent implements OnInit, OnDestroy {
+export class RutinasComponent implements OnInit {
   private confirmService = inject(ConfirmService);
-  private router = inject(Router);
   private layout = inject(LayoutComponent, { optional: true });
   private rutinaService = inject(RutinaService);
+
   vista: 'LISTA' | 'CREAR' = 'LISTA';
   rutinaEditandoId: string | null = null;
 
-  // Rutinas en memoria
-  rutinasDelEntrenador: Rutina[] = [];
-  rutinasPropias: Rutina[] = [];
+  rutinas: Rutina[] = [];
 
   // Formulario de Nueva Rutina
   nuevoNombre = '';
-  diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
   nuevosDias: string[] = [];
   ejerciciosAgregados: EjercicioAgregado[] = [];
+  diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
-  // Buscador de Ejercicios
+  // Ejercicios y Filtros de Búsqueda
   filtroNombre = '';
   ejerciciosBase: EjercicioBase[] = EJERCICIOS_BASE;
 
-  // Filtros de Búsqueda
   mostrarModalMusculo = false;
   mostrarModalTipo = false;
   filtroTrenSuperior = false;
@@ -108,7 +104,13 @@ export class RutinasComponent implements OnInit, OnDestroy {
     pesoCorporal: false
   };
 
-  // Edición de Ejercicio Agregado Modal
+  // Modal Asignar a Miembros
+  mostrarModalAsignar = false;
+  rutinaAsignando: Rutina | null = null;
+  misMiembros: any[] = [];
+  miembrosSeleccionados = new Set<string>();
+
+  // Modal Edición Parámetros
   mostrarModalEditar = false;
   ejercicioEditandoIndex: number | null = null;
   edicionSeries = 3;
@@ -116,42 +118,18 @@ export class RutinasComponent implements OnInit, OnDestroy {
   edicionPeso = '15kg';
   edicionDescanso = 60;
 
-  // Toast de Validación
+  // Toast
   toastVisible = false;
   toastMensaje = '';
-  yaEntrenoHoy = false;
 
   ngOnInit(): void {
     this.cargarRutinas();
-    this.validarHistorialHoy();
-  }
-
-  validarHistorialHoy(): void {
-    this.rutinaService.getHistorial().subscribe({
-      next: (historial) => {
-        const hoy = new Date();
-        const yyyy = hoy.getFullYear();
-        const mm = String(hoy.getMonth() + 1).padStart(2, '0');
-        const dd = String(hoy.getDate()).padStart(2, '0');
-        const hoyStr = `${yyyy}-${mm}-${dd}`;
-
-        this.yaEntrenoHoy = (historial || []).some((item: any) => {
-          if (!item.fecha) return false;
-          return item.fecha.startsWith(hoyStr);
-        });
-      },
-      error: (err) => console.error('Error al validar historial de hoy:', err)
-    });
-  }
-
-  ngOnDestroy(): void {
   }
 
   cargarRutinas(): void {
     this.rutinaService.getRutinas().subscribe({
-      next: (rutinas) => {
-        this.rutinasDelEntrenador = rutinas.filter(r => r.tipo === 'ASIGNADA');
-        this.rutinasPropias = rutinas.filter(r => r.tipo === 'PROPIA');
+      next: (res) => {
+        this.rutinas = res || [];
       },
       error: (err) => {
         console.error('Error al cargar rutinas:', err);
@@ -176,11 +154,9 @@ export class RutinasComponent implements OnInit, OnDestroy {
     this.rutinaEditandoId = rutina.id;
     this.nuevoNombre = rutina.nombre;
 
-    // Mapear días
     const diasArray = rutina.dias.split('·').map(d => d.trim());
     this.nuevosDias = [...diasArray];
 
-    // Mapear ejercicios agregados
     this.ejerciciosAgregados = (rutina.ejercicios || []).map(e => {
       const ejBase = this.ejerciciosBase.find(eb => eb.id === e.ejercicioId || eb.nombre === e.nombre) || {
         id: e.ejercicioId || 'custom',
@@ -201,23 +177,72 @@ export class RutinasComponent implements OnInit, OnDestroy {
     this.vista = 'CREAR';
   }
 
-  eliminarRutina(rutina: Rutina): void {
-    this.confirmService.confirmar({
+  async eliminarRutina(rutina: Rutina): Promise<void> {
+    const confirmado = await this.confirmService.confirmar({
       titulo: 'Eliminar Rutina',
       mensaje: `¿Estás seguro de que deseas eliminar la rutina "${rutina.nombre}"?`,
       textoConfirmar: 'Eliminar',
       textoCancelar: 'Cancelar'
-    }).subscribe(confirmado => {
-      if (confirmado) {
-        this.rutinaService.eliminarRutina(rutina.id).subscribe({
-          next: () => {
-            this.cargarRutinas();
-          },
-          error: (err) => {
-            console.error('Error al eliminar rutina:', err);
-            this.mostrarToast('Error al eliminar la rutina. No tienes permisos.');
-          }
-        });
+    });
+
+    if (confirmado) {
+      this.rutinaService.eliminarRutina(rutina.id).subscribe({
+        next: () => {
+          this.cargarRutinas();
+          this.mostrarToast('Rutina eliminada correctamente.');
+        },
+        error: (err) => {
+          console.error('Error al eliminar rutina:', err);
+          this.mostrarToast('Error al eliminar la rutina.');
+        }
+      });
+    }
+  }
+
+  // --- Modal Asignar ---
+
+  abrirModalAsignar(rutina: Rutina): void {
+    this.rutinaAsignando = rutina;
+    this.miembrosSeleccionados = new Set(rutina.asignados || []);
+
+    this.rutinaService.getMiembrosDelEntrenador().subscribe({
+      next: (res) => {
+        this.misMiembros = res.miembros || [];
+        this.mostrarModalAsignar = true;
+      },
+      error: (err) => {
+        console.error('Error al cargar miembros del entrenador:', err);
+        this.mostrarToast('Error al cargar la lista de miembros.');
+      }
+    });
+  }
+
+  toggleSeleccionMiembro(miembroId: string): void {
+    const idStr = miembroId.toString();
+    if (this.miembrosSeleccionados.has(idStr)) {
+      this.miembrosSeleccionados.delete(idStr);
+    } else {
+      this.miembrosSeleccionados.add(idStr);
+    }
+  }
+
+  esMiembroSeleccionado(miembroId: string): boolean {
+    return this.miembrosSeleccionados.has(miembroId.toString());
+  }
+
+  guardarAsignacion(): void {
+    if (!this.rutinaAsignando) return;
+
+    const ids = Array.from(this.miembrosSeleccionados);
+    this.rutinaService.asignarRutinaAMiembros(this.rutinaAsignando.id, ids).subscribe({
+      next: () => {
+        this.mostrarModalAsignar = false;
+        this.cargarRutinas();
+        this.mostrarToast('Asignaciones actualizadas exitosamente.');
+      },
+      error: (err) => {
+        console.error('Error al asignar rutina:', err);
+        this.mostrarToast('Error al actualizar asignaciones.');
       }
     });
   }
@@ -248,7 +273,6 @@ export class RutinasComponent implements OnInit, OnDestroy {
                          tiposActivos.length > 0;
 
     const list = this.ejerciciosBase.filter(ej => {
-      // Filtro por nombre o músculo en caja de texto
       if (this.filtroNombre.trim()) {
         const q = quitarAcentos(this.filtroNombre.toLowerCase().trim());
         const coincideNombre = quitarAcentos(ej.nombre.toLowerCase()).includes(q);
@@ -258,14 +282,12 @@ export class RutinasComponent implements OnInit, OnDestroy {
         }
       }
 
-      // Filtro por Músculo seleccionado en Modal
       if (musculosActivos.length > 0) {
         if (!musculosActivos.includes(ej.musculo.toLowerCase())) {
           return false;
         }
       }
 
-      // Filtro por Tipo de equipamiento seleccionado en Modal
       if (tiposActivos.length > 0) {
         if (!tiposActivos.includes(ej.tipo)) {
           return false;
@@ -360,11 +382,11 @@ export class RutinasComponent implements OnInit, OnDestroy {
     };
 
     if (this.rutinaEditandoId) {
-      // Modo Edición
       this.rutinaService.editarRutina(this.rutinaEditandoId, payload).subscribe({
         next: () => {
           this.cargarRutinas();
           this.vista = 'LISTA';
+          this.mostrarToast('Rutina actualizada exitosamente.');
         },
         error: (err) => {
           console.error('Error al editar rutina:', err);
@@ -372,11 +394,11 @@ export class RutinasComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      // Modo Crear Nueva
       this.rutinaService.crearRutina(payload).subscribe({
         next: () => {
           this.cargarRutinas();
           this.vista = 'LISTA';
+          this.mostrarToast('Rutina creada exitosamente.');
         },
         error: (err) => {
           console.error('Error al crear rutina:', err);
@@ -384,21 +406,6 @@ export class RutinasComponent implements OnInit, OnDestroy {
         }
       });
     }
-  }
-
-  iniciarEntreno(rutina: Rutina): void {
-    if (this.yaEntrenoHoy) {
-      this.confirmService.confirmar({
-        titulo: 'Entrenamiento Realizado',
-        mensaje: '¡Ya has completado un entrenamiento hoy! Te recomendamos descansar hoy para permitir la correcta recuperación muscular.',
-        textoConfirmar: 'Entendido',
-        ocultarCancelar: true
-      }).subscribe();
-      return;
-    }
-    this.router.navigate(['/miembro/rutinas/entreno', rutina.id], {
-      state: { rutina }
-    });
   }
 
   toggleSidebar(): void {

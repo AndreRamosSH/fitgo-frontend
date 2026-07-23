@@ -70,7 +70,7 @@
 
           <div class="grupo-campo">
             <label for="telefono">TELÉFONO</label>
-            <div *ngIf="!editando" class="input-falso">{{ user?.telefono || '+51 987 654 321' }}</div>
+            <div *ngIf="!editando" class="input-falso">{{ user?.telefono || 'Sin registrar' }}</div>
             <input *ngIf="editando" type="text" id="telefono" formControlName="telefono" placeholder="+51 987 654 321">
             <div *ngIf="editando && perfilForm.get('telefono')?.touched && perfilForm.get('telefono')?.invalid" class="texto-error-validacion">
               <small *ngIf="perfilForm.get('telefono')?.errors?.['pattern']">Número telefónico inválido.</small>
@@ -78,9 +78,92 @@
           </div>
 
           <div class="grupo-campo">
+            <label for="sexo">SEXO</label>
+            <div *ngIf="!editando" class="input-falso">{{ user?.sexo || 'Sin registrar' }}</div>
+            <select *ngIf="editando" id="sexo" formControlName="sexo" class="select-perfil">
+              <option value="">Seleccionar...</option>
+              <option value="MASCULINO">MASCULINO</option>
+              <option value="FEMENINO">FEMENINO</option>
+            </select>
+          </div>
+
+          <div class="grupo-campo">
+            <label for="fechaNacimiento">FECHA DE NACIMIENTO</label>
+            <div *ngIf="!editando" class="input-falso">{{ user?.fechaNacimiento || 'Sin registrar' }}</div>
+            <input *ngIf="editando" type="date" id="fechaNacimiento" formControlName="fechaNacimiento">
+          </div>
+
+          <div class="grupo-campo">
+            <label>EDAD</label>
+            <div class="input-falso">{{ user?.fechaNacimiento ? calcularEdad(user?.fechaNacimiento) + ' años' : 'Sin registrar' }}</div>
+          </div>
+
+          <div class="grupo-campo">
             <label>ROL EN EL SISTEMA</label>
             <div class="input-falso">
               <span class="tag-especial" [ngClass]="getRoleBadgeClass()">{{ user?.rol }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nueva Sección: Datos Físicos (Solo para Miembros) -->
+      <div class="tarjeta-seccion" *ngIf="user?.rol === 'MIEMBRO'">
+        <div class="tarjeta-cabecera">
+          <h3>DATOS FÍSICOS</h3>
+          <div class="botones-cabecera">
+            <button *ngIf="!editandoDatosFisicos" class="btn-secondary-outline" (click)="activarEdicionDatosFisicos()">Editar</button>
+            <div *ngIf="editandoDatosFisicos" class="grupo-botones-edicion">
+              <button class="btn-primary-small" (click)="guardarDatosFisicos()" [disabled]="datosFisicosForm.invalid">Guardar</button>
+              <button class="btn-secondary-outline" (click)="cancelarEdicionDatosFisicos()">Cancelar</button>
+            </div>
+          </div>
+        </div>
+
+        <div [formGroup]="datosFisicosForm" class="formulario-grid">
+          <div class="grupo-campo">
+            <label for="peso">PESO ACTUAL (KG)</label>
+            <div *ngIf="!editandoDatosFisicos" class="input-falso">
+              {{ metricas?.peso ? metricas.peso + ' kg' : 'Sin registrar' }}
+            </div>
+            <input *ngIf="editandoDatosFisicos" type="number" id="peso" formControlName="peso" placeholder="70">
+            <div *ngIf="editandoDatosFisicos && datosFisicosForm.get('peso')?.touched && datosFisicosForm.get('peso')?.invalid" class="texto-error-validacion">
+              <small *ngIf="datosFisicosForm.get('peso')?.errors?.['required']">El peso es obligatorio.</small>
+              <small *ngIf="datosFisicosForm.get('peso')?.errors?.['min']">Mínimo 10 kg.</small>
+              <small *ngIf="datosFisicosForm.get('peso')?.errors?.['max']">Máximo 500 kg.</small>
+            </div>
+          </div>
+
+          <div class="grupo-campo">
+            <label for="altura">TALLA / ALTURA (CM)</label>
+            <div *ngIf="!editandoDatosFisicos" class="input-falso">
+              {{ metricas?.altura ? (metricas.altura * 100 | number:'1.0-0') + ' cm' : 'Sin registrar' }}
+            </div>
+            <input *ngIf="editandoDatosFisicos" type="number" id="altura" formControlName="altura" placeholder="170">
+            <div *ngIf="editandoDatosFisicos && datosFisicosForm.get('altura')?.touched && datosFisicosForm.get('altura')?.invalid" class="texto-error-validacion">
+              <small *ngIf="datosFisicosForm.get('altura')?.errors?.['required']">La altura es obligatoria.</small>
+              <small *ngIf="datosFisicosForm.get('altura')?.errors?.['min']">Mínimo 50 cm.</small>
+              <small *ngIf="datosFisicosForm.get('altura')?.errors?.['max']">Máximo 280 cm.</small>
+            </div>
+          </div>
+
+          <div class="grupo-campo">
+            <label for="pesoObjetivo">PESO OBJETIVO (KG)</label>
+            <div *ngIf="!editandoDatosFisicos" class="input-falso">
+              {{ metricas?.pesoObjetivo ? metricas.pesoObjetivo + ' kg' : 'Sin registrar' }}
+            </div>
+            <input *ngIf="editandoDatosFisicos" type="number" id="pesoObjetivo" formControlName="pesoObjetivo" placeholder="65">
+            <div *ngIf="editandoDatosFisicos && datosFisicosForm.get('pesoObjetivo')?.touched && datosFisicosForm.get('pesoObjetivo')?.invalid" class="texto-error-validacion">
+              <small *ngIf="datosFisicosForm.get('pesoObjetivo')?.errors?.['required']">El peso objetivo es obligatorio.</small>
+              <small *ngIf="datosFisicosForm.get('pesoObjetivo')?.errors?.['min']">Mínimo 10 kg.</small>
+              <small *ngIf="datosFisicosForm.get('pesoObjetivo')?.errors?.['max']">Máximo 500 kg.</small>
+            </div>
+          </div>
+
+          <div class="grupo-campo">
+            <label>ÍNDICE DE MASA CORPORAL (IMC)</label>
+            <div class="input-falso">
+              {{ metricas?.imc ? (metricas.imc | number:'1.1-2') : 'Sin calcular' }}
             </div>
           </div>
         </div>
@@ -139,32 +222,48 @@
         </div>
       </div>
 
-      @switch (user?.rol) {
-        @case ('ADMIN') {
-          <div class="tarjeta-seccion dinamica">
-            <div class="tarjeta-cabecera">
-              <h3>ADMINISTRACIÓN</h3>
+      <div *ngIf="user?.rol === 'MIEMBRO'" class="tarjeta-seccion">
+        <div class="tarjeta-cabecera">
+          <h3>MI MEMBRESÍA</h3>
+        </div>
+        
+        <div *ngIf="membresiaData" class="tarjeta-membresia-detalle">
+          <div class="membresia-header-info">
+            <div>
+              <h4 class="membresia-plan-nombre">{{ membresiaData.plan?.nombre }}</h4>
+              <p class="membresia-plan-desc">{{ membresiaData.plan?.descripcion || 'Acceso ilimitado a áreas de musculación y asesoramiento personalizado.' }}</p>
             </div>
-            <p class="seccion-vacia">Opciones de administración del sistema (En construcción).</p>
+            <span class="tag-status-membresia" [ngClass]="membresiaData.estado?.toLowerCase() || 'activa'">
+              {{ membresiaData.estado || 'ACTIVA' }}
+            </span>
           </div>
-        }
-        @case ('ENTRENADOR') {
-          <div class="tarjeta-seccion dinamica">
-            <div class="tarjeta-cabecera">
-              <h3>MI INFORMACIÓN PROFESIONAL</h3>
+          
+          <div class="membresia-stats-grid">
+            <div class="stat-item">
+              <span class="stat-label">PRECIO</span>
+              <span class="stat-value">S/ {{ membresiaData.plan?.precio }}</span>
             </div>
-            <p class="seccion-vacia">Configuración de especialidades y biografía (En construcción).</p>
-          </div>
-        }
-        @case ('MIEMBRO') {
-          <div class="tarjeta-seccion dinamica">
-            <div class="tarjeta-cabecera">
-              <h3>MI MEMBRESÍA</h3>
+            <div class="stat-item">
+              <span class="stat-label">FECHA INICIO</span>
+              <span class="stat-value">{{ membresiaData.fechaInicio }}</span>
             </div>
-            <p class="seccion-vacia">Detalles y estado actual de tu membresía (En construcción).</p>
+            <div class="stat-item">
+              <span class="stat-label">FECHA FIN</span>
+              <span class="stat-value">{{ membresiaData.fechaFin }}</span>
+            </div>
           </div>
-        }
-      }
+        </div>
+
+        <div *ngIf="!membresiaData" class="membresia-vacia-container">
+          <div class="info-aviso-membresia">
+            <svg lucideCircleAlert class="icono-aviso"></svg>
+            <div>
+              <h4>No posees una membresía activa</h4>
+              <p>Por favor acércate a la recepción o ponte en contacto con administración para renovar o adquirir un nuevo plan de entrenamiento.</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div>
   </div>

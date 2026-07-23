@@ -2,6 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
+import { MiembroService } from '../../../core/services/miembro.service';
+import { MetricasService } from '../../../core/services/metricas.service';
 import { Usuario } from '../../../core/models/usuario.model';
 
 @Component({
@@ -13,21 +15,35 @@ import { Usuario } from '../../../core/models/usuario.model';
 })
 export class PerfilComponent implements OnInit {
   private authService = inject(AuthService);
+  private miembroService = inject(MiembroService);
+  private metricasService = inject(MetricasService);
 
   user: Usuario | null = null;
   initials: string = 'U';
 
   editando: boolean = false;
   editandoPassword: boolean = false;
+  editandoDatosFisicos: boolean = false;
 
   mensajeExito: string = '';
   mensajeError: string = '';
+
+  metricas: any = null;
+  membresiaData: any = null;
 
   perfilForm = new FormGroup({
     nombre: new FormControl('', [Validators.required, Validators.minLength(2)]),
     apellido: new FormControl('', [Validators.required, Validators.minLength(2)]),
     correo: new FormControl('', [Validators.required, Validators.email]),
-    telefono: new FormControl('', [Validators.pattern('^[+0-9\\s]{7,15}$')])
+    telefono: new FormControl('', [Validators.pattern('^[+0-9\\s]{7,15}$')]),
+    sexo: new FormControl(''),
+    fechaNacimiento: new FormControl('')
+  });
+
+  datosFisicosForm = new FormGroup({
+    peso: new FormControl<number | null>(null, [Validators.required, Validators.min(10), Validators.max(500)]),
+    altura: new FormControl<number | null>(null, [Validators.required, Validators.min(50), Validators.max(280)]),
+    pesoObjetivo: new FormControl<number | null>(null, [Validators.required, Validators.min(10), Validators.max(500)])
   });
 
   passwordForm = new FormGroup({
@@ -45,12 +61,56 @@ export class PerfilComponent implements OnInit {
       next: (data) => {
         this.user = data;
         this.actualizarIniciales();
+        if (this.user.rol === 'MIEMBRO') {
+          this.cargarMetricas();
+          this.cargarMembresia();
+        }
       },
       error: () => {
         this.user = this.authService.getUser();
         this.actualizarIniciales();
+        if (this.user && this.user.rol === 'MIEMBRO') {
+          this.cargarMetricas();
+          this.cargarMembresia();
+        }
       }
     });
+  }
+
+  cargarMetricas(): void {
+    this.metricasService.getUltimasMetricas().subscribe({
+      next: (m) => {
+        this.metricas = m;
+        if (this.user) {
+          this.user.fechaNacimiento = m.fechaNacimiento;
+          this.user.sexo = m.sexo;
+          this.user.pesoObjetivo = m.pesoObjetivo;
+          this.user.grasaObjetivo = m.grasaObjetivo;
+        }
+      },
+      error: (err) => console.error('Error al cargar métricas:', err)
+    });
+  }
+
+  cargarMembresia(): void {
+    this.miembroService.getMembresia().subscribe({
+      next: (res) => {
+        this.membresiaData = res.membresia !== 'Sin membresia activa' ? res.membresia : null;
+      },
+      error: (err) => console.error('Error al cargar membresía:', err)
+    });
+  }
+
+  calcularEdad(fechaNacimientoStr?: string): number {
+    if (!fechaNacimientoStr) return 0;
+    const nacimiento = new Date(fechaNacimientoStr);
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const mes = hoy.getMonth() - nacimiento.getMonth();
+    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+      edad--;
+    }
+    return edad;
   }
 
   actualizarIniciales(): void {
@@ -71,7 +131,9 @@ export class PerfilComponent implements OnInit {
         nombre: this.user.nombre,
         apellido: this.user.apellido,
         correo: this.user.correo,
-        telefono: this.user.telefono || ''
+        telefono: this.user.telefono || '',
+        sexo: this.user.sexo || '',
+        fechaNacimiento: this.user.fechaNacimiento || ''
       });
       this.editando = true;
       this.mensajeExito = '';
@@ -94,7 +156,9 @@ export class PerfilComponent implements OnInit {
       apellido: this.perfilForm.value.apellido!,
       correo: this.perfilForm.value.correo!,
       telefono: this.perfilForm.value.telefono || undefined,
-      rol: this.user?.rol!
+      rol: this.user?.rol!,
+      sexo: this.perfilForm.value.sexo || undefined,
+      fechaNacimiento: this.perfilForm.value.fechaNacimiento || undefined
     };
 
     this.authService.actualizarPerfil(editData).subscribe({
@@ -106,10 +170,13 @@ export class PerfilComponent implements OnInit {
           this.user.apellido = editData.apellido;
           this.user.correo = editData.correo;
           this.user.telefono = editData.telefono;
+          this.user.sexo = editData.sexo;
+          this.user.fechaNacimiento = editData.fechaNacimiento;
           this.authService.actualizarSesion(this.user);
           this.actualizarIniciales();
         }
         this.editando = false;
+        this.cargarMetricas();
       },
       error: (err) => {
         this.mensajeError = err.error?.error || 'Error al actualizar el perfil';
@@ -159,6 +226,62 @@ export class PerfilComponent implements OnInit {
       },
       error: (err) => {
         this.mensajeError = err.error?.error || 'Error al cambiar la contraseña';
+        this.mensajeExito = '';
+      }
+    });
+  }
+
+  activarEdicionDatosFisicos(): void {
+    if (this.metricas) {
+      this.datosFisicosForm.patchValue({
+        peso: this.metricas.peso,
+        altura: this.metricas.altura ? Math.round(this.metricas.altura * 100) : null,
+        pesoObjetivo: this.metricas.pesoObjetivo || this.user?.pesoObjetivo || 0
+      });
+    } else {
+      this.datosFisicosForm.patchValue({
+        peso: 70,
+        altura: 170,
+        pesoObjetivo: 65
+      });
+    }
+    this.editandoDatosFisicos = true;
+    this.mensajeExito = '';
+    this.mensajeError = '';
+  }
+
+  cancelarEdicionDatosFisicos(): void {
+    this.editandoDatosFisicos = false;
+  }
+
+  guardarDatosFisicos(): void {
+    if (this.datosFisicosForm.invalid) {
+      this.mensajeError = 'Por favor, ingresa los datos físicos correctamente.';
+      return;
+    }
+
+    const pesoVal = this.datosFisicosForm.value.peso!;
+    const alturaM = this.datosFisicosForm.value.altura! / 100;
+    const pesoObjVal = this.datosFisicosForm.value.pesoObjetivo!;
+
+    const payload = {
+      peso: pesoVal,
+      altura: alturaM,
+      pesoObjetivo: pesoObjVal,
+      fechaNacimiento: this.user?.fechaNacimiento,
+      sexo: this.user?.sexo,
+      grasaObjetivo: this.user?.grasaObjetivo
+    };
+
+    this.metricasService.registrarMetricas(payload).subscribe({
+      next: () => {
+        this.mensajeExito = 'Datos físicos actualizados con éxito';
+        this.mensajeError = '';
+        this.editandoDatosFisicos = false;
+        this.cargarMetricas();
+      },
+      error: (err) => {
+        this.mensajeError = err.error?.error || 'Error al actualizar los datos físicos';
         this.mensajeExito = '';
       }
     });
