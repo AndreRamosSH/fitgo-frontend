@@ -566,7 +566,7 @@
   @include responds-to(desktop-sm) {
     grid-template-columns: repeat(2, 1fr);
   }
-  @include responds-to(phone) {
+  @include responds-to(movil) {
     grid-template-columns: 1fr;
   }
 }
