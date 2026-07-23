@@ -105,7 +105,7 @@
       <h3>¡Bienvenido a FitGO!</h3>
     </div>
     <div class="modal-cuerpo">
-      <p class="modal-subtitulo">Para activar tu cuenta y personalizar tu experiencia, ingresa tus métricas iniciales:</p>
+      <p class="modal-subtitulo">Para personalizar tu experiencia, ingresa tus métricas iniciales:</p>
 
       <div class="formulario-inicial">
         <div class="grupo-campo">
@@ -133,22 +133,6 @@
           <div class="selector-sexo">
             <button type="button" class="btn-sexo" [class.activo]="formSexo === 'MASCULINO'" (click)="formSexo = 'MASCULINO'">MASCULINO</button>
             <button type="button" class="btn-sexo" [class.activo]="formSexo === 'FEMENINO'" (click)="formSexo = 'FEMENINO'">FEMENINO</button>
-          </div>
-        </div>
-
-        <!-- Vista previa en tiempo real -->
-        <div class="vista-previa-metricas" *ngIf="previewImc > 0">
-          <div class="previa-item">
-            <span>IMC estimado:</span>
-            <strong>{{ previewImc | number:'1.1-1' }}</strong>
-          </div>
-          <div class="previa-item" *ngIf="previewGrasa > 0">
-            <span>% Grasa:</span>
-            <strong>{{ previewGrasa | number:'1.1-1' }}%</strong>
-          </div>
-          <div class="previa-item" *ngIf="previewMasaMuscular > 0">
-            <span>% Masa Muscular:</span>
-            <strong>{{ previewMasaMuscular | number:'1.1-1' }}%</strong>
           </div>
         </div>
 

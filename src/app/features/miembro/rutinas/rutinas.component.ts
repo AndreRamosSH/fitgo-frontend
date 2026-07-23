@@ -119,9 +119,29 @@ export class RutinasComponent implements OnInit, OnDestroy {
   // Toast de Validación
   toastVisible = false;
   toastMensaje = '';
+  yaEntrenoHoy = false;
 
   ngOnInit(): void {
     this.cargarRutinas();
+    this.validarHistorialHoy();
+  }
+
+  validarHistorialHoy(): void {
+    this.rutinaService.getHistorial().subscribe({
+      next: (historial) => {
+        const hoy = new Date();
+        const yyyy = hoy.getFullYear();
+        const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+        const dd = String(hoy.getDate()).padStart(2, '0');
+        const hoyStr = `${yyyy}-${mm}-${dd}`;
+
+        this.yaEntrenoHoy = (historial || []).some((item: any) => {
+          if (!item.fecha) return false;
+          return item.fecha.startsWith(hoyStr);
+        });
+      },
+      error: (err) => console.error('Error al validar historial de hoy:', err)
+    });
   }
 
   ngOnDestroy(): void {
@@ -181,25 +201,25 @@ export class RutinasComponent implements OnInit, OnDestroy {
     this.vista = 'CREAR';
   }
 
-  async eliminarRutina(rutina: Rutina): Promise<void> {
-    const confirmado = await this.confirmService.confirmar({
+  eliminarRutina(rutina: Rutina): void {
+    this.confirmService.confirmar({
       titulo: 'Eliminar Rutina',
       mensaje: `¿Estás seguro de que deseas eliminar la rutina "${rutina.nombre}"?`,
       textoConfirmar: 'Eliminar',
       textoCancelar: 'Cancelar'
+    }).subscribe(confirmado => {
+      if (confirmado) {
+        this.rutinaService.eliminarRutina(rutina.id).subscribe({
+          next: () => {
+            this.cargarRutinas();
+          },
+          error: (err) => {
+            console.error('Error al eliminar rutina:', err);
+            this.mostrarToast('Error al eliminar la rutina. No tienes permisos.');
+          }
+        });
+      }
     });
-
-    if (confirmado) {
-      this.rutinaService.eliminarRutina(rutina.id).subscribe({
-        next: () => {
-          this.cargarRutinas();
-        },
-        error: (err) => {
-          console.error('Error al eliminar rutina:', err);
-          this.mostrarToast('Error al eliminar la rutina. No tienes permisos.');
-        }
-      });
-    }
   }
 
   cancelarCreacion(): void {
@@ -367,6 +387,15 @@ export class RutinasComponent implements OnInit, OnDestroy {
   }
 
   iniciarEntreno(rutina: Rutina): void {
+    if (this.yaEntrenoHoy) {
+      this.confirmService.confirmar({
+        titulo: 'Entrenamiento Realizado',
+        mensaje: '¡Ya has completado un entrenamiento hoy! Te recomendamos descansar hoy para permitir la correcta recuperación muscular.',
+        textoConfirmar: 'Entendido',
+        ocultarCancelar: true
+      }).subscribe();
+      return;
+    }
     this.router.navigate(['/miembro/rutinas/entreno', rutina.id], {
       state: { rutina }
     });

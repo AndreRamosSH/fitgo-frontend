@@ -1,15 +1,14 @@
 <ng-container *ngIf="vista === 'LISTA'">
-  <!-- Vista de lista de rutinas (original) -->
-    <div class="seccion-bienvenida">
-      <h1>Mis Rutinas</h1>
-      <p>Rutinas del entrenador y rutinas propias</p>
+  <!-- Cabecera de la sección -->
+  <header class="cabecera-seccion-rutinas">
+    <div class="titulos-cabecera">
+      <h1 class="titulo-pagina">Mis Rutinas</h1>
+      <p class="subtitulo-pagina">Rutinas del entrenador y rutinas propias</p>
     </div>
-  <div class="encabezado-tabla-apilado">
-    <button class="btn-crear-rutina" (click)="irACrear()">
-      <svg lucidePlus class="btn-icon"></svg>
-      Crear rutina
+    <button class="btn-crear-rutina-naranja" (click)="irACrear()">
+      <span class="plus-icon">+</span> Crear rutina
     </button>
-  </div>
+  </header>
 
   <div class="categoria-seccion">
     <h2 class="titulo-seccion">del entrenador</h2>
@@ -106,14 +105,16 @@
 </ng-container>
 
 <ng-container *ngIf="vista === 'CREAR'">
-  <!-- Vista de creador de rutinas -->
-  <div class="encabezado-tabla-apilado">
-    <div class="seccion-bienvenida">
-      <h1>Crear rutina propia</h1>
-      <p>Configure los datos de su rutina y añada ejercicios</p>
+  <!-- Cabecera de la sección de creación -->
+  <header class="cabecera-seccion-rutinas">
+    <div class="titulos-cabecera">
+      <h1 class="titulo-pagina">{{ rutinaEditandoId ? 'Editar rutina' : 'Crear rutina propia' }}</h1>
+      <p class="subtitulo-pagina">Configure los datos de su rutina y añada ejercicios</p>
     </div>
-    <button class="btn-crear-rutina" (click)="cancelarCreacion()">Volver</button>
-  </div>
+    <button class="btn-volver" (click)="cancelarCreacion()">
+      <svg lucideChevronLeft class="icono-volver"></svg> Volver
+    </button>
+  </header>
 
   <div class="editor-columnas">
     <!-- Columna Izquierda: Datos de la rutina y ejercicios agregados -->

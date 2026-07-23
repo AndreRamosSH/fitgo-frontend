@@ -3,35 +3,96 @@
 @use '../../../../styles/variables' as *;
 @use '../../../../styles/mixins' as *;
 
-// --- ESTRUCTURA PRINCIPAL ---
-
-.encabezado-tabla-apilado {
+// Cabecera Premium
+.cabecera-seccion-rutinas {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 2.5rem;
-}
-
-.btn-crear-rutina {
-  background: transparent;
-  color: var(--texto);
-  border: 1px solid var(--texto-suave);
-  padding: 0.5rem 1.25rem;
-  font-weight: 600;
-  border-radius: var(--radio);
-  display: inline-flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  margin-bottom: 2.5rem;
 
-  .btn-icon { width: 16px; height: 16px; }
+  @include responds-to(tablet) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
 
-  &:hover {
-    border-color: var(--acento);
-    color: var(--acento);
-    background: rgba(249, 115, 22, 0.05);
+  .titulos-cabecera {
+    h1 {
+      font-family: var(--fuente-titulo), sans-serif;
+      font-size: 2.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--texto);
+      margin: 0 0 0.25rem 0;
+    }
+
+    p {
+      color: var(--texto-suave);
+      font-size: 0.95rem;
+      margin: 0;
+    }
+  }
+
+  .btn-crear-rutina-naranja {
+    background: var(--gradiente);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border-radius: var(--radio);
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+
+    .plus-icon {
+      font-size: 1.2rem;
+      line-height: 1;
+      font-weight: 600;
+    }
+
+    &:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+      transform: translateY(-1px);
+    }
+  }
+
+  .btn-volver {
+    background: transparent;
+    color: var(--texto-suave);
+    border: 1px solid var(--borde);
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border-radius: var(--radio);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+
+    .icono-volver {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2.5;
+      transition: transform 0.2s ease;
+    }
+
+    &:hover {
+      border-color: var(--texto);
+      color: var(--texto);
+      background-color: rgba(255, 255, 255, 0.03);
+      
+      .icono-volver {
+        transform: translateX(-2px);
+      }
+    }
   }
 }
 

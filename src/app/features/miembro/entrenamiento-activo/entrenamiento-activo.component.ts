@@ -45,6 +45,11 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
   entrenoCompletado = false;
   datosEntreno: EjercicioEntreno[] = [];
 
+  // Propiedades para el control de descanso
+  mostrarDescanso = false;
+  tiempoDescansoRestante = 0;
+  descansoInterval: any = null;
+
   ngOnInit(): void {
     const localSession = localStorage.getItem('active_workout_session');
     if (localSession) {
@@ -90,6 +95,7 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.detenerCronometro();
+    this.detenerDescanso();
   }
 
   cargarDatosEntreno(rutina: any): void {
@@ -176,6 +182,9 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
     // Marcar la serie actual como completada
     series[this.serieActivaIndex].completada = true;
 
+    let finRutina = false;
+    const descansoSegundos = ejercicioActual.descanso || 60;
+
     // Verificar si quedan más series en este ejercicio
     if (this.serieActivaIndex < series.length - 1) {
       this.serieActivaIndex++;
@@ -189,12 +198,56 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
         this.serieActivaIndex = 0;
       } else {
         // Rutina completada
+        finRutina = true;
         this.detenerCronometro();
         this.entrenoCompletado = true;
         this.registrarEntrenamientoFinal();
       }
     }
+
     this.guardarSesionLocal();
+
+    if (!finRutina) {
+      this.iniciarDescanso(descansoSegundos);
+    }
+  }
+
+  // Métodos de control del descanso
+  iniciarDescanso(segundos: number): void {
+    this.detenerDescanso();
+    this.tiempoDescansoRestante = segundos;
+    this.mostrarDescanso = true;
+
+    this.descansoInterval = setInterval(() => {
+      if (this.tiempoDescansoRestante > 0) {
+        this.tiempoDescansoRestante--;
+      } else {
+        this.detenerDescanso();
+      }
+    }, 1000);
+  }
+
+  agregar15Segundos(): void {
+    this.tiempoDescansoRestante += 15;
+  }
+
+  omitirDescanso(): void {
+    this.detenerDescanso();
+  }
+
+  detenerDescanso(): void {
+    if (this.descansoInterval) {
+      clearInterval(this.descansoInterval);
+      this.descansoInterval = null;
+    }
+    this.mostrarDescanso = false;
+    this.tiempoDescansoRestante = 0;
+  }
+
+  getTiempoDescansoFormateado(): string {
+    const minutos = Math.floor(this.tiempoDescansoRestante / 60);
+    const segundos = this.tiempoDescansoRestante % 60;
+    return `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
   }
 
   retrocederSerie(): void {

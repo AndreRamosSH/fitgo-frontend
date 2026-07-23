@@ -167,7 +167,40 @@ export class ResumenComponent implements OnInit {
 
   guardarMetricasIniciales(): void {
     if (!this.formPeso || !this.formAltura || !this.formFechaNacimiento || !this.formSexo || !this.formPesoObjetivo) {
-      this.modalMensaje = 'Por favor complete todos los campos (el peso objetivo es obligatorio)';
+      this.modalMensaje = 'Por favor complete todos los campos';
+      return;
+    }
+
+    // Validación de números negativos o fuera de rango para Peso
+    if (this.formPeso < 10 || this.formPeso > 500) {
+      this.modalMensaje = 'El peso debe estar entre 10 kg y 500 kg';
+      return;
+    }
+
+    // Validación de números negativos o fuera de rango para Talla
+    if (this.formAltura < 50 || this.formAltura > 300) {
+      this.modalMensaje = 'La talla debe estar entre 50 cm y 300 cm';
+      return;
+    }
+
+    // Validación de números negativos o fuera de rango para Peso Objetivo
+    if (this.formPesoObjetivo < 10 || this.formPesoObjetivo > 500) {
+      this.modalMensaje = 'El peso objetivo debe estar entre 10 kg y 500 kg';
+      return;
+    }
+
+    // Validación de edad mínima (mínimo 15 años)
+    const edad = this.calcularEdad(this.formFechaNacimiento);
+    if (isNaN(edad) || edad < 0) {
+      this.modalMensaje = 'La fecha de nacimiento ingresada no es válida';
+      return;
+    }
+    if (edad < 15) {
+      this.modalMensaje = 'El miembro debe tener al menos 15 años de edad';
+      return;
+    }
+    if (edad > 110) {
+      this.modalMensaje = 'La edad ingresada supera el límite permitido';
       return;
     }
 

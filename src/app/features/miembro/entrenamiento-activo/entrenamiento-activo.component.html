@@ -16,6 +16,23 @@
     <div class="entreno-principal">
       <!-- Ejercicio Activo Card -->
       <div class="ejercicio-activo-card" *ngIf="datosEntreno && datosEntreno[ejercicioActivoIndex]">
+        <!-- Overlay de Descanso -->
+        <div class="descanso-overlay" [class.visible]="mostrarDescanso">
+          <div class="descanso-contenido">
+            <svg lucideTimer class="icono-descanso-timer"></svg>
+            <span class="descanso-titulo">TIEMPO DE DESCANSO</span>
+            <span class="descanso-contador">{{ getTiempoDescansoFormateado() }}</span>
+            <div class="descanso-acciones">
+              <button type="button" class="btn-descanso btn-descanso-mas" (click)="agregar15Segundos()">
+                +15s
+              </button>
+              <button type="button" class="btn-descanso btn-descanso-omitir" (click)="omitirDescanso()">
+                Omitir
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Barra de Progreso de Ejercicios -->
         <div class="progreso-barra-vacia">
           <div class="progreso-barra-llena" [style.width.%]="getProgresoEntreno()"></div>
