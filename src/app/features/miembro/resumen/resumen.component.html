@@ -1,6 +1,6 @@
 <section class="seccion-bienvenida">
   <h1>Bienvenido, <span>{{ nombreUsuario }}</span></h1>
-  <p>Martes 21 de enero · Semana 3 de tu rutina</p>
+  <p>¡Hora de alcanzar tu mejor versión hoy!</p>
 </section>
 
 <div *ngIf="mostrarAlertaVencimiento" class="alerta-vencimiento-aviso">
@@ -22,20 +22,20 @@
 <section class="grid-metricas">
   <article class="tarjeta-metrica">
     <p class="metrica-titulo">Asistencias este mes</p>
-    <p class="metrica-valor">14</p>
-    <p class="metrica-cambio-suave">de 20 días hábiles</p>
+    <p class="metrica-valor">{{ entrenosEsteMes }}</p>
+    <p class="metrica-cambio-suave">de {{ diasTotalesMes }} días del mes</p>
   </article>
 
   <article class="tarjeta-metrica">
     <p class="metrica-titulo">Días hasta vencimiento</p>
-    <p class="metrica-valor">18</p>
-    <p class="metrica-cambio-suave">Membresía mensual</p>
+    <p class="metrica-valor">{{ diasRestantes }}</p>
+    <p class="metrica-cambio-suave">{{ membresia?.plan?.nombre || 'Membresía Activa' }}</p>
   </article>
 
   <article class="tarjeta-metrica">
     <p class="metrica-titulo">IMC actual</p>
-    <p class="metrica-valor">23.4</p>
-    <p class="metrica-cambio-suave">Peso normal</p>
+    <p class="metrica-valor">{{ imcActual | number:'1.1-1' }}</p>
+    <p class="metrica-cambio-suave">{{ clasificacionImc }}</p>
   </article>
 </section>
 
@@ -44,25 +44,30 @@
   <article class="tarjeta card-detallada">
     <div class="card-cabecera">
       <h2>Membresía</h2>
-      <span class="tag-membresia">Mensual · Activa</span>
+      <span class="tag-membresia" [ngClass]="membresia?.estado?.toLowerCase()">
+        {{ membresia?.plan?.nombre || 'Plan' }} · {{ membresia?.estado || 'Sin estado' }}
+      </span>
     </div>
     <div class="card-cuerpo">
       <div class="fila-metrica">
         <span class="metrica-label">Inicio</span>
-        <span class="metrica-valor">03 ene 2025</span>
+        <span class="metrica-valor">{{ membresia?.fechaInicio | date:'dd MMM yyyy':'UTC' }}</span>
       </div>
       <div class="fila-metrica">
         <span class="metrica-label">Vence</span>
-        <span class="metrica-valor">03 feb 2025</span>
+        <span class="metrica-valor">{{ membresia?.fechaFin | date:'dd MMM yyyy':'UTC' }}</span>
       </div>
-      <div class="progreso-membresia">
+      <div class="progreso-membresia" *ngIf="membresia">
         <div class="progreso-textos">
-          <span>18 días restantes</span>
-          <span>40%</span>
+          <span>{{ diasRestantes }} días restantes</span>
+          <span>{{ 100 - progresoPorcentaje }}% restante</span>
         </div>
         <div class="barra-progreso-contenedor">
-          <div class="barra-progreso-llenado" style="width: 40%"></div>
+          <div class="barra-progreso-llenado" [style.width.%]="progresoPorcentaje"></div>
         </div>
+      </div>
+      <div *ngIf="!membresia" class="texto-vacio-membresia">
+        No tienes una membresía registrada.
       </div>
     </div>
   </article>
@@ -75,20 +80,83 @@
     <div class="card-cuerpo">
       <div class="fila-metrica">
         <span class="metrica-label">Peso</span>
-        <span class="metrica-valor">72.5 kg</span>
+        <span class="metrica-valor">{{ pesoActual | number:'1.1-1' }} kg</span>
       </div>
       <div class="fila-metrica">
         <span class="metrica-label">Talla</span>
-        <span class="metrica-valor">1.76 m</span>
+        <span class="metrica-valor">{{ alturaActual | number:'1.2-2' }} m</span>
       </div>
       <div class="fila-metrica">
         <span class="metrica-label">Masa muscular</span>
-        <span class="metrica-valor">38.2%</span>
+        <span class="metrica-valor">{{ masaMuscularActual | number:'1.1-1' }}%</span>
       </div>
       <div class="fila-metrica">
         <span class="metrica-label">Grasa corporal</span>
-        <span class="metrica-valor">16.4%</span>
+        <span class="metrica-valor">{{ grasaActual | number:'1.1-1' }}%</span>
       </div>
     </div>
   </article>
+</div>
+
+<!-- Modal Inicial Flotante Premium -->
+<div class="modal-overlay" *ngIf="mostrarModalInicial">
+  <div class="modal-tarjeta modal-registro-inicial">
+    <div class="modal-cabecera">
+      <h3>¡Bienvenido a FitGO!</h3>
+    </div>
+    <div class="modal-cuerpo">
+      <p class="modal-subtitulo">Para activar tu cuenta y personalizar tu experiencia, ingresa tus métricas iniciales:</p>
+
+      <div class="formulario-inicial">
+        <div class="grupo-campo">
+          <label for="peso">Peso (kg)</label>
+          <input type="number" id="peso" [(ngModel)]="formPeso" placeholder="Ej: 72.5" min="10" max="500" step="0.1">
+        </div>
+
+        <div class="grupo-campo">
+          <label for="altura">Talla (cm)</label>
+          <input type="number" id="altura" [(ngModel)]="formAltura" placeholder="Ej: 176" min="50" max="300">
+        </div>
+
+        <div class="grupo-campo">
+          <label for="pesoObjetivo">Peso Objetivo (kg)</label>
+          <input type="number" id="pesoObjetivo" [(ngModel)]="formPesoObjetivo" placeholder="Ej: 70.0" min="10" max="500" step="0.1">
+        </div>
+
+        <div class="grupo-campo">
+          <label for="fechaNacimiento">Fecha de Nacimiento</label>
+          <input type="date" id="fechaNacimiento" [(ngModel)]="formFechaNacimiento">
+        </div>
+
+        <div class="grupo-campo">
+          <label>Sexo</label>
+          <div class="selector-sexo">
+            <button type="button" class="btn-sexo" [class.activo]="formSexo === 'MASCULINO'" (click)="formSexo = 'MASCULINO'">MASCULINO</button>
+            <button type="button" class="btn-sexo" [class.activo]="formSexo === 'FEMENINO'" (click)="formSexo = 'FEMENINO'">FEMENINO</button>
+          </div>
+        </div>
+
+        <!-- Vista previa en tiempo real -->
+        <div class="vista-previa-metricas" *ngIf="previewImc > 0">
+          <div class="previa-item">
+            <span>IMC estimado:</span>
+            <strong>{{ previewImc | number:'1.1-1' }}</strong>
+          </div>
+          <div class="previa-item" *ngIf="previewGrasa > 0">
+            <span>% Grasa:</span>
+            <strong>{{ previewGrasa | number:'1.1-1' }}%</strong>
+          </div>
+          <div class="previa-item" *ngIf="previewMasaMuscular > 0">
+            <span>% Masa Muscular:</span>
+            <strong>{{ previewMasaMuscular | number:'1.1-1' }}%</strong>
+          </div>
+        </div>
+
+        <p class="error-mensaje" *ngIf="modalMensaje">{{ modalMensaje }}</p>
+      </div>
+    </div>
+    <div class="modal-pie">
+      <button class="btn-modal-aplicar" (click)="guardarMetricasIniciales()">Comenzar mi Entrenamiento</button>
+    </div>
+  </div>
 </div>
