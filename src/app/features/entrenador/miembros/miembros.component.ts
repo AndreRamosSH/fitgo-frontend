@@ -23,11 +23,11 @@ export class MiembrosComponent implements OnInit {
   totalMiembros = 0;
   busqueda = '';
 
-  // Detalle del miembro activo
+
   detalleMiembro: MiembroDetalleDTO | null = null;
   cargandoDetalle = false;
 
-  // Modal para cambiar / asignar rutina
+
   mostrarModalRutina = false;
   rutinasPlantillas: any[] = [];
   rutinaSeleccionadaId: string | null = null;

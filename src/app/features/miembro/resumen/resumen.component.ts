@@ -29,11 +29,11 @@ export class ResumenComponent implements OnInit {
   mostrarAlertaGracia = false;
   diasRestantes = 0;
 
-  // Asistencias
+
   entrenosEsteMes = 0;
   diasTotalesMes = 30;
 
-  // Modal Inicial
+
   mostrarModalInicial = false;
   formPeso: number | null = null;
   formAltura: number | null = null;
@@ -42,7 +42,7 @@ export class ResumenComponent implements OnInit {
   formSexo: string = '';
   modalMensaje = '';
 
-  // Propiedades calculadas en tiempo real para la preview del modal
+
   get previewImc(): number {
     if (this.formPeso && this.formAltura) {
       const altM = this.formAltura / 100;
@@ -80,8 +80,8 @@ export class ResumenComponent implements OnInit {
 
   get progresoPorcentaje(): number {
     if (!this.membresia) return 0;
-    // Si la membresía dura 30 días, calculamos el porcentaje consumido
-    // diasRestantes va de 30 (nuevo) a 0 (vencido)
+
+
     const diasConsumidos = Math.max(0, 30 - this.diasRestantes);
     return Math.round((diasConsumidos / 30) * 100);
   }
@@ -171,25 +171,25 @@ export class ResumenComponent implements OnInit {
       return;
     }
 
-    // Validación de números negativos o fuera de rango para Peso
+
     if (this.formPeso < 10 || this.formPeso > 500) {
       this.modalMensaje = 'El peso debe estar entre 10 kg y 500 kg';
       return;
     }
 
-    // Validación de números negativos o fuera de rango para Talla
+
     if (this.formAltura < 50 || this.formAltura > 300) {
       this.modalMensaje = 'La talla debe estar entre 50 cm y 300 cm';
       return;
     }
 
-    // Validación de números negativos o fuera de rango para Peso Objetivo
+
     if (this.formPesoObjetivo < 10 || this.formPesoObjetivo > 500) {
       this.modalMensaje = 'El peso objetivo debe estar entre 10 kg y 500 kg';
       return;
     }
 
-    // Validación de edad mínima (mínimo 15 años)
+
     const edad = this.calcularEdad(this.formFechaNacimiento);
     if (isNaN(edad) || edad < 0) {
       this.modalMensaje = 'La fecha de nacimiento ingresada no es válida';
@@ -206,7 +206,7 @@ export class ResumenComponent implements OnInit {
 
     const payload: Metricas = {
       peso: this.formPeso,
-      altura: this.formAltura / 100, // cm a metros
+      altura: this.formAltura / 100,
       fechaNacimiento: this.formFechaNacimiento,
       sexo: this.formSexo,
       pesoObjetivo: this.formPesoObjetivo

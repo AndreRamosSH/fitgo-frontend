@@ -1,6 +1,6 @@
-/* El diseño base de las grillas (grid-metricas), tarjetas y gráficos fue migrado a _layout.scss */
 
-/* Selector de Meses (Específico para esta vista) */
+
+
 .navegacion-mes {
   display: flex;
   align-items: center;
@@ -57,7 +57,7 @@
   }
 }
 
-/* Spinner de carga */
+
 .cargando-contenedor {
   display: flex;
   flex-direction: column;

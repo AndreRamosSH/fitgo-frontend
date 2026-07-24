@@ -14,23 +14,23 @@ import { Metricas } from '../../../core/models/metricas.model';
 export class MetricasComponent implements OnInit {
     private metricasService = inject(MetricasService);
 
-    // Métricas del último registro
+
     peso: number = 0;
-    altura: number = 0; // cm
+    altura: number = 0;
     imc: number = 0;
     estadoImc: string = 'Sin datos';
     masaMuscular: number = 0;
     grasaCorporal: number = 0;
     fechaRegistro: string = '';
 
-    // Metas
+
     pesoObjetivo: number = 70.0;
     grasaObjetivo: number = 15.0;
     editandoMetas = false;
     formPesoObjetivo: number = 70.0;
     formGrasaObjetivo: number = 15.0;
 
-    // Cambios desde el inicio
+
     pesoCambioStr: string = '0 kg';
     pesoCambioClase: string = '';
     masaCambioStr: string = '0%';
@@ -38,17 +38,17 @@ export class MetricasComponent implements OnInit {
     grasaCambioStr: string = '0%';
     grasaCambioClase: string = '';
 
-    // Historial para gráfico
-    historialPesos: any[] = [];
-    pesoMaximo: number = 100; // Para escalar las barras
 
-    // Modales y mensajes
+    historialPesos: any[] = [];
+    pesoMaximo: number = 100;
+
+
     mostrarModalRegistro = false;
     formPeso: number | null = null;
     formAltura: number | null = null;
     mensaje: string = '';
 
-    // Datos del usuario (sexo y fecha de nacimiento) para calcular composición corporal
+
     fechaNacimiento: string = '';
     sexo: string = '';
 
@@ -62,7 +62,7 @@ export class MetricasComponent implements OnInit {
             next: (res: Metricas) => {
                 if (res && res.peso > 0) {
                     this.peso = res.peso;
-                    this.altura = res.altura * 100; // Metros a cm
+                    this.altura = res.altura * 100;
                     this.imc = res.imc || 0;
                     this.clasificarIMC(this.imc);
                     this.fechaNacimiento = res.fechaNacimiento || '';
@@ -73,7 +73,7 @@ export class MetricasComponent implements OnInit {
                     this.formGrasaObjetivo = this.grasaObjetivo;
                     this.fechaRegistro = res.fechaRegistro || '';
 
-                    // Calcular grasa y masa muscular
+
                     const edad = this.calcularEdad(this.fechaNacimiento);
                     this.grasaCorporal = this.calcularGrasa(this.imc, edad, this.sexo);
                     this.masaMuscular = (100 - this.grasaCorporal) * 0.7;
@@ -87,11 +87,11 @@ export class MetricasComponent implements OnInit {
         this.metricasService.getHistorialMetricas().subscribe({
             next: (res: any[]) => {
                 if (res && res.length > 0) {
-                    // Historial completo
+
                     this.historialPesos = res.map((item, index) => {
                         const date = new Date(item.fechaRegistro);
                         const labelMes = date.toLocaleDateString('es-ES', { month: 'short' });
-                        // Formatear como Dic1, Dic2 si hay varios en el mismo mes
+
                         return {
                           peso: item.peso,
                           mes: labelMes.charAt(0).toUpperCase() + labelMes.slice(1, 3) + (index > 0 && new Date(res[index - 1].fechaRegistro).getMonth() === date.getMonth() ? (index % 2 + 1) : ''),
@@ -99,23 +99,23 @@ export class MetricasComponent implements OnInit {
                         };
                     });
 
-                    // Quedarse con los últimos 5 para el gráfico de barras
+
                     this.historialPesos = this.historialPesos.slice(-5);
 
-                    // Calcular peso máximo para el escalado del gráfico
+
                     const pesos = this.historialPesos.map(h => h.peso);
                     this.pesoMaximo = Math.max(...pesos, 100);
 
-                    // Calcular cambios con respecto al primer registro del historial
+
                     const primerRegistro = res[0];
                     const ultimoRegistro = res[res.length - 1];
 
                     const pesoDiff = ultimoRegistro.peso - primerRegistro.peso;
                     this.pesoCambioStr = `${Math.abs(pesoDiff).toFixed(1)} kg ${pesoDiff <= 0 ? 'desde inicio' : 'ganado'}`;
-                    this.pesoCambioClase = pesoDiff <= 0 ? 'positivo' : 'negativo'; // Perder peso suele ser positivo en gym
+                    this.pesoCambioClase = pesoDiff <= 0 ? 'positivo' : 'negativo';
 
-                    // Estimar grasa del primer registro
-                    const edadPrimer = this.calcularEdad(this.fechaNacimiento); // aproximado
+
+                    const edadPrimer = this.calcularEdad(this.fechaNacimiento);
                     const imcPrimer = (primerRegistro.altura && primerRegistro.altura > 0) ? primerRegistro.peso / (primerRegistro.altura * primerRegistro.altura) : 0;
                     const grasaPrimer = this.calcularGrasa(imcPrimer, edadPrimer, this.sexo);
                     const masaPrimer = (100 - grasaPrimer) * 0.7;
@@ -134,7 +134,7 @@ export class MetricasComponent implements OnInit {
     }
 
     calcularEdad(fechaNacimientoStr: string): number {
-        if (!fechaNacimientoStr) return 25; // default
+        if (!fechaNacimientoStr) return 25;
         const nacimiento = new Date(fechaNacimientoStr);
         const hoy = new Date();
         let edad = hoy.getFullYear() - nacimiento.getFullYear();
@@ -208,7 +208,7 @@ export class MetricasComponent implements OnInit {
         });
     }
 
-    // Porcentajes de barra para metas
+
     get progresoPesoMeta(): number {
         if (this.peso <= 0 || this.pesoObjetivo <= 0) return 0;
         if (this.peso <= this.pesoObjetivo) return 100;

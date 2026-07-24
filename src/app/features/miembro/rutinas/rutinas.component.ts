@@ -60,21 +60,21 @@ export class RutinasComponent implements OnInit, OnDestroy {
   vista: 'LISTA' | 'CREAR' = 'LISTA';
   rutinaEditandoId: string | null = null;
 
-  // Rutinas en memoria
+
   rutinasDelEntrenador: Rutina[] = [];
   rutinasPropias: Rutina[] = [];
 
-  // Formulario de Nueva Rutina
+
   nuevoNombre = '';
   diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
   nuevosDias: string[] = [];
   ejerciciosAgregados: EjercicioAgregado[] = [];
 
-  // Buscador de Ejercicios
+
   filtroNombre = '';
   ejerciciosBase: EjercicioBase[] = EJERCICIOS_BASE;
 
-  // Filtros de Búsqueda
+
   mostrarModalMusculo = false;
   mostrarModalTipo = false;
   filtroTrenSuperior = false;
@@ -108,7 +108,7 @@ export class RutinasComponent implements OnInit, OnDestroy {
     pesoCorporal: false
   };
 
-  // Edición de Ejercicio Agregado Modal
+
   mostrarModalEditar = false;
   ejercicioEditandoIndex: number | null = null;
   edicionSeries = 3;
@@ -116,7 +116,7 @@ export class RutinasComponent implements OnInit, OnDestroy {
   edicionPeso = '15kg';
   edicionDescanso = 60;
 
-  // Toast de Validación
+
   toastVisible = false;
   toastMensaje = '';
   yaEntrenoHoy = false;
@@ -176,11 +176,11 @@ export class RutinasComponent implements OnInit, OnDestroy {
     this.rutinaEditandoId = rutina.id;
     this.nuevoNombre = rutina.nombre;
 
-    // Mapear días
+
     const diasArray = rutina.dias.split('·').map(d => d.trim());
     this.nuevosDias = [...diasArray];
 
-    // Mapear ejercicios agregados
+
     this.ejerciciosAgregados = (rutina.ejercicios || []).map(e => {
       const ejBase = this.ejerciciosBase.find(eb => eb.id === e.ejercicioId || eb.nombre === e.nombre) || {
         id: e.ejercicioId || 'custom',
@@ -248,7 +248,7 @@ export class RutinasComponent implements OnInit, OnDestroy {
                          tiposActivos.length > 0;
 
     const list = this.ejerciciosBase.filter(ej => {
-      // Filtro por nombre o músculo en caja de texto
+
       if (this.filtroNombre.trim()) {
         const q = quitarAcentos(this.filtroNombre.toLowerCase().trim());
         const coincideNombre = quitarAcentos(ej.nombre.toLowerCase()).includes(q);
@@ -258,14 +258,14 @@ export class RutinasComponent implements OnInit, OnDestroy {
         }
       }
 
-      // Filtro por Músculo seleccionado en Modal
+
       if (musculosActivos.length > 0) {
         if (!musculosActivos.includes(ej.musculo.toLowerCase())) {
           return false;
         }
       }
 
-      // Filtro por Tipo de equipamiento seleccionado en Modal
+
       if (tiposActivos.length > 0) {
         if (!tiposActivos.includes(ej.tipo)) {
           return false;
@@ -360,7 +360,7 @@ export class RutinasComponent implements OnInit, OnDestroy {
     };
 
     if (this.rutinaEditandoId) {
-      // Modo Edición
+
       this.rutinaService.editarRutina(this.rutinaEditandoId, payload).subscribe({
         next: () => {
           this.cargarRutinas();
@@ -372,7 +372,7 @@ export class RutinasComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      // Modo Crear Nueva
+
       this.rutinaService.crearRutina(payload).subscribe({
         next: () => {
           this.cargarRutinas();

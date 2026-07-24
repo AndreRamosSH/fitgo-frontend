@@ -43,7 +43,7 @@ export class RegistroComponent {
       correo: this.registroForm.value.correo!,
       telefono: this.registroForm.value.telefono || undefined,
       password: this.registroForm.value.password!,
-      rol: 'MIEMBRO' // Por defecto se registran como miembros desde el portal público
+      rol: 'MIEMBRO'
     };
 
     this.authService.registro(userData).subscribe({

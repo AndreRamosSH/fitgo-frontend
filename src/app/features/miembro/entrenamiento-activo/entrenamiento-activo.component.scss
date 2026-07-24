@@ -567,7 +567,7 @@
     }
   }
 
-  // Animación del Party Popper (Lucide Icon)
+
   .party-popper-animacion {
     display: flex;
     align-items: center;
@@ -583,7 +583,7 @@
     }
   }
 
-  // Grilla de Estadísticas
+
   .stats-resumen-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -635,7 +635,7 @@
     }
   }
 
-  // Detalle por ejercicio
+
   .detalle-ejercicios-resumen {
     width: 100%;
     display: flex;
@@ -715,7 +715,7 @@
     }
   }
 
-  // Acciones Footer
+
   .exito-acciones-footer {
     display: flex;
     gap: 1rem;
@@ -774,7 +774,7 @@
   }
 }
 
-// Keyframes para animaciones
+
 @keyframes bounceScale {
   0%, 100% {
     transform: scale(1);

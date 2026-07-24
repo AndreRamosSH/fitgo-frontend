@@ -8,7 +8,7 @@
 </div>
 <app-confirm-modal></app-confirm-modal>
 
-<!-- Overlay de Cuenta Pendiente (Access Gate) -->
+
 <div *ngIf="mostrarModalPendiente" class="acceso-pendiente-overlay">
   <div class="acceso-pendiente-modal">
     <h2>Cuenta pendiente</h2>
@@ -16,9 +16,9 @@
       Tu cuenta fue creada correctamente. El administrador debe activarte una membresía para que puedas acceder al sistema.
     </p>
 
-    <!-- Stepper Visual -->
+    
     <div class="stepper-pasos">
-      <!-- Paso 1: Cuenta creada -->
+      
       <div class="paso completado">
         <div class="indicador-circulo">
           <svg viewBox="0 0 24 24" class="icono-check" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -28,7 +28,7 @@
         <span class="paso-texto">Cuenta creada</span>
       </div>
 
-      <!-- Paso 2: Asignación de membresía -->
+      
       <div class="paso" [ngClass]="paso2Estado">
         <div class="indicador-circulo">
           <span *ngIf="paso2Estado !== 'completado'">2</span>
@@ -39,7 +39,7 @@
         <span class="paso-texto">Asignación de membresía — {{ paso2Estado === 'completado' ? 'completada' : 'pendiente' }}</span>
       </div>
 
-      <!-- Paso 3: Acceso completo -->
+      
       <div class="paso" [ngClass]="paso3Estado">
         <div class="indicador-circulo">
           <span *ngIf="paso3Estado !== 'completado'">3</span>
@@ -51,7 +51,7 @@
       </div>
     </div>
 
-    <!-- Acción -->
+    
     <button (click)="cerrarSesion()" class="btn-cerrar-sesion">Cerrar sesión</button>
   </div>
 </div>

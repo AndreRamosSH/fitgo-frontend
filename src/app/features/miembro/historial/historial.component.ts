@@ -5,8 +5,8 @@ import { RutinaService } from '../../../core/services/rutina.service';
 import { SharedLucideIconsModule } from '../../../shared/icons/lucide-icons.module';
 
 interface MesOpcion {
-  key: string;      // Formato "YYYY-MM"
-  label: string;    // Formato "Enero 2026"
+  key: string;
+  label: string;
 }
 
 @Component({
@@ -25,7 +25,7 @@ export class HistorialComponent implements OnInit {
   cargando = true;
   mensajeError = '';
 
-  // Selector de Mes
+
   mesSeleccionado = '';
   mesesDisponibles: MesOpcion[] = [];
   nombreMeses = [
@@ -33,7 +33,7 @@ export class HistorialComponent implements OnInit {
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
   ];
 
-  // Paginación
+
   paginaActual = 1;
   itemsPorPagina = 10;
   totalPaginas = 1;
@@ -53,7 +53,7 @@ export class HistorialComponent implements OnInit {
     const hoy = new Date();
     const opciones: MesOpcion[] = [];
     
-    // Generar los últimos 12 meses
+
     for (let i = 0; i < 12; i++) {
       const d = new Date(hoy.getFullYear(), hoy.getMonth() - i, 1);
       const anio = d.getFullYear();
@@ -70,7 +70,7 @@ export class HistorialComponent implements OnInit {
     this.rutinaService.getHistorial().subscribe({
       next: (res: any[]) => {
         this.historialCompleto = (res || []).map(item => {
-          // Agrupar detalles planos del backend por nombre de ejercicio
+
           const groupedMap = new Map<string, any[]>();
           if (item.detalles) {
             item.detalles.forEach((det: any) => {
@@ -88,7 +88,7 @@ export class HistorialComponent implements OnInit {
           
           const ejerciciosGrouped: any[] = [];
           groupedMap.forEach((series, nombre) => {
-            // Ordenar las series por número
+
             series.sort((a, b) => a.numero - b.numero);
             ejerciciosGrouped.push({ nombre, series });
           });
@@ -110,13 +110,13 @@ export class HistorialComponent implements OnInit {
   }
 
   aplicarFiltroYControlarPaginacion(): void {
-    // Filtrar por el mes seleccionado
+
     this.historialFiltrado = this.historialCompleto.filter(item => {
       if (!item.fecha) return false;
       return item.fecha.startsWith(this.mesSeleccionado);
     });
 
-    // Calcular páginas
+
     this.paginaActual = 1;
     this.totalPaginas = Math.ceil(this.historialFiltrado.length / this.itemsPorPagina) || 1;
     
@@ -142,7 +142,7 @@ export class HistorialComponent implements OnInit {
   navegarMes(offset: number): void {
     const parts = this.mesSeleccionado.split('-');
     const anio = parseInt(parts[0], 10);
-    const mes = parseInt(parts[1], 10) - 1; // 0-indexed
+    const mes = parseInt(parts[1], 10) - 1;
 
     const nuevaFecha = new Date(anio, mes + offset, 1);
     const nuevoAnio = nuevaFecha.getFullYear();

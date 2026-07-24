@@ -27,7 +27,7 @@ export class RutinaService {
   private entrenoApiUrl = `${environment.apiUrl}/miembro/entrenamientos`;
   private entrenadorApiUrl = `${environment.apiUrl}/entrenador`;
 
-  // --- Operaciones de Rutinas ---
+
 
   getRutinas(): Observable<any[]> {
     return this.http.get<any[]>(this.rutinasApiUrl);
@@ -53,7 +53,7 @@ export class RutinaService {
     return this.http.get<any>(`${this.entrenadorApiUrl}/miembros`);
   }
 
-  // --- Operaciones de Entrenamiento Activo ---
+
 
   registrarEntrenamiento(payload: any): Observable<any> {
     return this.http.post<any>(`${this.entrenoApiUrl}/registrar`, payload);

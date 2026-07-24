@@ -24,8 +24,8 @@ interface ProgresoData {
 }
 
 interface MesOpcion {
-  key: string;      // Formato "YYYY-MM"
-  label: string;    // Formato "Enero 2026"
+  key: string;
+  label: string;
 }
 
 @Component({
@@ -38,7 +38,7 @@ interface MesOpcion {
 export class ProgresoComponent implements OnInit {
   private miembroService = inject(MiembroService);
 
-  mesSeleccionado = ''; // Formato "YYYY-MM"
+  mesSeleccionado = '';
   mesesDisponibles: MesOpcion[] = [];
   data: ProgresoData | null = null;
   cargando = false;
@@ -62,7 +62,7 @@ export class ProgresoComponent implements OnInit {
     const hoy = new Date();
     const opciones: MesOpcion[] = [];
     
-    // Generar los últimos 12 meses para el selector
+
     for (let i = 0; i < 12; i++) {
       const d = new Date(hoy.getFullYear(), hoy.getMonth() - i, 1);
       const anio = d.getFullYear();
@@ -96,7 +96,7 @@ export class ProgresoComponent implements OnInit {
   navegarMes(offset: number): void {
     const parts = this.mesSeleccionado.split('-');
     const anio = parseInt(parts[0], 10);
-    const mes = parseInt(parts[1], 10) - 1; // 0-indexed
+    const mes = parseInt(parts[1], 10) - 1;
 
     const nuevaFecha = new Date(anio, mes + offset, 1);
     const nuevoAnio = nuevaFecha.getFullYear();
@@ -114,8 +114,8 @@ export class ProgresoComponent implements OnInit {
   }
 
   obtenerAlturaBarra(entrenos: number): string {
-    // Si entrena un máximo de 7 días a la semana, sacamos la proporción.
-    // Capped a un mínimo de 15% para que la barra no quede invisible si es 0, y 100% de alto.
+
+
     if (entrenos === 0) return '15%';
     const pct = (entrenos / 7) * 100;
     return `${Math.min(pct, 100)}%`;

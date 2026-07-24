@@ -1,5 +1,5 @@
 <div class="entreno-pantalla" *ngIf="!entrenoCompletado">
-  <!-- Título de Entreno -->
+  
   <div class="entreno-titulo-bloque">
     <div class="entreno-titulo-seccion">
       <span class="sub-entreno-label">MODO ENTRENO ACTIVO</span>
@@ -12,11 +12,11 @@
   </div>
 
   <div class="entreno-grid">
-    <!-- Columna Principal: Ejercicio actual, GIF, Series, Navegación -->
+    
     <div class="entreno-principal">
-      <!-- Ejercicio Activo Card -->
+      
       <div class="ejercicio-activo-card" *ngIf="datosEntreno && datosEntreno[ejercicioActivoIndex]">
-        <!-- Overlay de Descanso -->
+        
         <div class="descanso-overlay" [class.visible]="mostrarDescanso">
           <div class="descanso-contenido">
             <svg lucideTimer class="icono-descanso-timer"></svg>
@@ -33,19 +33,19 @@
           </div>
         </div>
 
-        <!-- Barra de Progreso de Ejercicios -->
+        
         <div class="progreso-barra-vacia">
           <div class="progreso-barra-llena" [style.width.%]="getProgresoEntreno()"></div>
         </div>
 
         <h2 class="ejercicio-activo-titulo">{{ datosEntreno[ejercicioActivoIndex].nombre }}</h2>
 
-        <!-- Contenedor del GIF Grande -->
+        
         <div class="tarjeta-gif-grande">
           <img [ngSrc]="datosEntreno[ejercicioActivoIndex].imagen" alt="Animación del ejercicio" width="400" height="300">
         </div>
 
-        <!-- Cuadrícula de Series -->
+        
         <div class="seccion-series-entreno">
           <h3>Series</h3>
           <div class="grilla-series-entreno" [class.mas-de-tres]="datosEntreno[ejercicioActivoIndex].series.length > 3">
@@ -59,7 +59,7 @@
           </div>
         </div>
 
-        <!-- Inputs de Edición Rápida -->
+        
         <div class="inputs-edicion-rapida" *ngIf="datosEntreno[ejercicioActivoIndex].series[serieActivaIndex]">
           <div class="grupo-campo">
             <label>Repeticiones</label>
@@ -71,7 +71,7 @@
           </div>
         </div>
 
-        <!-- Botones de Navegación -->
+        
         <div class="botones-entreno-footer">
           <button type="button" class="btn-entreno-control btn-entreno-anterior"
                   (click)="retrocederSerie()"
@@ -86,7 +86,7 @@
       </div>
     </div>
 
-    <!-- Columna Lateral: Cola de ejercicios y botón de STOP -->
+    
     <div class="entreno-lateral">
       <div class="cola-ejercicios-tarjeta">
         <h2>Cola de Ejercicios</h2>
@@ -107,7 +107,7 @@
         </div>
       </div>
 
-      <!-- Botón STOP -->
+      
       <button type="button" class="btn-stop-entreno" (click)="pararEntreno()">
         STOP
       </button>
@@ -115,9 +115,9 @@
   </div>
 </div>
 
-<!-- Vista de Éxito: Resumen de Entrenamiento Completo -->
+
 <div class="entreno-exito-pantalla" *ngIf="entrenoCompletado">
-  <!-- Party Popper Animado con efecto rebote -->
+  
   <div class="party-popper-animacion">
     <svg lucidePartyPopper class="icono-party"></svg>
   </div>
@@ -129,28 +129,28 @@
     </p>
   </div>
 
-  <!-- Fila de Tarjetas de Resumen (Stats Grid) -->
+  
   <div class="stats-resumen-grid">
-    <!-- Tarjeta 1: Tiempo Total -->
+    
     <div class="stats-resumen-tarjeta">
       <span class="stats-resumen-valor tiempo">{{ getTiempoFormateado() }}</span>
       <span class="stats-resumen-label">Tiempo total</span>
     </div>
 
-    <!-- Tarjeta 2: Ejercicios -->
+    
     <div class="stats-resumen-tarjeta">
       <span class="stats-resumen-valor">{{ datosEntreno.length }}</span>
       <span class="stats-resumen-label">Ejercicios</span>
     </div>
 
-    <!-- Tarjeta 3: Series Totales -->
+    
     <div class="stats-resumen-tarjeta">
       <span class="stats-resumen-valor">{{ getSeriesTotales() }}</span>
       <span class="stats-resumen-label">Series totales</span>
     </div>
   </div>
 
-  <!-- Detalle por ejercicio -->
+  
   <div class="detalle-ejercicios-resumen">
     <h3>Detalle por ejercicio</h3>
     <div class="tabla-resumen-contenedor">
@@ -175,7 +175,7 @@
     </div>
   </div>
 
-  <!-- Botones de Acción Finales -->
+  
   <div class="exito-acciones-footer">
     <button type="button" class="btn-exito-accion btn-exito-progreso" (click)="verProgreso()">
       Ver progreso

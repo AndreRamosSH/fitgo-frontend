@@ -7,7 +7,7 @@
   gap: 1.5rem;
 }
 
-// --- VISTA LISTA: GRID DE TARJETAS ---
+
 
 .busqueda-flotante {
   input {
@@ -171,7 +171,7 @@
   }
 }
 
-// --- VISTA DETALLE DE MIEMBRO ---
+
 
 .cabecera-seccion-rutinas {
   display: flex;
@@ -321,9 +321,9 @@
   gap: 1.5rem;
 }
 
-// Estilos de gráficos y calendario heredados del sistema de diseño global en _layout.scss
 
-// Filas de Métricas Físicas
+
+
 .fila-metrica-detalle {
   display: flex;
   justify-content: space-between;
@@ -370,7 +370,7 @@
   }
 }
 
-// Rutina Asignada Preview
+
 .caja-rutina-asignada-preview {
   display: flex;
   justify-content: space-between;
@@ -420,7 +420,7 @@
   width: 100%;
 }
 
-// Modal de Selección de Rutina
+
 .lista-opciones-rutina {
   display: flex;
   flex-direction: column;

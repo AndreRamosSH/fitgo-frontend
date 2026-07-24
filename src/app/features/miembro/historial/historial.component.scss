@@ -1,7 +1,7 @@
 @use '../../../../styles/variables' as *;
 @use '../../../../styles/mixins' as *;
 
-// Selector de Meses
+
 .navegacion-mes {
   display: flex;
   align-items: center;
@@ -58,7 +58,7 @@
   }
 }
 
-// Carga y Estado Vacío
+
 .cargando-contenedor {
   display: flex;
   flex-direction: column;
@@ -133,7 +133,7 @@
   }
 }
 
-// Estilos de la Tabla de Historial
+
 .tabla-historial {
   .fila-entrenamiento {
     cursor: pointer;
@@ -212,7 +212,7 @@
   }
 }
 
-// Fila de Detalles Expandibles (Badges por Ejercicio)
+
 .fila-detalles-desplegable {
   background-color: rgba(20, 20, 20, 0.4);
   
@@ -310,7 +310,7 @@
   }
 }
 
-// Estilos de Paginación Completa (Copied from admin)
+
 .paginacion-completa {
   display: flex;
   justify-content: space-between;
@@ -375,11 +375,11 @@
   }
 }
 
-// Responsividad Móvil específica para esta tabla
+
 @include responds-to(tablet) {
   .tabla-historial {
-    th:nth-child(3), td:nth-child(3), // Duracion
-    th:nth-child(4), td:nth-child(4)  // Volumen
+    th:nth-child(3), td:nth-child(3),
+    th:nth-child(4), td:nth-child(4)
     {
       display: none;
     }
@@ -389,7 +389,7 @@
 @include responds-to(movil) {
   .tabla-historial {
     .texto-btn-accion {
-      display: none; // Solo mostrar chevron en movil
+      display: none;
     }
 
     .btn-toggle-detalles {

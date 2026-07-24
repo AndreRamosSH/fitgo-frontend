@@ -1,9 +1,9 @@
-// Estilos propios del componente de Rutinas (Entrenador)
-// Migrado desde _rutinas-compartidas.scss — ya NO va en el bundle global
+
+
 @use '../../../../styles/variables' as *;
 @use '../../../../styles/mixins' as *;
 
-// --- ESTRUCTURA PRINCIPAL ---
+
 
 .cabecera-seccion-rutinas {
   display: flex;
@@ -125,7 +125,7 @@
   gap: 1.25rem;
 }
 
-// --- TARJETA DE RUTINA ---
+
 
 .tarjeta-rutina {
   background: var(--fondo-tarjeta);
@@ -193,7 +193,7 @@
   padding-top: 1.25rem;
 }
 
-// --- LISTA DE EJERCICIOS ---
+
 
 .lista-ejercicios {
   display: flex;
@@ -245,7 +245,7 @@
   }
 }
 
-// --- BOTÓN PRINCIPAL ENTRENADOR (ASIGNAR) ---
+
 .btn-asignar {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: #fff;
@@ -269,7 +269,7 @@
   }
 }
 
-// --- FOOTER DE ACCIONES DE RUTINA ---
+
 .rutina-acciones-footer {
   display: flex;
   flex-direction: column;
@@ -320,7 +320,7 @@
   }
 }
 
-// --- VISTA CREAR (EDITOR) ---
+
 .editor-columnas {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -578,7 +578,7 @@
   }
 }
 
-// --- CHECKBOXES ---
+
 .lista-checkboxes-tipo, .lista-checkboxes {
   display: flex;
   flex-direction: column;
@@ -638,7 +638,7 @@
   &:hover input ~ .checkbox-custom { border-color: var(--acento); }
 }
 
-// --- MODALES ---
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -702,7 +702,7 @@
   }
 }
 
-// --- MODAL ASIGNAR A MIEMBROS (exclusivo del Entrenador) ---
+
 .lista-miembros-asignacion {
   display: flex;
   flex-direction: column;
@@ -771,7 +771,7 @@
   &:hover { border-color: #10b981; }
 }
 
-// --- TOAST ---
+
 .toast-error, .toast-notificacion {
   position: fixed;
   bottom: 2rem;

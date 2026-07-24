@@ -80,7 +80,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   private animarTransicionAcceso(): void {
-    // Transición secuencial interactiva
+
     this.paso2Estado = 'completado';
     
     setTimeout(() => {

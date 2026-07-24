@@ -533,8 +533,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   &::-webkit-scrollbar {
     display: none;
   }
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .tab-pill {
@@ -562,11 +562,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 }
 
-/* ========================================= */
-/* --- COMPONENTES PREMIUM (DASHBOARD) --- */
-/* ========================================= */
 
-/* Grid de KPIs */
+
+
+
+
 .grid-metricas {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -640,7 +640,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   50% { transform: translateY(-4px); }
 }
 
-/* Grid de Gráficos (2 columnas) */
+
 .grid-graficos {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -667,7 +667,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 }
 
-/* Gráfico de Barras CSS */
+
 .grafico-barras {
   display: flex;
   justify-content: space-around;
@@ -732,7 +732,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 }
 
-/* Calendario de Contribución estilo GitHub */
+
 .calendario-contribucion-contenedor {
   display: flex;
   justify-content: center;
@@ -772,7 +772,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 }
 
-/* Leyenda */
+
 .leyenda-calendario {
   display: flex;
   justify-content: center;

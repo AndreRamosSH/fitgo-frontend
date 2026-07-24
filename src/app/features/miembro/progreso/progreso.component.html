@@ -4,7 +4,7 @@
     <p>Resumen de toda tu actividad en FitGO</p>
   </div>
 
-  <!-- Selector de Mes y Año con Controles de Navegación -->
+  
   <div class="navegacion-mes">
     <button class="btn-nav-mes" (click)="navegarMes(-1)" [disabled]="cargando" aria-label="Mes anterior">
       <svg lucideChevronLeft class="icono-nav"></svg>
@@ -28,7 +28,7 @@
 </div>
 
 <ng-container *ngIf="!cargando && data">
-  <!-- Grid de Métricas Principales (KPIs) -->
+  
   <div class="grid-metricas">
     <article class="tarjeta-metrica">
       <p class="metrica-titulo">Entrenos totales</p>
@@ -64,9 +64,9 @@
     </article>
   </div>
 
-  <!-- Grid Gráficos y Asistencia -->
+  
   <div class="grid-graficos">
-    <!-- Panel Izquierdo: Entrenos por semana -->
+    
     <section class="tarjeta-grafico">
       <h3>Entrenos por semana – {{ obtenerNombreMesSeleccionado() }}</h3>
       
@@ -81,7 +81,7 @@
       </div>
     </section>
 
-    <!-- Panel Derecho: Racha de asistencia (Github contributions style) -->
+    
     <section class="tarjeta-grafico">
       <h3>Racha de asistencia – {{ obtenerNombreMesSeleccionado() }}</h3>
 
@@ -96,7 +96,7 @@
         </div>
       </div>
 
-      <!-- Leyenda de colores -->
+      
       <footer class="leyenda-calendario">
         <div class="leyenda-item">
           <span class="leyenda-color entreno"></span>

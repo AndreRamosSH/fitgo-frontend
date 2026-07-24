@@ -1,5 +1,5 @@
 <div class="container-metricas">
-  <!-- Cabecera de la sección -->
+  
   <header class="cabecera-seccion-metricas">
     <div class="titulos-cabecera">
       <h1 class="titulo-pagina">Métricas físicas</h1>
@@ -14,7 +14,7 @@
     {{ mensaje }}
   </div>
 
-  <!-- Grilla de KPIs principales (Usa estilos globales de _layout.scss) -->
+  
   <section class="grid-metricas">
     <article class="tarjeta-metrica">
       <p class="metrica-titulo">Peso actual</p>
@@ -53,9 +53,9 @@
     </article>
   </section>
 
-  <!-- Panel secundario de Evolución y Metas (Usa grid-graficos y tarjeta-grafico globales) -->
+  
   <div class="grid-graficos">
-    <!-- Columna 1: Evolución de Peso -->
+    
     <article class="tarjeta-grafico">
       <h3>Evolución de peso (kg)</h3>
       <div class="grafico-barras" *ngIf="historialPesos.length > 0">
@@ -72,7 +72,7 @@
       </div>
     </article>
 
-    <!-- Columna 2: Metas Personales -->
+    
     <article class="tarjeta-grafico card-metas-personales">
       <div class="cabecera-metas">
         <h3>Metas Personales</h3>
@@ -81,7 +81,7 @@
         </button>
       </div>
 
-      <!-- Vista de lectura -->
+      
       <div class="contenedor-metas-progreso" *ngIf="!editandoMetas">
         <div class="meta-item">
           <div class="meta-info">
@@ -114,7 +114,7 @@
         </p>
       </div>
 
-      <!-- Vista de edición -->
+      
       <div class="formulario-metas" *ngIf="editandoMetas">
         <div class="grupo-campo">
           <label for="pesoObjetivo">Peso Objetivo (kg)</label>
@@ -134,7 +134,7 @@
   </div>
 </div>
 
-<!-- Modal emergente para registrar hoy -->
+
 <div class="modal-overlay" *ngIf="mostrarModalRegistro">
   <div class="modal-tarjeta modal-registro-rapido">
     <div class="modal-cabecera">

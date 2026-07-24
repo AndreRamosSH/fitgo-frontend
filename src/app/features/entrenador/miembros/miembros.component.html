@@ -1,8 +1,8 @@
 <div class="contenedor-entrenador-miembros">
 
-  <!-- VISTA 1: LISTA DE MIEMBROS -->
+  
   <ng-container *ngIf="vista === 'LISTA'">
-    <!-- Cabecera de la sección -->
+    
     <div class="seccion-bienvenida">
       <div class="bienvenida-texto">
         <h1>Mis Miembros</h1>
@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <!-- Grid de Tarjetas de Miembros -->
+    
     <section class="grid-tarjetas-miembros">
       <article *ngFor="let m of miembrosFiltrados" class="tarjeta card-miembro-item" (click)="verDetalleMiembro(m.id)">
         <div class="card-miembro-header">
@@ -59,9 +59,9 @@
     </section>
   </ng-container>
 
-  <!-- VISTA 2: DETALLE DE MIEMBRO -->
+  
   <ng-container *ngIf="vista === 'DETALLE'">
-    <!-- Cabecera de la sección de detalle -->
+    
     <header class="cabecera-seccion-rutinas">
       <div class="titulos-cabecera">
         <h1 class="titulo-pagina">Detalle del Miembro</h1>
@@ -77,7 +77,7 @@
     </div>
 
     <div *ngIf="!cargandoDetalle && detalleMiembro" class="contenido-detalle-miembro">
-      <!-- Encabezado Perfil del Miembro -->
+      
       <header class="perfil-miembro-header">
         <div class="avatar-gran-circulo">{{ detalleMiembro.initials }}</div>
         <div class="info-principal-perfil">
@@ -92,7 +92,7 @@
         </div>
       </header>
 
-      <!-- Tarjetas KPI Superior (3 Tarjetas) -->
+      
       <section class="grid-metricas">
         <article class="tarjeta-metrica">
           <p class="metrica-titulo">Asist. este mes</p>
@@ -115,11 +115,11 @@
         </article>
       </section>
 
-      <!-- Grilla Principal 2 Columnas -->
+      
       <div class="grid-detalle-dos-columnas">
-        <!-- Columna Izquierda: Asistencia y Métricas Físicas -->
+        
         <div class="columna-izquierda-asistencia">
-          <!-- Asistencia del Mes -->
+          
           <article class="tarjeta-grafico">
             <h3>Asistencia — Mes Actual</h3>
             <div class="calendario-contribucion-contenedor">
@@ -131,7 +131,7 @@
                 </div>
               </div>
             </div>
-            <!-- Leyenda de colores -->
+            
             <footer class="leyenda-calendario">
               <div class="leyenda-item">
                 <span class="leyenda-color entreno"></span>
@@ -144,7 +144,7 @@
             </footer>
           </article>
 
-          <!-- Métricas físicas -->
+          
           <article class="tarjeta-grafico">
             <h3>Métricas físicas</h3>
             <div class="card-cuerpo">
@@ -185,9 +185,9 @@
           </article>
         </div>
 
-        <!-- Columna Derecha: Entrenos por semana -->
+        
         <div class="columna-derecha-metricas">
-          <!-- Entrenos por semana -->
+          
           <article class="tarjeta-grafico">
             <h3>Entrenos por semana</h3>
             <div class="grafico-barras">

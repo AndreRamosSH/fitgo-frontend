@@ -4,7 +4,7 @@
     <p>Revisa tus rutinas completadas y el progreso de tus levantamientos</p>
   </div>
 
-  <!-- Selector de Mes y Año con Controles de Navegación -->
+  
   <div class="navegacion-mes">
     <button class="btn-nav-mes" (click)="navegarMes(-1)" [disabled]="cargando" aria-label="Mes anterior">
       <svg lucideChevronLeft class="icono-nav"></svg>
@@ -32,7 +32,7 @@
 </div>
 
 <ng-container *ngIf="!cargando && !mensajeError">
-  <!-- Estado Vacío -->
+  
   <div class="tarjeta estado-vacio-panel" *ngIf="historialFiltrado.length === 0">
     <div class="icono-vacio-contenedor">
       <svg lucideDumbbell class="icono-vacio"></svg>
@@ -41,7 +41,7 @@
     <p>Aún no has registrado sesiones de entrenamiento en el mes seleccionado.</p>
   </div>
 
-  <!-- Tabla del Historial -->
+  
   <div class="tabla-responsive" *ngIf="historialFiltrado.length > 0">
     <table class="tabla-usuarios tabla-historial">
       <thead>
@@ -55,7 +55,7 @@
       </thead>
       <tbody>
         <ng-container *ngFor="let item of historialPaginado">
-          <!-- Fila Principal -->
+          
           <tr class="fila-entrenamiento" [class.abierta]="item.expanded" (click)="toggleEntrenamiento(item)">
             <td class="columna-nombre">
               <div class="info-nombre-rutina">
@@ -76,7 +76,7 @@
             </td>
           </tr>
 
-          <!-- Fila de Detalles Expandidos -->
+          
           <tr *ngIf="item.expanded" class="fila-detalles-desplegable">
             <td colspan="5" class="celda-detalles-desplegable">
               <div class="detalles-entrenamiento-contenedor">
@@ -105,7 +105,7 @@
     </table>
   </div>
 
-  <!-- Paginación Completa -->
+  
   <div class="paginacion-completa" *ngIf="historialFiltrado.length > itemsPorPagina">
     <button class="btn-paginacion-nav" [disabled]="paginaActual === 1" (click)="paginaAnterior()">
       Anterior

@@ -1,5 +1,5 @@
 <ng-container *ngIf="vista === 'LISTA'">
-  <!-- Cabecera de la sección -->
+  
   <header class="cabecera-seccion-rutinas">
     <div class="titulos-cabecera">
       <h1 class="titulo-pagina">Gestión de Rutinas</h1>
@@ -15,7 +15,7 @@
 
     <div class="contenedor-rutinas">
       <div *ngFor="let rut of rutinas" class="tarjeta-rutina" [class.abierto]="rut.expanded">
-        <!-- Cabecera de la rutina -->
+        
         <div class="rutina-cabecera" (click)="toggleRutina(rut)">
           <div class="rutina-info-basica">
             <h3>{{ rut.nombre }}</h3>
@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <!-- Ejercicios y Botones de Gestión (Asignar, Editar, Eliminar) -->
+        
         <div *ngIf="rut.expanded" class="rutina-detalle">
           <div class="lista-ejercicios">
             <div *ngFor="let ej of rut.ejercicios; let idx = index" class="item-ejercicio">
@@ -45,7 +45,7 @@
           </div>
 
           <div class="rutina-acciones-footer">
-            <!-- Botón Asignar reemplaza al botón GO -->
+            
             <button class="btn-asignar" (click)="abrirModalAsignar(rut)">
               <svg lucideCheck class="btn-icon"></svg>
               Asignar
@@ -72,8 +72,8 @@
 </ng-container>
 
 <ng-container *ngIf="vista === 'CREAR'">
-  <!-- Vista de Creación y Edición de Rutina -->
-  <!-- Cabecera de la sección de creación -->
+  
+  
   <header class="cabecera-seccion-rutinas">
     <div class="titulos-cabecera">
       <h1 class="titulo-pagina">{{ rutinaEditandoId ? 'Editar Rutina' : 'Crear Nueva Rutina' }}</h1>
@@ -85,9 +85,9 @@
   </header>
 
   <div class="editor-columnas">
-    <!-- Columna Izquierda: Formulario de Datos y Ejercicios Seleccionados -->
+    
     <div class="columna-izquierda">
-      <!-- Tarjeta 1: Datos de la rutina -->
+      
       <article class="tarjeta-editor">
         <h2 class="subtitulo-editor">Datos Básicos</h2>
 
@@ -106,7 +106,7 @@
         </div>
       </article>
 
-      <!-- Tarjeta 2: Ejercicios Agregados -->
+      
       <article class="tarjeta-editor">
         <h2 class="subtitulo-editor">Ejercicios Agregados ({{ ejerciciosAgregados.length }})</h2>
 
@@ -140,7 +140,7 @@
       </article>
     </div>
 
-    <!-- Columna Derecha: Buscador de Ejercicios -->
+    
     <div class="columna-derecha">
       <article class="tarjeta-editor search-panel">
         <h2 class="subtitulo-editor">Buscar Ejercicios</h2>
@@ -189,7 +189,7 @@
   </div>
 </ng-container>
 
-<!-- MODAL ASIGNAR A MIEMBROS -->
+
 <div class="modal-overlay" *ngIf="mostrarModalAsignar" (click)="mostrarModalAsignar = false">
   <div class="modal-tarjeta modal-miembros-width" (click)="$event.stopPropagation()">
     <div class="modal-cabecera">
@@ -234,9 +234,9 @@
   </div>
 </div>
 
-<!-- MODALES FLOTANTES -->
 
-<!-- 1. Modal Filtro Músculo -->
+
+
 <div class="modal-overlay" *ngIf="mostrarModalMusculo" (click)="mostrarModalMusculo = false">
   <div class="modal-tarjeta" (click)="$event.stopPropagation()">
     <div class="modal-cabecera">
@@ -245,7 +245,7 @@
     </div>
 
     <div class="modal-cuerpo">
-      <!-- Checkbox Tren Superior -->
+      
       <div class="grupo-checkbox-padre">
         <label class="checkbox-label">
           <input type="checkbox" [(ngModel)]="filtroTrenSuperior">
@@ -253,7 +253,7 @@
           <strong>Tren Superior</strong>
         </label>
 
-        <!-- Opciones Tren Superior -->
+        
         <div class="sub-opciones-checkbox" *ngIf="filtroTrenSuperior">
           <label class="checkbox-label" *ngFor="let mus of ['pecho', 'espalda', 'biceps', 'triceps', 'antebrazos', 'hombros']">
             <input type="checkbox" [(ngModel)]="subMusculos[mus]">
@@ -263,7 +263,7 @@
         </div>
       </div>
 
-      <!-- Checkbox Tren Inferior -->
+      
       <div class="grupo-checkbox-padre">
         <label class="checkbox-label">
           <input type="checkbox" [(ngModel)]="filtroTrenInferior">
@@ -271,7 +271,7 @@
           <strong>Tren Inferior</strong>
         </label>
 
-        <!-- Opciones Tren Inferior -->
+        
         <div class="sub-opciones-checkbox" *ngIf="filtroTrenInferior">
           <label class="checkbox-label" *ngFor="let mus of ['cuadriceps', 'femorales', 'gluteos', 'pantorrillas', 'aductores', 'abductores', 'abs']">
             <input type="checkbox" [(ngModel)]="subMusculos[mus]">
@@ -288,7 +288,7 @@
   </div>
 </div>
 
-<!-- 2. Modal Filtro Tipo -->
+
 <div class="modal-overlay" *ngIf="mostrarModalTipo" (click)="mostrarModalTipo = false">
   <div class="modal-tarjeta" (click)="$event.stopPropagation()">
     <div class="modal-cabecera">
@@ -312,7 +312,7 @@
   </div>
 </div>
 
-<!-- 3. Modal Editar Parámetros del Ejercicio -->
+
 <div class="modal-overlay" *ngIf="mostrarModalEditar" (click)="mostrarModalEditar = false">
   <div class="modal-tarjeta" (click)="$event.stopPropagation()">
     <div class="modal-cabecera">
@@ -321,7 +321,7 @@
     </div>
 
     <div class="modal-cuerpo">
-      <!-- Selector de Series (1 a 6) -->
+      
       <div class="grupo-campo">
         <label>Series (máx. 6)</label>
         <select [(ngModel)]="edicionSeries">
@@ -329,19 +329,19 @@
         </select>
       </div>
 
-      <!-- Repeticiones (Entrada libre por teclado) -->
+      
       <div class="grupo-campo">
         <label>Repeticiones</label>
         <input type="number" [(ngModel)]="edicionReps" placeholder="Ej: 12">
       </div>
 
-      <!-- Peso total (Entrada libre por teclado) -->
+      
       <div class="grupo-campo">
         <label>Peso Total (kg) (ej. '0' para peso corporal)</label>
         <input type="text" [(ngModel)]="edicionPeso" placeholder="Ej: 60">
       </div>
 
-      <!-- Descanso (Segundos) -->
+      
       <div class="grupo-campo">
         <label>Descanso (segundos)</label>
         <input type="number" [(ngModel)]="edicionDescanso" placeholder="Ej: 60">
@@ -354,7 +354,7 @@
   </div>
 </div>
 
-<!-- TOAST DE NOTIFICACIÓN -->
+
 <div class="toast-notificacion" [class.mostrar]="toastVisible">
   {{ toastMensaje }}
 </div>

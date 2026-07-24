@@ -4,7 +4,7 @@
 .container-metricas {
 }
 
-// Cabecera Premium
+
 .cabecera-seccion-metricas {
   display: flex;
   justify-content: space-between;
@@ -64,7 +64,7 @@
   }
 }
 
-// Alerta de éxito
+
 .alerta-exito {
   background-color: rgba(16, 185, 129, 0.1);
   border: 1px solid #10b981;
@@ -75,7 +75,7 @@
   font-size: 0.95rem;
 }
 
-// Texto vacío para el gráfico
+
 .texto-vacio-grafico {
   text-align: center;
   padding: 3rem;
@@ -83,7 +83,7 @@
   font-size: 0.95rem;
 }
 
-// Estructura de cabecera de Metas Personales
+
 .card-metas-personales {
   .cabecera-metas {
     display: flex;
@@ -116,7 +116,7 @@
   }
 }
 
-// Barras de progreso de metas
+
 .contenedor-metas-progreso {
   display: flex;
   flex-direction: column;
@@ -186,14 +186,14 @@
   }
 }
 
-// Edición de Metas
+
 .formulario-metas {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-// Modal Emergente
+
 .modal-overlay {
   position: fixed;
   inset: 0;

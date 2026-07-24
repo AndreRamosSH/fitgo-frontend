@@ -45,7 +45,7 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
   entrenoCompletado = false;
   datosEntreno: EjercicioEntreno[] = [];
 
-  // Propiedades para el control de descanso
+
   mostrarDescanso = false;
   tiempoDescansoRestante = 0;
   descansoInterval: any = null;
@@ -74,7 +74,7 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
       this.rutinaActiva = state.rutina;
       this.cargarDatosEntreno(state.rutina);
     } else {
-      // Rutina por defecto si se accede directamente a la URL
+
       const rutinaDemo = {
         id: 'demo',
         nombre: 'Rutina Hipertrofia Pecho y Tríceps',
@@ -104,7 +104,7 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
     this.tiempoSegundos = 0;
     this.entrenoCompletado = false;
 
-    // Estructurar los datos de entrenamiento exactamente con la lógica original y GIFs de la base de datos
+
     this.datosEntreno = (rutina.ejercicios || []).map((e: any) => {
       const ejBase = EJERCICIOS_BASE.find(eb => eb.nombre === e.nombre);
       const imagen = ejBase ? ejBase.imagen : obtenerImagenEjercicio(e.nombre);
@@ -179,25 +179,25 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
     const ejercicioActual = this.datosEntreno[this.ejercicioActivoIndex];
     const series = ejercicioActual.series;
 
-    // Marcar la serie actual como completada
+
     series[this.serieActivaIndex].completada = true;
 
     let finRutina = false;
     const descansoSegundos = ejercicioActual.descanso || 60;
 
-    // Verificar si quedan más series en este ejercicio
+
     if (this.serieActivaIndex < series.length - 1) {
       this.serieActivaIndex++;
     } else {
-      // Ejercicio completado
+
       ejercicioActual.completado = true;
 
-      // Verificar si hay más ejercicios
+
       if (this.ejercicioActivoIndex < this.datosEntreno.length - 1) {
         this.ejercicioActivoIndex++;
         this.serieActivaIndex = 0;
       } else {
-        // Rutina completada
+
         finRutina = true;
         this.detenerCronometro();
         this.entrenoCompletado = true;
@@ -212,7 +212,7 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Métodos de control del descanso
+
   iniciarDescanso(segundos: number): void {
     this.detenerDescanso();
     this.tiempoDescansoRestante = segundos;
@@ -253,16 +253,16 @@ export class EntrenamientoActivoComponent implements OnInit, OnDestroy {
   retrocederSerie(): void {
     if (!this.datosEntreno || this.datosEntreno.length === 0) return;
 
-    // Si ya estamos en la primera serie del primer ejercicio, no hacemos nada
+
     if (this.ejercicioActivoIndex === 0 && this.serieActivaIndex === 0) return;
 
-    // Si estamos en medio del ejercicio, retrocedemos la serie
+
     if (this.serieActivaIndex > 0) {
       this.serieActivaIndex--;
       this.datosEntreno[this.ejercicioActivoIndex].series[this.serieActivaIndex].completada = false;
     } else {
-      // Si estamos en la primera serie de un ejercicio (que no sea el primero),
-      // retrocedemos al ejercicio anterior y a su última serie.
+
+
       this.ejercicioActivoIndex--;
       const ejercicioAnterior = this.datosEntreno[this.ejercicioActivoIndex];
       ejercicioAnterior.completado = false;

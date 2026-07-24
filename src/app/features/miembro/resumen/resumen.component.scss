@@ -34,7 +34,7 @@
   strong { font-weight: 600; }
 }
 
-// Sin !important — la clase solo se aplica en el HTML sin conflicto de especificidad
+
 .destacado {
   color: var(--acento);
 }
@@ -142,7 +142,7 @@
   }
 }
 
-// Estilos del Modal Inicial Flotante Premium
+
 .modal-overlay {
   position: fixed;
   inset: 0;

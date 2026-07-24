@@ -61,13 +61,13 @@ export class RutinasComponent implements OnInit {
 
   rutinas: Rutina[] = [];
 
-  // Formulario de Nueva Rutina
+
   nuevoNombre = '';
   nuevosDias: string[] = [];
   ejerciciosAgregados: EjercicioAgregado[] = [];
   diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
-  // Ejercicios y Filtros de Búsqueda
+
   filtroNombre = '';
   ejerciciosBase: EjercicioBase[] = EJERCICIOS_BASE;
 
@@ -104,13 +104,13 @@ export class RutinasComponent implements OnInit {
     pesoCorporal: false
   };
 
-  // Modal Asignar a Miembros
+
   mostrarModalAsignar = false;
   rutinaAsignando: Rutina | null = null;
   misMiembros: any[] = [];
   miembrosSeleccionados = new Set<string>();
 
-  // Modal Edición Parámetros
+
   mostrarModalEditar = false;
   ejercicioEditandoIndex: number | null = null;
   edicionSeries = 3;
@@ -118,7 +118,7 @@ export class RutinasComponent implements OnInit {
   edicionPeso = '15kg';
   edicionDescanso = 60;
 
-  // Toast
+
   toastVisible = false;
   toastMensaje = '';
 
@@ -199,7 +199,7 @@ export class RutinasComponent implements OnInit {
     }
   }
 
-  // --- Modal Asignar ---
+
 
   abrirModalAsignar(rutina: Rutina): void {
     this.rutinaAsignando = rutina;

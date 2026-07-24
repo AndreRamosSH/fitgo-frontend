@@ -1,7 +1,7 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
-// --- ESTILOS COMUNES DE RUTINAS (COMPARTIDOS MIEMBRO / ENTRENADOR) ---
+
 
 .item-ejercicio, .item-agregado, .item-resultado {
   display: flex;
@@ -179,7 +179,7 @@
   }
 }
 
-// --- BOTÓN PRINCIPAL MIEMBRO (GO) ---
+
 .btn-go {
   background: linear-gradient(135deg, #10B981 0%, #059669 100%);
   color: #fff;
@@ -200,7 +200,7 @@
   }
 }
 
-// --- BOTÓN PRINCIPAL ENTRENADOR (ASIGNAR) ---
+
 .btn-asignar {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: #fff;
@@ -225,7 +225,7 @@
   }
 }
 
-// --- VISTA CREAR (EDITOR) ---
+
 .editor-columnas {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -492,7 +492,7 @@
   }
 }
 
-// --- MODALES FLOTANTES ---
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -614,7 +614,7 @@
   &:hover input ~ .checkbox-custom { border-color: var(--acento); }
 }
 
-// --- TOAST DE NOTIFICACIÓN/ERROR ---
+
 .toast-error, .toast-notificacion {
   position: fixed;
   bottom: 2rem;
@@ -661,7 +661,7 @@
   border-left-color: var(--acento);
 }
 
-// --- BOTONES DE ACCIÓN DE TARJETA DE RUTINAS ---
+
 .rutina-acciones-footer {
   display: flex;
   flex-direction: column;
@@ -715,7 +715,7 @@
   }
 }
 
-// --- MODAL ASIGNAR A MIEMBROS (ENTRENADOR) ---
+
 .lista-miembros-asignacion {
   display: flex;
   flex-direction: column;

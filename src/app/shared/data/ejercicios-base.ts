@@ -1,8 +1,8 @@
 export interface EjercicioBase {
   id: string;
   nombre: string;
-  musculo: string; // 'pecho', 'espalda', 'hombros', 'biceps', 'triceps', 'antebrazos', 'cuadriceps', 'femorales', 'gluteos', 'pantorrillas', 'aductores', 'abductores', 'abs'
-  tipo: string;    // 'Pesos Libres', 'Poleas', 'Smith', 'Maquina libre', 'Peso Corporal'
+  musculo: string;
+  tipo: string;
   imagen: string;
 }
 
@@ -13,7 +13,7 @@ export function obtenerImagenEjercicio(nombre: string): string {
 }
 
 export const EJERCICIOS_BASE: EjercicioBase[] = [
-  // --- PECHO ---
+
   {
     id: 'pectorals/barbell-bench-press',
     nombre: 'Press de banca con barra (Bench Press)',
@@ -113,7 +113,7 @@ export const EJERCICIOS_BASE: EjercicioBase[] = [
     imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/pectorals/push-up.gif'
   },
 
-  // --- ESPALDA ---
+
   {
     id: 'lats/pull-up',
     nombre: 'Dominadas pronas (Pull-up)',
@@ -213,7 +213,7 @@ export const EJERCICIOS_BASE: EjercicioBase[] = [
     imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/spine/hyperextension.gif'
   },
 
-  // --- HOMBROS ---
+
   {
     id: 'delts/dumbbell-seated-shoulder-press',
     nombre: 'Press militar sentado con mancuernas',
@@ -299,7 +299,7 @@ export const EJERCICIOS_BASE: EjercicioBase[] = [
     imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/delts/barbell-upright-row.gif'
   },
 
-  // --- BÍCEPS ---
+
   {
     id: 'biceps/barbell-curl',
     nombre: 'Curl de bíceps con barra recta',
@@ -378,7 +378,7 @@ export const EJERCICIOS_BASE: EjercicioBase[] = [
     imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/biceps/ez-barbell-spider-curl.gif'
   },
 
-  // --- TRÍCEPS ---
+
   {
     id: 'triceps/cable-pushdown-with-rope-attachment',
     nombre: 'Extensión de tríceps en polea con cuerda',
@@ -450,7 +450,7 @@ export const EJERCICIOS_BASE: EjercicioBase[] = [
     imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/triceps/lever-seated-dip.gif'
   },
 
-  // --- ANTEBRAZOS ---
+
   {
     id: 'forearms/barbell-palms-up-wrist-curl-over-a-bench',
     nombre: 'Curl de muñeca con barra sobre banco',
@@ -473,7 +473,7 @@ export const EJERCICIOS_BASE: EjercicioBase[] = [
     imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/forearms/dumbbell-one-arm-wrist-curl.gif'
   },
 
-  // --- CUÁDRICEPS ---
+
   {
     id: 'glutes/barbell-full-squat',
     nombre: 'Sentadilla trasera con barra (Back Squat)',
@@ -545,7 +545,7 @@ export const EJERCICIOS_BASE: EjercicioBase[] = [
     imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/glutes/dumbbell-step-up.gif'
   },
 
-  // --- FEMORALES ---
+
   {
     id: 'hamstrings/lever-lying-leg-curl',
     nombre: 'Curl femoral tumbado en máquina',
@@ -596,7 +596,7 @@ export const EJERCICIOS_BASE: EjercicioBase[] = [
     imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/hamstrings/lever-kneeling-leg-curl.gif'
   },
 
-  // --- GLÚTEOS ---
+
   {
     id: 'glutes/barbell-glute-bridge',
     nombre: 'Hip Thrust con barra',
@@ -647,7 +647,7 @@ export const EJERCICIOS_BASE: EjercicioBase[] = [
     imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/glutes/cable-pull-through-with-rope.gif'
   },
 
-  // --- PANTORRILLAS ---
+
   {
     id: 'calves/lever-standing-calf-raise',
     nombre: 'Elevación de talones de pie en máquina',
@@ -691,7 +691,7 @@ export const EJERCICIOS_BASE: EjercicioBase[] = [
     imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/calves/donkey-calf-raise.gif'
   },
 
-  // --- ADUCTORES Y ABDUCTORES ---
+
   {
     id: 'abductors/lever-seated-hip-abduction',
     nombre: 'Abducción de cadera en máquina (Abductores)',
@@ -714,7 +714,7 @@ export const EJERCICIOS_BASE: EjercicioBase[] = [
     imagen: 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/adductors/cable-hip-adduction.gif'
   },
 
-  // --- CORE (ABDOMINALES) ---
+
   {
     id: 'abs/hanging-leg-raise',
     nombre: 'Elevación de piernas colgado',
